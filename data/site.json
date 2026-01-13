@@ -1,0 +1,205 @@
+{
+  "unit": {
+    "name": "Skyhawk Composite Squadron",
+    "designation": "NCR-MN-040",
+    "logo": "/media/website/skyhawks_logo_CAP_transparent.png"
+  },
+  "menu": [
+    {
+      "id": "about",
+      "title": "About",
+      "url": "/about/",
+      "children": [
+        {
+          "title": "Civil Air Patrol",
+          "url": "/about/civil-air-patrol/"
+        },
+        {
+          "title": "Skyhawk Composite Squadron",
+          "url": "/about/skyhawk-composite-squadron/"
+        },
+        {
+          "title": "Staff",
+          "url": "/about/staff/"
+        }
+      ]
+    },
+    {
+      "id": "events",
+      "title": "Events",
+      "url": "/events/",
+      "children": [
+        {
+          "title": "Skyhawk Calendar",
+          "url": "/events/skyhawk-calendar/"
+        },
+        {
+          "title": "MN Wing Calendar",
+          "url": "https://mncap.org/calendar/calendar_monthview.cfm",
+          "external": true
+        },
+        {
+          "title": "Encampment",
+          "url": "https://mncadets.cap.gov.production.premier.siteviz.com/encampment/",
+          "external": true
+        },
+        {
+          "title": "Ground Team Academy",
+          "url": "https://mnwg.cap.gov/programs/activities/ground-team-academy/",
+          "external": true
+        },
+        {
+          "title": "MN Leadership Academy",
+          "url": "https://mncadets.cap.gov.production.premier.siteviz.com/activities/mla/info/",
+          "external": true
+        }
+      ]
+    },
+    {
+      "id": "members",
+      "title": "Members",
+      "url": "/members/",
+      "children": [
+        {
+          "title": "Request Form: Absences and Promotion Requirements",
+          "url": "/members/request-and-absence-form/"
+        },
+        {
+          "id": "cadet-programs",
+          "title": "Cadet Programs",
+          "url": "/members/cp/",
+          "children": [
+            {
+              "title": "Cadet Promotions",
+              "url": "/members/cp/cadet-promotions/"
+            },
+            {
+              "title": "Cadet Staff & Duty Positions",
+              "url": "/about/staff/"
+            },
+            {
+              "title": "Resources for New and Seasoned Cadets",
+              "url": "/members/cp/cadet-resources/"
+            },
+            {
+              "title": "Physical Fitness",
+              "url": "/members/cp/physical-fitness/"
+            },
+            {
+              "title": "Character Forums",
+              "url": "/members/cp/character-lessons/"
+            }
+          ]
+        },
+        {
+          "id": "senior-members",
+          "title": "Senior Members",
+          "url": "/members/senior-members/",
+          "children": [
+            {
+              "title": "SM Information & Resources",
+              "url": "/members/senior-members/sm-info-resources/"
+            },
+            {
+              "title": "SM Education & Training",
+              "url": "/members/senior-members/sm-training/"
+            },
+            {
+              "title": "SM Awards & Promotions",
+              "url": "/members/senior-members/sm-awards-promotions/"
+            }
+          ]
+        },
+        {
+          "title": "Uniforms",
+          "url": "/members/uniforms/"
+        },
+        {
+          "title": "Email Communication",
+          "url": "/members/email-communication/"
+        },
+        {
+          "id": "emergency-services",
+          "title": "Emergency Services",
+          "url": "/members/es/",
+          "children": [
+            {
+              "title": "General Emergency Services (GES) Training",
+              "url": "/members/es/ges/"
+            },
+            {
+              "title": "Introductory Communications User Training (ICUT)",
+              "url": "/members/es/icut/"
+            },
+            {
+              "title": "101 Card",
+              "url": "/members/es/101-card/"
+            },
+            {
+              "title": "24 & 72 Hour Packs",
+              "url": "/members/es/24-72-hour-packs/"
+            },
+            {
+              "title": "SQTR Task Lists",
+              "url": "/members/es/sqtr/"
+            },
+            {
+              "title": "Additional Coursework & Hands-On Training",
+              "url": "/members/es/additional-es-training/"
+            },
+            {
+              "title": "GTM Qualification Checklist",
+              "url": "/members/es/gtm/"
+            }
+          ]
+        },
+        {
+          "title": "Aerospace Education",
+          "url": "/members/ae/",
+          "children": [
+            {
+              "title": "Orientation Flights",
+              "url": "/members/ae/o-flights/"
+            },
+            {
+              "title": "Flight Simulator",
+              "url": "/members/ae/flight-simulator/"
+            },
+            {
+              "title": "Private Pilot's License",
+              "url": "/members/ae/private-pilots-license/"
+            },
+            {
+              "title": "SkyAware (ADS-B)",
+              "url": "/members/ae/skyaware/"
+            }
+          ]
+        },
+        {
+          "title": "CyberPatriot",
+          "url": "/members/cyberpatriot/"
+        },
+        {
+          "title": "Quality Cadet Unit Award",
+          "url": "/members/qcua/"
+        }
+      ]
+    },
+    {
+      "id": "join",
+      "title": "Join",
+      "url": "/join/",
+      "children": [
+        {
+          "title": "How to Join",
+          "url": "/join/how-to-join/"
+        }
+      ]
+    },
+    {
+      "id": "contacts",
+      "title": "Contacts",
+      "url": "/contacts/"
+    }
+  ]
+}
