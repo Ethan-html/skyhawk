@@ -198,13 +198,7 @@
     {
       "id": "join",
       "title": "Join",
-      "url": "/join/",
-      "children": [
-        {
-          "title": "How to Join",
-          "url": "/page?page=join/how-to-join/"
-        }
-      ]
+      "url": "/page?page=join/how-to-join/"
     },
     {
       "id": "contacts",

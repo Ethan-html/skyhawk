@@ -9,7 +9,7 @@ fetch("/data/site.json")
       document.getElementById("unit-name").textContent =
         `${site.unit.name} (${site.unit.designation})`;
     }
-
+    
     // ============================
     // Build main menu
     // ============================
@@ -75,7 +75,7 @@ fetch("/data/site.json")
         });
       });
     }
-
+    
     // ============================
     // Set footer contact info
     // ============================

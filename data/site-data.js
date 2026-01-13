@@ -56,5 +56,132 @@ const siteData = [
         `
       }
     ]
+  },
+  {
+    id: "events",
+    title: "Events",
+    children: [
+      {
+        title: "Skyhawk Calendar",
+        slug: "skyhawk-calendar",
+        content: `
+          <iframe src="https://calendar.google.com/calendar/embed?height=600&amp;wkst=1&amp;bgcolor=%23ffffff&amp;ctz=America%2FChicago&amp;src=c2t5aGF3ay5jYXAubW5AZ21haWwuY29t&amp;src=ZW4udXNhLm9mZmljaWFsI2hvbGlkYXlAZ3JvdXAudi5jYWxlbmRhci5nb29nbGUuY29t&amp;color=%233F51B5&amp;color=%23616161" style="border:solid 1px #777" width="800" height="600" frameborder="0" scrolling="no" data-ruffle-polyfilled=""></iframe>
+        `
+      },
+      {
+        title: "Mn Wing Calendar",
+        slug: "mn-wing-calendar",
+        externalUrl: "https://mnwg.cap.gov",
+      },
+      {
+        title: "Encampment",
+        slug: "encampment",
+        externalUrl: "https://mncadets.cap.gov.production.premier.siteviz.com/encampment",
+      },
+      {
+        title: "Ground Team Academy",
+        slug: "ground-team-academy",
+        externalUrl: "https://mnwg.cap.gov/programs/activities/ground-team-academy",
+      },
+      {
+        title: "MN Leadership Academy",
+        slug: "mn-leadership-academy",
+        externalUrl: "https://mncadets.cap.gov.production.premier.siteviz.com/activities/mla/info",
+      }
+    ]
+  },
+  {
+    id: "members",
+    title: "Members",
+    children: [
+      {
+        title: "Request Form: Absences and Promotion Requirements",
+        slug: "request-and-absence-form",
+        content: `
+          <div id="session-message-wrapper">
+          </div>
+          <p>Please use the form below to submit requests for the following:</p>
+          <ul>
+           <li>Excused absences<br><strong>***or***</strong></li>
+           <li>Final 4 tasks (<a href="/members/cp/cadet-promotions/" target="_blank">additional forms required</a>&nbsp;[oath, uniform, leadership expectations, active participation])</li>
+           <li>Drill tests (<a href="/members/cp/cadet-promotions/#Drill" target="_blank">bring your forms</a>)</li>
+           <li>Written exams (proctored tests)</li>
+           <li>Oral presentations (speeches)--bring your evaluation forms with header information filled out</li>
+           <li>Promotion Boards (<a href="/members/cp/cadet-promotions/#promotion-board" target="_blank">additional forms required</a>)</li>
+          </ul>
+          <p><strong>Absence notifications</strong> may be submitted at any time before the meeting in order to be excused.</p>
+          <p><strong>Requests for promotion requirements must be submitted by 2359 on the Thursday</strong> before the Monday meeting.<br>
+            Late submissions will be considered for the following meeting.</p>
+          <p>You may submit multiple forms for different requests/dates.</p>
+          <p>If you have any questions, please ask your chain of command (cadets) or the Deputy Commander for Cadets (parents).</p>
+          <p><iframe frameborder="0" height="2371" marginheight="0" marginwidth="0" src="https://docs.google.com/forms/d/e/1FAIpQLScMyWh6v6jvMjUAtDNCjb3SlNtYnirnM9I6h3vSGvFnZ6ISBA/viewform?embedded=true" width="750" data-ruffle-polyfilled="">Loading&amp;amp;hellip;</iframe></p>
+        `
+      }
+    ]
+  },
+  {
+    id: "join",
+    title: "Join",
+    children: [
+      {
+        title: "How to Join",
+        slug: "how-to-join",
+        content: `
+  <div class="main-content-column-nested w-col w-col-12 w-col-stack">
+    <div class="main-content-wrap nested-content-wrap">
+      <div id="session-message-wrapper"></div>
+      <p>Before joining CAP, each potential member is required to attend a minimum of three meetings. We will discuss with you what the Civil Air Patrol Program is about and answer any questions that you may have. You will also have an opportunity to take a look at our facilities and observe squadron training and activities.</p>
+      <p>If you would like to visit one of our meetings, or if you are interested in talking to one of us to learn more about the Civil Air Patrol Program and what we do at our squadron, please <a href="/page?page=contacts/">contact us</a>.</p>
+      <hr>
+      <h4><strong>Potential New Cadet (Youth) Members:</strong></h4>
+      <p>(Youth ages 12-18) <a href="https://www.gocivilairpatrol.com/join/youth-in-cadet-program/how-to-join---cadet" target="_blank">Click here for information on how to join CAP as a Cadet (Youth) Member.</a></p>
+      <p><a href="https://www.capnhq.gov/CAP.MembershipSystem.Web/CadetOnlineApp.aspx" target="_blank">Complete an Online Cadet Application</a> (requires Commander's approval).</p>
+      <hr>
+      <h4>Potential New Senior Members:</h4>
+      <p>(Adults 18 years of age or older) <a href="https://www.gocivilairpatrol.com/join/active-adult-in-cap/active-adult" target="_blank"><strong>Click here for information on how to join CAP as a Senior Member.</strong></a></p>
+      <hr>
+      <p>You can learn more about the Civil Air Patrol Program at <a href="https://www.gocivilairpatrol.com/" target="_blank">www.gocivilairpatrol.com</a>.</p>
+    </div>
+  </div>
+        `
+      }
+    ]
+  },
+  {
+    id: "contacts",
+    title: "contacts",
+    children: [
+      {
+        title: "contacts",
+        slug: "contacts",
+        content: `
+  <div class="inside-row-nested w-row">
+        <div class="main-content-column-nested w-col w-col-12 w-col-stack">
+         <div class="main-content-wrap nested-content-wrap">
+          <div id="session-message-wrapper">
+          </div>
+          <h4>SKYHAWK COMPOSITE SQUADRON ADDRESS</h4>
+          <p>700 Elm Ave E<br>
+            Delano High School Tigers Den<br>
+            Delano, MN 55328<br>
+            &nbsp;</p>
+          <p><em>Occasional meetings also held at&nbsp;Brandt Airport,&nbsp;2561 72nd St SE, Delano, MN 55328.</em></p>
+          <hr>
+          <p x-ms-format-detection="none">763-350-1587</p>
+          <p>timhagen39@gmail.com</p>
+          <hr>
+          <h4>Susie's Sewing</h4>
+          <p>Susie's Sewing (Sue Glover)</p>
+          <p>Seamstress-Alterationist For Uniforms</p>
+          <p>319 Kelsey Street</p>
+          <p>Delano, MN 55328</p>
+          <p>763-972-6541</p>
+         </div>
+        </div>
+       </div>
+        `
+      }
+    ]
   }
+
 ];

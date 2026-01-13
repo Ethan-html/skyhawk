@@ -77,7 +77,22 @@ function renderPageFromQuery(data) {
   /* ---------- TITLE & CONTENT ---------- */
 
   document.getElementById("pageTitle").textContent = activePage.title;
-  document.getElementById("pageContent").innerHTML = activePage.content;
+  document.getElementById("pageTitle").textContent = activePage.title;
+
+  if (activePage.externalUrl) {
+    // Option 1: redirect immediately
+    window.location.href = activePage.externalUrl;
+
+    // Option 2: show a message and a link instead of redirect
+    // document.getElementById("pageContent").innerHTML = `
+    //   <p>This page redirects to: 
+    //     <a href="${activePage.externalUrl}" target="_blank">${activePage.title}</a>
+    //   </p>
+    // `;
+  } else {
+    // Normal content page
+    document.getElementById("pageContent").innerHTML = activePage.content;
+  }
 }
 
 
