@@ -1,37 +1,47 @@
 {
   "unit": {
     "name": "Skyhawk Composite Squadron",
-    "designation": "NCR-MN-040",
-    "logo": "/media/website/skyhawks_logo_CAP_transparent.png"
+    "designation": "MN-123"
   },
+  "contact": {
+    "address": "700 Elm Ave E, Delano High School - Tigers Den, Delano, MN 55328",
+    "phone": "763-350-1587",
+    "email": "timhagen39@gmail.com"
+  },
+
   "menu": [
     {
       "id": "about",
       "title": "About",
-      "url": "/about/",
+      "url": "/page?page=about/",
       "children": [
         {
+
           "title": "Civil Air Patrol",
-          "url": "/about/civil-air-patrol/"
+          "url": "/page?page=about/civil-air-patrol/",
+          "content": ""
         },
         {
           "title": "Skyhawk Composite Squadron",
-          "url": "/about/skyhawk-composite-squadron/"
+          "url": "/page?page=about/skyhawk-composite-squadron/",
+          "content": ""
         },
         {
           "title": "Staff",
-          "url": "/about/staff/"
+          "url": "/page?page=about/staff/",
+          "content": ""
         }
       ]
     },
     {
       "id": "events",
       "title": "Events",
-      "url": "/events/",
+      "url": "/page?page=events/",
       "children": [
         {
           "title": "Skyhawk Calendar",
-          "url": "/events/skyhawk-calendar/"
+          "url": "/page?page=events/skyhawk-calendar/",
+          "content": ""
         },
         {
           "title": "MN Wing Calendar",

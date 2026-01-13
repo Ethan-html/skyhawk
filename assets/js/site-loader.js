@@ -2,18 +2,18 @@ fetch("/data/site.json")
   .then(res => res.json())
   .then(site => {
     // ============================
-    // Set page title dynamically
+    // Set page title and header
     // ============================
     if (site.unit && site.unit.name) {
-      document.title = site.unit.name; // sets <title>Skyhawk Composite Squadron</title>
+      document.title = site.unit.name;
+      document.getElementById("unit-name").textContent =
+        `${site.unit.name} (${site.unit.designation})`;
     }
 
-    // Set unit name in header
-    document.getElementById("unit-name").textContent =
-      `${site.unit.name} (${site.unit.designation})`;
-
+    // ============================
+    // Build main menu
+    // ============================
     const menuRoot = document.getElementById("main-menu");
-
     site.menu.forEach(item => {
       const li = document.createElement("li");
       li.className = "main-li";
@@ -63,21 +63,39 @@ fetch("/data/site.json")
     });
 
     // ============================
-    // Attach hover events to dropdowns
+    // Dropdown hover (jQuery)
     // ============================
     if (window.jQuery) {
       jQuery(document).ready(function () {
         jQuery('.main-li.has-dropdown').each(function () {
           const $item = jQuery(this);
           $item.off('mouseenter mouseleave');
-          $item.on('mouseenter', function () {
-            $item.addClass('open');
-          });
-          $item.on('mouseleave', function () {
-            $item.removeClass('open');
-          });
+          $item.on('mouseenter', function () { $item.addClass('open'); });
+          $item.on('mouseleave', function () { $item.removeClass('open'); });
         });
       });
     }
+
+    // ============================
+    // Set footer contact info
+    // ============================
+    if (site.contact) {
+      // Address
+      const addrEl = document.getElementById("address");
+      if (addrEl) addrEl.innerHTML = site.contact.address.replace(/\n/g, "<br>");
+
+      // Phone
+      const phoneEl = document.getElementById("phone");
+      if (phoneEl) {
+        phoneEl.href = `tel:${site.contact.phone}`;
+        phoneEl.textContent = site.contact.phone;
+      }
+
+      // Email
+      const emailEl = document.getElementById("email");;
+      if (emailEl) {
+        emailEl.innerHTML = `<a href="mailto:${site.contact.email}">${site.contact.email}</a>`;
+      }
+    }
   })
-  .catch(err => console.error("Menu load failed:", err));
+  .catch(err => console.error("Site load failed:", err));
