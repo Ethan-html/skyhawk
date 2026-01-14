@@ -11758,3 +11758,23 @@ a.no-border {
   color: #fff;
 }
 /*# sourceMappingURL=maps/screen.min.css.map */
+
+
+/* =========================
+   FOOTER MOBILE FIX
+   ========================= */
+@media (max-width: 991px) {
+
+  .footer-column-wrap {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding-left: 0;
+    padding-right: 0;
+    clear: none;
+  }
+
+  .footer-row {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+}

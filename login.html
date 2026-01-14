@@ -3,139 +3,301 @@
 <head>
     <meta charset="UTF-8">
     <title>Login - Skyhawk Composite Squadron</title>
-    <link rel="icon" href="/media/websites/skyhawks_logo_CAP_transparent.png">
+    <link rel="icon" href="/media/websites/skyhawks_logo_CAP_transparent.ico">
+    <link rel="shortcut icon" href="/media/websites/skyhawks_logo_CAP_transparent.ico" type="image/png">
     <link rel="stylesheet" href="assets/stylesheets/main.css">
+    <script src="/assets/js/site-loader.js" defer></script>
+    <script src="https://skyhawk.cap.gov/core/libraries/jquery/assets/3.3.1/jquery.min.js"></script>
+    <script src="https://skyhawk.cap.gov/assets/javascripts/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js"></script>
+    <script src="https://skyhawk.cap.gov/core/public/shared/assets/js/jquery.cycle2/2.1.6/jquery.cycle2-fef2f3645726cce4154911d6140d7d52.min.js"></script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+        /* =========================
+        LOGIN PAGE – ISOLATED
+        ========================= */
+
+        .login-page {
+          min-height: calc(100vh - 200px); /* avoids header/footer overlap */
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 40px 20px;
+          background: #f5f7fa;
         }
 
-        .login-container {
-            background: #fff;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
+        .login-card {
+          width: 100%;
+          max-width: 380px;
+          background: #ffffff;
+          border-radius: 10px;
+          padding: 32px 28px;
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+          text-align: center;
         }
 
-        .login-container img {
-            width: 120px;
-            margin-bottom: 20px;
+        /* Logo */
+        .login-card img {
+          width: 110px;
+          margin-bottom: 16px;
         }
 
-        .login-container h2 {
-            margin-bottom: 20px;
-            color: #1a1a1a;
+        /* Title */
+        .login-card h2 {
+          font-size: 20px;
+          margin-bottom: 20px;
+          color: #1a1a1a;
+          font-weight: 600;
         }
 
-        .login-container input[type="text"],
-        .login-container input[type="password"] {
-            width: 100%;
-            padding: 12px 15px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-            font-size: 16px;
+        /* Inputs */
+        .login-card input[type="text"],
+        .login-card input[type="password"] {
+          width: 100%;
+          padding: 12px 14px;
+          margin-bottom: 12px;
+          border-radius: 6px;
+          border: 1px solid #d0d4d9;
+          font-size: 15px;
+          background: #fff;
+          transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .login-container button {
-            background-color: #0072ce;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
-            width: 100%;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 10px;
+        .login-card input:focus {
+          outline: none;
+          border-color: #0072ce;
+          box-shadow: 0 0 0 3px rgba(0, 114, 206, 0.15);
         }
 
-        .login-container button:hover {
-            background-color: #005bb5;
+        /* Button */
+        .login-card button {
+          width: 100%;
+          margin-top: 10px;
+          padding: 12px;
+          border-radius: 6px;
+          border: none;
+          background-color: #0072ce;
+          color: #fff;
+          font-size: 15px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: background-color 0.2s ease, transform 0.1s ease;
         }
 
-        .login-container .error {
-            color: red;
-            margin-top: 10px;
-            font-size: 14px;
+        .login-card button:hover {
+          background-color: #005bb5;
         }
 
+        .login-card button:active {
+          transform: translateY(1px);
+        }
+
+        /* Error / Status message */
+        .login-card .error {
+          margin-top: 12px;
+          font-size: 14px;
+        }
+
+        /* Footer text */
         .login-footer {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #666;
-        }
-
-        .login-footer a {
-            color: #0072ce;
-            text-decoration: none;
-        }
-
-        .login-container button {
-            background: linear-gradient(135deg, #0072ce, #005bb5);
-            color: white;
-            padding: 14px 20px;
-            border: none;
-            border-radius: 25px;
-            width: 100%;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(0, 114, 206, 0.3);
-        }
-
-        .login-container button:hover {
-            background: linear-gradient(135deg, #005bb5, #003f7f);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 181, 0.4);
+          margin-top: 18px;
+          font-size: 13px;
+          color: #666;
         }
 
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <img src="/media/website/skyhawks_logo_CAP_transparent.png" alt="Skyhawk Logo">
-        <h2>Login to Your Account</h2>
-        <form id="loginForm">
-            <input type="text" id="username" placeholder="Email" required>
-            <input type="password" id="password" placeholder="Password" required>
-            <button type="submit">Login</button>
-            <div class="error" style="display: none;" id="errorMsg"></div>
-        </form>
-        <div class="login-footer">
-            <p>Skyhawk Members only</p>
+    <div class="header-section">
+         <div data-collapse="medium" data-animation="default" data-duration="400" class="nav-section w-nav">
+            <div class="header-contents-wrap">
+               <div class="header-container w-container">
+                  <div class="logo-container">
+                     <a href="/" class="logo w-clearfix w-nav-brand"> <img src="/assets/images/CAP-2017-logo-horizontal-optimized.png" alt="Skyhawk Composite Squadron" class="logo-image"> </a>
+                     <h2 class="website-tagline" id="unit-name"></h2>
+                  </div>
+                  <div class="header-content-right-wrap">
+                     <a href="https://www.gocivilairpatrol.com/?form=FUNEALECFQD" id="donations-button" class="donations-btn">
+                        <div class="donations-btn-image">
+                           <div class="donations-btn-ripple"></div>
+                           <img src="/assets/images/heart.svg" alt="">
+                        </div>
+                        <div class="donations-btn-text">
+                           Donate Today
+                        </div>
+                     </a>
+                     <div class="website-logo-container">
+                        <img src="/media/website/skyhawks_logo_CAP_transparent.png" alt="Skyhawk Composite Squadron" class="website-logo">
+                     </div>
+                     <a href="#main-content" class="cms_form_button primary skip-to-main-content sronly">Skip to main content</a>
+                  </div>
+               </div>
+               <nav class="header-menu-wrap">
+                  <div class="header-menu-inside-wrap">
+                     <div class="nav-container w-container">
+                        <nav class="desktop-navigation-menu">
+                           <ul class="main-ul" id="main-menu"></ul>
+                           <div class="link-block site-share-wrapper w-hidden-medium w-hidden-small w-hidden-tiny">
+                              <a href="" class="w-inline-block w--current" id="load-site-share"> <img src="/assets/images/share-icon.png" alt="Share" class="share-icon"> </a>
+                              <nav class="nav-drop-list w-dropdown-list">
+                                 <a href="mailto:?subject=Sitemap&amp;body=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap" class="nav-drop-list-link">Email this page</a> <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;t=Sitemap" class="nav-drop-list-link" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;t=Sitemap'); return false;" target="_blank">Share on Facebook</a> <a href="https://twitter.com/intent/tweet?source=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;text=" class="nav-drop-list-link" onclick="window.open('https://twitter.com/intent/tweet?text=Sitemap https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap'); return false;" title="Share on X (formerly Twitter)" target="_blank">Share on X</a> <a href="https://www.linkedin.com/sharing/share-offsite?mini=true&amp;summary=Sitemap&amp;source=Civil%20Air%20Patrol&amp;url=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;subject=Sitemap" class="nav-drop-list-link" onclick="window.open('https://www.linkedin.com/sharing/share-offsite?mini=true&amp;summary=Sitemap&amp;source=Civil%20Air%20Patrol&amp;url=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;subject=Sitemap'); return false;">Share on LinkedIn</a>
+                              </nav>
+                           </div>
+                        </nav>
+                     </div>
+                  </div>
+               </nav>
+            </div>
+            <div class="w-nav-overlay" data-wf-ignore=""></div>
+         </div>
+      </div>
+    <div class="login-page">
+        <div class="login-card">
+
+            <h2>Login to Your Account</h2>
+            <form id="loginForm">
+                <input type="text" id="username" placeholder="Email" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+                <div class="error" style="display: none;" id="errorMsg"></div>
+            </form>
+            <div class="login-footer">
+                <p>Skyhawk Members only</p>
+            </div>
         </div>
     </div>
+    <div class="footer-section">
+         <div class="middle-footer-div">
+            <div class="footer-container">
+               <div class="footer-row row">
+                  <div class="_1 footer-column-wrap">
+                     <h4 class="footer-column-title">Address</h4>
+                     <p id="address" class="footer-paragraph"></p>
+                     <p class="footer-paragraph" x-ms-format-detection="none"><span id="phone"></span></p>
+                     <p id="email" class="footer-paragraph"></p>
+                  </div>
+                  <div class="_3 footer-column-wrap">
+                     <h4 class="footer-column-title">Mission Statement</h4>
+                     <div class="footer-paragraph">
+                        Volunteers serving America's communities, saving lives, and shaping futures.
+                     </div>
+                  </div>
+                  <div class="_2 footer-column-wrap">
+                    <h4 class="footer-column-title">Quick Links</h4>
+                    <ul
+                      id="footer-quick-links"
+                      class="footer-links-list w-list-unstyled">
+                    </ul>
+                  </div>
 
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+            </div>
+         </div>
+         <div class="container footer w-container"></div>
+         <div class="footer-signoff-section">
+            <div class="bottom-footer-container">
+               <div class="footer-signoff-row row w-row">
+                  <div class="column w-col w-col-9 w-col-stack">
+                     <div class="copyright-text">
+                        © 2026 Civil Air Patrol. All rights reserved.
+                     </div>
+                     <ul class="footer-signoff-list w-list-unstyled">
+                        <li class="footer-signoff-list-item"><a href="https://get.adobe.com/reader/" target="_blank" rel="noopener" class="footer-link">Get Adobe Acrobat Reader</a></li>
+                        <li class="footer-signoff-list-item"><a href="https://www.gocivilairpatrol.com/legal-privacy-statement" target="_blank" rel="noopener" class="footer-link">Legal &amp; Privacy Statement</a></li>
+                     </ul>
+                  </div>
+                  <div class="column w-clearfix w-col w-col-3 w-col-stack">
+                     <div class="footer-signoff-grip w-inline-block">
+                        <div id="GRIPFooterLogo" style="padding-top: 10px;">
+                           <span id="GRIPFooterLogoText" style="
+                              color: #919293;
+                              font-size: 10px;
+                              font-family: Arial, sans-serif;
+                              text-transform: uppercase;
+                              display: block;
+                              text-align: left;
+                              font-weight: 700;
+                              letter-spacing: 0.02rem;
+                              ">
+                           WEB DEVELOPMENT BY <a href="" target="_blank" rel="noopener noreferrer" style="
+                              color: #919293;
+                              text-decoration: underline;
+                              ">ETHAN LARSON</a>
+                           </span>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   <script type="module">
+     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+     import {
+       getAuth,
+       signInWithEmailAndPassword,
+       onAuthStateChanged
+     } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value.trim();
-            const errorMsg = document.getElementById('errorMsg');
+     const firebaseConfig = {
+       apiKey: "AIzaSyBk_ikYB1PzkgHx4zJY73pe3EfzQRpZvqw",
+       authDomain: "skyhawk-web.firebaseapp.com",
+       projectId: "skyhawk-web",
+       storageBucket: "skyhawk-web.firebasestorage.app",
+       messagingSenderId: "340655139001",
+       appId: "1:340655139001:web:7923a1fe83ac4a4c689368",
+       measurementId: "G-M2RSE2BRK2"
+     };
 
-            // Simple validation example
-            if(username === "admin" && password === "password123") {
-                errorMsg.style.color = "green";
-                errorMsg.textContent = "Login successful! Redirecting...";
-                // Redirect to main page after login
-                setTimeout(() => { window.location.href = "/"; }, 1000);
-            } else {
-                errorMsg.style.color = "red";
-                errorMsg.textContent = "Invalid username or password";
-            }
-        });
-    </script>
+     const app = initializeApp(firebaseConfig);
+     const auth = getAuth(app);
+
+     const form = document.getElementById("loginForm");
+     const errorMsg = document.getElementById("errorMsg");
+
+     form.addEventListener("submit", async (e) => {
+       e.preventDefault();
+
+       const email = document.getElementById("username").value.trim();
+       const password = document.getElementById("password").value;
+
+       errorMsg.style.display = "block";
+       errorMsg.style.color = "#333";
+       errorMsg.textContent = "Signing in…";
+
+       try {
+         await signInWithEmailAndPassword(auth, email, password);
+
+         errorMsg.style.color = "green";
+         errorMsg.textContent = "Login successful! Redirecting…";
+
+         setTimeout(() => {
+           window.location.href = "/";
+         }, 800);
+
+       } catch (err) {
+         errorMsg.style.color = "red";
+
+         switch (err.code) {
+           case "auth/user-not-found":
+             errorMsg.textContent = "No account found for this email.";
+             break;
+           case "auth/wrong-password":
+             errorMsg.textContent = "Incorrect password.";
+             break;
+           case "auth/invalid-email":
+             errorMsg.textContent = "Invalid email address.";
+             break;
+           default:
+             errorMsg.textContent = "Login failed. Please try again.";
+         }
+       }
+     });
+
+     // Optional: auto-redirect if already logged in
+     onAuthStateChanged(auth, (user) => {
+       if (user) {
+         window.location.href = "/";
+       }
+     });
+   </script>
+
 </body>
 </html>

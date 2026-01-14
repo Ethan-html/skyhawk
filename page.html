@@ -6,12 +6,350 @@
       <link rel="icon" href="/media/websites/skyhawks_logo_CAP_transparent.png">
       <link rel="shortcut icon" href="/media/websites/skyhawks_logo_CAP_transparent.png" type="image/png">
       <link rel="stylesheet" href="assets/stylesheets/main.css">
-      <script src="/assets/js/site-loader.js" defer></script>
-      <script src="/data/site-data.js"></script>
-      <script src="/assets/js/pages.js" defer></script>
+
       <script src="https://skyhawk.cap.gov/core/libraries/jquery/assets/3.3.1/jquery.min.js"></script>
       <script src="https://skyhawk.cap.gov/assets/javascripts/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js"></script>
       <script src="https://skyhawk.cap.gov/core/public/shared/assets/js/jquery.cycle2/2.1.6/jquery.cycle2-fef2f3645726cce4154911d6140d7d52.min.js"></script>
+
+      <script type="module">
+         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+         import {
+           initializeFirestore,
+           persistentLocalCache,
+           persistentMultipleTabManager,
+           collection,
+           doc,
+           getDoc,
+           getDocs
+         } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+         const firebaseConfig = {
+           apiKey: "AIzaSyBk_ikYB1PzkgHx4zJY73pe3EfzQRpZvqw",
+           authDomain: "skyhawk-web.firebaseapp.com",
+           projectId: "skyhawk-web",
+           storageBucket: "skyhawk-web.firebasestorage.app",
+           messagingSenderId: "340655139001",
+           appId: "1:340655139001:web:7923a1fe83ac4a4c689368",
+           measurementId: "G-M2RSE2BRK2"
+         };
+
+         const app = initializeApp(firebaseConfig);
+
+         const db = initializeFirestore(app, {
+           cache: persistentLocalCache({
+             tabManager: persistentMultipleTabManager()
+           })
+         });
+
+        /* ===============================
+           LOAD PAGE (CACHE → NETWORK)
+        =============================== */
+        async function loadPage(sectionId, onUpdate) {
+          const cacheKey = `pageData_${sectionId}`;
+          const cachedRaw = localStorage.getItem(cacheKey);
+
+          if (cachedRaw) {
+            try {
+              const cached = JSON.parse(cachedRaw);
+              onUpdate(cached); // 🔥 INSTANT render
+            } catch {}
+          }
+
+          // --- Always revalidate in background ---
+          const pageSnap = await getDoc(doc(db, "pages", sectionId));
+          if (!pageSnap.exists()) return;
+
+          const childrenSnap = await getDocs(
+            collection(db, `pages/${sectionId}/children`)
+          );
+
+          const fresh = {
+            id: sectionId,
+            title: pageSnap.data().title,
+            children: {}
+          };
+
+          childrenSnap.forEach(c => {
+            const d = c.data();
+            fresh.children[d.slug] = {
+              title: d.title,
+              slug: d.slug,
+              content: d.content,
+              externalUrl: d.externalUrl || null
+            };
+          });
+
+          // Only update if data changed
+          if (JSON.stringify(fresh) !== cachedRaw) {
+            localStorage.setItem(cacheKey, JSON.stringify(fresh));
+            onUpdate(fresh); // 🔁 Re-render with fresh data
+          }
+        }
+
+        /* ===============================
+           RENDER
+        =============================== */
+        function renderPage(pageData) {
+          if (!pageData) return;
+
+          const params = new URLSearchParams(location.search);
+          const [, childSlug] = (params.get("page") || "").split("/");
+
+          const children = Object.values(pageData.children);
+          const active = children.find(c => c.slug === childSlug) || children[0];
+
+          // Side nav
+          const sideList = document.getElementById("sideNavList");
+          const sideTitle = document.getElementById("sideNavTitleLink");
+          sideTitle.textContent = pageData.title;
+          sideTitle.href = `/page?page=${pageData.id}`;
+          sideList.innerHTML = "";
+
+          children.forEach(c => {
+            const li = document.createElement("li");
+            li.className = "left-nav-list-item";
+
+            const a = document.createElement("a");
+            a.className = "left-nav-list-link";
+            a.href = `/page?page=${pageData.id}/${c.slug}`;
+            a.textContent = c.title;
+            if (c.slug === active.slug) a.classList.add("selected");
+
+            li.append(a, document.createElement("div"));
+            sideList.appendChild(li);
+          });
+
+          // Content
+          document.getElementById("pageTitle").textContent = active.title;
+
+          if (active.externalUrl) {
+            location.href = active.externalUrl;
+          } else {
+            document.getElementById("pageContent").innerHTML = active.content;
+          }
+        }
+
+        /* ===============================
+           INIT
+        =============================== */
+        document.addEventListener("DOMContentLoaded", () => {
+          const sectionId = (new URLSearchParams(location.search).get("page") || "")
+            .split("/")[0];
+
+          if (!sectionId) return;
+
+          document.getElementById("pageContent").textContent = "Loading...";
+
+          loadPage(sectionId, renderPage);
+        });
+      </script>
+      <script type="module">
+
+         // --------------------
+         // Cache-first loader
+         // --------------------
+         async function loadDocOrCache(pathSegments, cacheKey) {
+           const cached = localStorage.getItem(cacheKey);
+           if (cached) {
+             try { return JSON.parse(cached); } catch {}
+           }
+
+           try {
+             const ref = doc(db, ...pathSegments);
+             const snap = await getDoc(ref);
+             if (snap.exists()) {
+               const data = snap.data();
+               localStorage.setItem(cacheKey, JSON.stringify(data));
+               return data;
+             }
+           } catch (err) {
+             console.warn(`Failed to load ${pathSegments.join("/")}`, err);
+           }
+           return null;
+         }
+
+         async function loadCollectionOrCache(pathSegments, cacheKey) {
+           const cached = localStorage.getItem(cacheKey);
+           if (cached) {
+             try { return JSON.parse(cached); } catch {}
+           }
+
+           try {
+             const colRef = collection(db, ...pathSegments);
+             const snap = await getDocs(colRef);
+             const data = snap.docs.map(d => d.data());
+             localStorage.setItem(cacheKey, JSON.stringify(data));
+             return data;
+           } catch (err) {
+             console.warn(`Failed to load collection ${pathSegments.join("/")}`, err);
+           }
+           return [];
+         }
+
+         // --------------------
+         // Render functions
+         // --------------------
+         function renderUnit(unit) {
+           if (!unit) return;
+           document.title = unit.name;
+           const el = document.getElementById("unit-name");
+           if (el) el.textContent = `${unit.name} (${unit.designation})`;
+         }
+
+         function renderContact(contact) {
+           if (!contact) return;
+           const addrEl = document.getElementById("address");
+           if (addrEl) addrEl.innerHTML = contact.address.replace(/\n/g, "<br>");
+
+           const phoneEl = document.getElementById("phone");
+           if (phoneEl) {
+             phoneEl.href = `tel:${contact.phone}`;
+             phoneEl.textContent = contact.phone;
+           }
+
+           const emailEl = document.getElementById("email");
+           if (emailEl) {
+             emailEl.innerHTML = `<a href="mailto:${contact.email}">${contact.email}</a>`;
+           }
+         }
+
+        async function renderMenu() {
+           const menuRoot = document.getElementById("main-menu");
+           if (!menuRoot) return;
+
+           // 1️⃣ Try to load menu from localStorage first
+           let pagesData = JSON.parse(localStorage.getItem("menuPages") || "null");
+
+           if (pagesData) {
+             buildMenu(pagesData, menuRoot);
+           }
+
+           // 2️⃣ Fetch fresh menu from Firestore (in background)
+           try {
+             const pagesCollection = collection(db, "main", "menu", "pages");
+             const pagesSnap = await getDocs(pagesCollection);
+
+             const pagesWithChildren = await Promise.all(
+               pagesSnap.docs.map(async pageDoc => {
+                 const childrenSnap = await getDocs(collection(pagesCollection, pageDoc.id, "children"));
+                 return {
+                   page: pageDoc.data(),
+                   children: childrenSnap.docs.map(d => d.data())
+                 };
+               })
+             );
+
+             // Save to cache
+             localStorage.setItem("menuPages", JSON.stringify(pagesWithChildren));
+
+             // Rebuild menu (replace existing)
+             menuRoot.innerHTML = "";
+             buildMenu(pagesWithChildren, menuRoot);
+
+           } catch (err) {
+             console.warn("Failed to load menu from Firestore", err);
+           }
+         }
+
+         // Helper: build menu from data
+         function buildMenu(pagesWithChildren, menuRoot) {
+           const fragment = document.createDocumentFragment();
+
+           pagesWithChildren.forEach(({ page, children }) => {
+             const li = document.createElement("li");
+             li.className = "main-li";
+             li.id = `menu-item-${page.id || page.title}`;
+
+             const a = document.createElement("a");
+             a.href = page.url || "#";
+             a.textContent = page.title;
+             a.target = "_self";
+             a.className = "main-nav-link";
+             li.appendChild(a);
+
+             if (children?.length) {
+               li.classList.add("has-dropdown");
+               const dropdown = document.createElement("div");
+               dropdown.className = "dropdown-container";
+
+               const ul = document.createElement("ul");
+               ul.className = "dropdown-list";
+
+               children.forEach(child => {
+                 const cli = document.createElement("li");
+                 const ca = document.createElement("a");
+                 ca.href = child.url || "#";
+                 ca.textContent = child.title;
+                 ca.target = "_self";
+                 cli.appendChild(ca);
+                 ul.appendChild(cli);
+               });
+
+               dropdown.appendChild(ul);
+               li.appendChild(dropdown);
+             }
+
+             fragment.appendChild(li);
+           });
+
+           menuRoot.appendChild(fragment);
+
+           // Dropdown hover (jQuery)
+           if (window.jQuery) {
+             jQuery('.main-li.has-dropdown').each(function () {
+               const $item = jQuery(this);
+               $item.off('mouseenter mouseleave');
+               $item.on('mouseenter', function () { $item.addClass('open'); });
+               $item.on('mouseleave', function () { $item.removeClass('open'); });
+             });
+           }
+         }
+
+
+         // Footer quick links
+         function renderQuickLinks(links) {
+           if (!links?.length) return;
+           const root = document.getElementById("footer-quick-links");
+           if (!root) return;
+
+           links.forEach(link => {
+             const li = document.createElement("li");
+             li.className = "footer-links-list-item";
+
+             const a = document.createElement("a");
+             a.className = "footer-link footer-list-item-link";
+             a.href = link.url;
+             a.textContent = link.title;
+             a.target = link.external === "true" ? "_blank" : "_self";
+             if (link.external === "true") a.rel = "noopener noreferrer";
+
+             li.appendChild(a);
+             root.appendChild(li);
+           });
+         }
+
+         // --------------------
+         // INIT
+         // --------------------
+         document.addEventListener("DOMContentLoaded", async () => {
+           // Fire all loads in parallel (cache-first)
+           const [unit, contact, quickLinks] = await Promise.all([
+             loadDocOrCache(["main", "unit"], "unit"),
+             loadDocOrCache(["main", "contact"], "contact"),
+             loadCollectionOrCache(["main", "quickLinks", "children"], "quickLinks")
+           ]);
+
+           renderUnit(unit);
+           renderContact(contact);
+           renderQuickLinks(quickLinks);
+
+           // Menu can load in background without blocking DOM
+           renderMenu();
+         });
+      </script>
+
+
+
    </head>
    <body>
       <div class="header-section">
@@ -124,11 +462,13 @@
                      </div>
                   </div>
                   <div class="_2 footer-column-wrap">
-                     <h4 class="footer-column-title">Quick Links</h4>
-                     <ul class="footer-links-list w-list-unstyled">
-                        <li class="footer-links-list-item"><a class="footer-link footer-list-item-link " href="https://www.capnhq.gov/Auth/Identity/Account/eServicesLogin">eServices</a></li>
-                     </ul>
+                    <h4 class="footer-column-title">Quick Links</h4>
+                    <ul
+                      id="footer-quick-links"
+                      class="footer-links-list w-list-unstyled">
+                    </ul>
                   </div>
+
                </div>
             </div>
          </div>
