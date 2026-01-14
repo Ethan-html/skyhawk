@@ -77,7 +77,6 @@ function renderPageFromQuery(data) {
   /* ---------- TITLE & CONTENT ---------- */
 
   document.getElementById("pageTitle").textContent = activePage.title;
-  document.getElementById("pageTitle").textContent = activePage.title;
 
   if (activePage.externalUrl) {
     // Option 1: redirect immediately
