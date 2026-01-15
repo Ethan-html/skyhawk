@@ -5888,8 +5888,7 @@ button[type="submit"],
 .tertiary:hover,
 button[type="submit"]:hover,
 #jobs_module.cms_form .cms_form_button:hover {
-  border-color: #ba0c2f !important;
-  background-color: #ba0c2f !important;
+
   color: #fff !important;
 }
 .button.secondary,

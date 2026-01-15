@@ -82,16 +82,38 @@
     return [];
   }
 
-  async function loadPage(sectionId, onUpdate) {
+   async function loadPage(sectionId, onUpdate) {
     const cacheKey = `pageData_${sectionId}`;
     const cachedRaw = localStorage.getItem(cacheKey);
+
     if (cachedRaw) {
       try { onUpdate(JSON.parse(cachedRaw)); } catch {}
     }
-    const pageSnap = await getDoc(doc(db, "pages", sectionId));
+
+    // ✅ Correct document path
+    const pageRef = doc(db, "member", "pages", "children", sectionId);
+    const pageSnap = await getDoc(pageRef);
+
     if (!pageSnap.exists()) return;
-    const childrenSnap = await getDocs(collection(db, `pages/${sectionId}/children`));
-    const fresh = { id: sectionId, title: pageSnap.data().title, children: {} };
+
+    // ✅ Correct children collection path
+    const childrenRef = collection(
+      db,
+      "member",
+      "pages",
+      "children",
+      sectionId,
+      "children"
+    );
+
+    const childrenSnap = await getDocs(childrenRef);
+
+    const fresh = {
+      id: sectionId,
+      title: pageSnap.data().title,
+      children: {}
+    };
+
     childrenSnap.forEach(c => {
       const d = c.data();
       fresh.children[d.slug] = {
@@ -101,11 +123,13 @@
         externalUrl: d.externalUrl || null
       };
     });
+
     if (JSON.stringify(fresh) !== cachedRaw) {
       localStorage.setItem(cacheKey, JSON.stringify(fresh));
       onUpdate(fresh);
     }
   }
+
 
   // ===============================
   // RENDER FUNCTIONS
@@ -121,14 +145,14 @@
     const sideList = document.getElementById("sideNavList");
     const sideTitle = document.getElementById("sideNavTitleLink");
     sideTitle.textContent = pageData.title;
-    sideTitle.href = `/page?page=${pageData.id}`;
+    sideTitle.href = `/memberpage?page=${pageData.id}`;
     sideList.innerHTML = "";
     children.forEach(c => {
       const li = document.createElement("li");
       li.className = "left-nav-list-item";
       const a = document.createElement("a");
       a.className = "left-nav-list-link";
-      a.href = `/page?page=${pageData.id}/${c.slug}`;
+      a.href = `/memberpage?page=${pageData.id}/${c.slug}`;
       a.textContent = c.title;
       if (c.slug === active.slug) a.classList.add("selected");
       li.append(a, document.createElement("div"));

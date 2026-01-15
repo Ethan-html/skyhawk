@@ -6,10 +6,151 @@
     <link rel="icon" href="/media/websites/skyhawks_logo_CAP_transparent.ico">
     <link rel="shortcut icon" href="/media/websites/skyhawks_logo_CAP_transparent.ico" type="image/png">
     <link rel="stylesheet" href="assets/stylesheets/main.css">
-    <script src="/assets/js/site-loader.js" defer></script>
     <script src="https://skyhawk.cap.gov/core/libraries/jquery/assets/3.3.1/jquery.min.js"></script>
     <script src="https://skyhawk.cap.gov/assets/javascripts/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js"></script>
     <script src="https://skyhawk.cap.gov/core/public/shared/assets/js/jquery.cycle2/2.1.6/jquery.cycle2-fef2f3645726cce4154911d6140d7d52.min.js"></script>
+    <script type="module">
+         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+         import {
+           initializeFirestore,
+           persistentLocalCache,
+           persistentMultipleTabManager,
+           collection,
+           doc,
+           getDoc,
+           getDocs
+         } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+         // --------------------
+         // Firebase config
+         // --------------------
+         const firebaseConfig = {
+           apiKey: "AIzaSyBk_ikYB1PzkgHx4zJY73pe3EfzQRpZvqw",
+           authDomain: "skyhawk-web.firebaseapp.com",
+           projectId: "skyhawk-web",
+           storageBucket: "skyhawk-web.firebasestorage.app",
+           messagingSenderId: "340655139001",
+           appId: "1:340655139001:web:7923a1fe83ac4a4c689368",
+           measurementId: "G-M2RSE2BRK2"
+         };
+
+         const app = initializeApp(firebaseConfig);
+         const db = initializeFirestore(app, {
+           cache: persistentLocalCache({
+             tabManager: persistentMultipleTabManager()
+           })
+         });
+
+         // --------------------
+         // Cache-first loader
+         // --------------------
+         async function loadDocOrCache(pathSegments, cacheKey) {
+           const cached = localStorage.getItem(cacheKey);
+           if (cached) {
+             try { return JSON.parse(cached); } catch {}
+           }
+
+           try {
+             const ref = doc(db, ...pathSegments);
+             const snap = await getDoc(ref);
+             if (snap.exists()) {
+               const data = snap.data();
+               localStorage.setItem(cacheKey, JSON.stringify(data));
+               return data;
+             }
+           } catch (err) {
+             console.warn(`Failed to load ${pathSegments.join("/")}`, err);
+           }
+           return null;
+         }
+
+         async function loadCollectionOrCache(pathSegments, cacheKey) {
+           const cached = localStorage.getItem(cacheKey);
+           if (cached) {
+             try { return JSON.parse(cached); } catch {}
+           }
+
+           try {
+             const colRef = collection(db, ...pathSegments);
+             const snap = await getDocs(colRef);
+             const data = snap.docs.map(d => d.data());
+             localStorage.setItem(cacheKey, JSON.stringify(data));
+             return data;
+           } catch (err) {
+             console.warn(`Failed to load collection ${pathSegments.join("/")}`, err);
+           }
+           return [];
+         }
+
+         // --------------------
+         // Render functions
+         // --------------------
+         function renderUnit(unit) {
+           if (!unit) return;
+           document.title = unit.name;
+           const el = document.getElementById("unit-name");
+           if (el) el.textContent = `${unit.name} (${unit.designation})`;
+         }
+
+         function renderContact(contact) {
+           if (!contact) return;
+           const addrEl = document.getElementById("address");
+           if (addrEl) addrEl.innerHTML = contact.address.replace(/\n/g, "<br>");
+
+           const phoneEl = document.getElementById("phone");
+           if (phoneEl) {
+             phoneEl.href = `tel:${contact.phone}`;
+             phoneEl.textContent = contact.phone;
+           }
+
+           const emailEl = document.getElementById("email");
+           if (emailEl) {
+             emailEl.innerHTML = `<a href="mailto:${contact.email}">${contact.email}</a>`;
+           }
+         }
+
+
+         // Footer quick links
+         function renderQuickLinks(links) {
+           if (!links?.length) return;
+           const root = document.getElementById("footer-quick-links");
+           if (!root) return;
+
+           links.forEach(link => {
+             const li = document.createElement("li");
+             li.className = "footer-links-list-item";
+
+             const a = document.createElement("a");
+             a.className = "footer-link footer-list-item-link";
+             a.href = link.url;
+             a.textContent = link.title;
+             a.target = link.external === "true" ? "_blank" : "_self";
+             if (link.external === "true") a.rel = "noopener noreferrer";
+
+             li.appendChild(a);
+             root.appendChild(li);
+           });
+         }
+
+         // --------------------
+         // INIT
+         // --------------------
+         document.addEventListener("DOMContentLoaded", async () => {
+           // Fire all loads in parallel (cache-first)
+           const [unit, contact, quickLinks] = await Promise.all([
+             loadDocOrCache(["main", "unit"], "unit"),
+             loadDocOrCache(["main", "contact"], "contact"),
+             loadCollectionOrCache(["main", "quickLinks", "children"], "quickLinks")
+           ]);
+
+           renderUnit(unit);
+           renderContact(contact);
+           renderQuickLinks(quickLinks);
+
+           // Menu can load in background without blocking DOM
+           renderMenu();
+         });
+      </script>
     <style>
         /* =========================
         LOGIN PAGE – ISOLATED
@@ -61,37 +202,29 @@
           transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .login-card input:focus {
-          outline: none;
-          border-color: #0072ce;
-          box-shadow: 0 0 0 3px rgba(0, 114, 206, 0.15);
-        }
-
         /* Button */
-        .login-card button {
-          width: 100%;
-          margin-top: 10px;
-          padding: 12px;
-          border-radius: 6px;
-          border: none;
-          background-color: #0072ce;
-          color: #fff;
-          font-size: 15px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: background-color 0.2s ease, transform 0.1s ease;
-        }
+.login-card button {
+    width: 100%;
+    color: #fff;
+    display: block;
+    border: none;
+    padding: 15px 20px;
+    border-radius: 25px;
+    background: #1161ee;
+}
 
-        .login-card button:hover {
-          background-color: #005bb5;
-        }
+.blue-line {
+  width: 100%;       /* full width of parent container */
+  height: 5px;       /* thickness of the line */
+  background-color: #001489; /* plain blue color */
+  border: none;      /* remove any default borders */
+  border-radius: 2px; /* optional, slightly rounded ends */
+}
 
-        .login-card button:active {
-          transform: translateY(1px);
-        }
+
 
         /* Error / Status message */
-        .login-card .error {
+        .login-card .error1 {
           margin-top: 12px;
           font-size: 14px;
         }
@@ -129,26 +262,13 @@
                      </div>
                      <a href="#main-content" class="cms_form_button primary skip-to-main-content sronly">Skip to main content</a>
                   </div>
+
                </div>
-               <nav class="header-menu-wrap">
-                  <div class="header-menu-inside-wrap">
-                     <div class="nav-container w-container">
-                        <nav class="desktop-navigation-menu">
-                           <ul class="main-ul" id="main-menu"></ul>
-                           <div class="link-block site-share-wrapper w-hidden-medium w-hidden-small w-hidden-tiny">
-                              <a href="" class="w-inline-block w--current" id="load-site-share"> <img src="/assets/images/share-icon.png" alt="Share" class="share-icon"> </a>
-                              <nav class="nav-drop-list w-dropdown-list">
-                                 <a href="mailto:?subject=Sitemap&amp;body=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap" class="nav-drop-list-link">Email this page</a> <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;t=Sitemap" class="nav-drop-list-link" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;t=Sitemap'); return false;" target="_blank">Share on Facebook</a> <a href="https://twitter.com/intent/tweet?source=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;text=" class="nav-drop-list-link" onclick="window.open('https://twitter.com/intent/tweet?text=Sitemap https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap'); return false;" title="Share on X (formerly Twitter)" target="_blank">Share on X</a> <a href="https://www.linkedin.com/sharing/share-offsite?mini=true&amp;summary=Sitemap&amp;source=Civil%20Air%20Patrol&amp;url=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;subject=Sitemap" class="nav-drop-list-link" onclick="window.open('https://www.linkedin.com/sharing/share-offsite?mini=true&amp;summary=Sitemap&amp;source=Civil%20Air%20Patrol&amp;url=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;subject=Sitemap'); return false;">Share on LinkedIn</a>
-                              </nav>
-                           </div>
-                        </nav>
-                     </div>
-                  </div>
-               </nav>
             </div>
             <div class="w-nav-overlay" data-wf-ignore=""></div>
          </div>
       </div>
+    <div class="blue-line"></div>
     <div class="login-page">
         <div class="login-card">
 
@@ -157,7 +277,7 @@
                 <input type="text" id="username" placeholder="Email" required>
                 <input type="password" id="password" placeholder="Password" required>
                 <button type="submit">Login</button>
-                <div class="error" style="display: none;" id="errorMsg"></div>
+                <div class="error1" style="display: none;" id="errorMsg"></div>
             </form>
             <div class="login-footer">
                 <p>Skyhawk Members only</p>
