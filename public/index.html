@@ -3,8 +3,7 @@
    <head>
       <meta charset="utf-8">
       <title></title>
-      <link rel="icon" href="/media/websites/skyhawks_logo_CAP_transparent.ico">
-      <link rel="shortcut icon" href="/media/websites/skyhawks_logo_CAP_transparent.ico" type="image/png">
+      <link rel="icon" type="image/png" href="/media/website/skyhawks_logo_CAP_transparent.png">
       <link rel="stylesheet" href="assets/stylesheets/main.css">
 
       <script src="https://skyhawk.cap.gov/core/libraries/jquery/assets/3.3.1/jquery.min.js"></script>
@@ -111,96 +110,96 @@
          }
 
         async function renderMenu() {
-  const menuRoot = document.getElementById("main-menu");
-  if (!menuRoot) return;
+           const menuRoot = document.getElementById("main-menu");
+           if (!menuRoot) return;
 
-  // 1️⃣ Try to load menu from localStorage first
-  let pagesData = JSON.parse(localStorage.getItem("menuPages") || "null");
+           // 1️⃣ Try to load menu from localStorage first
+           let pagesData = JSON.parse(localStorage.getItem("menuPages") || "null");
 
-  if (pagesData) {
-    buildMenu(pagesData, menuRoot);
-  }
+           if (pagesData) {
+             buildMenu(pagesData, menuRoot);
+           }
 
-  // 2️⃣ Fetch fresh menu from Firestore (in background)
-  try {
-    const pagesCollection = collection(db, "main", "menu", "pages");
-    const pagesSnap = await getDocs(pagesCollection);
+           // 2️⃣ Fetch fresh menu from Firestore (in background)
+           try {
+             const pagesCollection = collection(db, "main", "menu", "pages");
+             const pagesSnap = await getDocs(pagesCollection);
 
-    const pagesWithChildren = await Promise.all(
-      pagesSnap.docs.map(async pageDoc => {
-        const childrenSnap = await getDocs(collection(pagesCollection, pageDoc.id, "children"));
-        return {
-          page: pageDoc.data(),
-          children: childrenSnap.docs.map(d => d.data())
-        };
-      })
-    );
+             const pagesWithChildren = await Promise.all(
+               pagesSnap.docs.map(async pageDoc => {
+                 const childrenSnap = await getDocs(collection(pagesCollection, pageDoc.id, "children"));
+                 return {
+                   page: pageDoc.data(),
+                   children: childrenSnap.docs.map(d => d.data())
+                 };
+               })
+             );
 
-    // Save to cache
-    localStorage.setItem("menuPages", JSON.stringify(pagesWithChildren));
+             // Save to cache
+             localStorage.setItem("menuPages", JSON.stringify(pagesWithChildren));
 
-    // Rebuild menu (replace existing)
-    menuRoot.innerHTML = "";
-    buildMenu(pagesWithChildren, menuRoot);
+             // Rebuild menu (replace existing)
+             menuRoot.innerHTML = "";
+             buildMenu(pagesWithChildren, menuRoot);
 
-  } catch (err) {
-    console.warn("Failed to load menu from Firestore", err);
-  }
-}
+           } catch (err) {
+             console.warn("Failed to load menu from Firestore", err);
+           }
+         }
 
-// Helper: build menu from data
-function buildMenu(pagesWithChildren, menuRoot) {
-  const fragment = document.createDocumentFragment();
+         // Helper: build menu from data
+         function buildMenu(pagesWithChildren, menuRoot) {
+           const fragment = document.createDocumentFragment();
 
-  pagesWithChildren.forEach(({ page, children }) => {
-    const li = document.createElement("li");
-    li.className = "main-li";
-    li.id = `menu-item-${page.id || page.title}`;
+           pagesWithChildren.forEach(({ page, children }) => {
+             const li = document.createElement("li");
+             li.className = "main-li";
+             li.id = `menu-item-${page.id || page.title}`;
 
-    const a = document.createElement("a");
-    a.href = page.url || "#";
-    a.textContent = page.title;
-    a.target = "_self";
-    a.className = "main-nav-link";
-    li.appendChild(a);
+             const a = document.createElement("a");
+             a.href = page.url || "#";
+             a.textContent = page.title;
+             a.target = "_self";
+             a.className = "main-nav-link";
+             li.appendChild(a);
 
-    if (children?.length) {
-      li.classList.add("has-dropdown");
-      const dropdown = document.createElement("div");
-      dropdown.className = "dropdown-container";
+             if (children?.length) {
+               li.classList.add("has-dropdown");
+               const dropdown = document.createElement("div");
+               dropdown.className = "dropdown-container";
 
-      const ul = document.createElement("ul");
-      ul.className = "dropdown-list";
+               const ul = document.createElement("ul");
+               ul.className = "dropdown-list";
 
-      children.forEach(child => {
-        const cli = document.createElement("li");
-        const ca = document.createElement("a");
-        ca.href = child.url || "#";
-        ca.textContent = child.title;
-        ca.target = "_self";
-        cli.appendChild(ca);
-        ul.appendChild(cli);
-      });
+               children.forEach(child => {
+                 const cli = document.createElement("li");
+                 const ca = document.createElement("a");
+                 ca.href = child.url || "#";
+                 ca.textContent = child.title;
+                 ca.target = "_self";
+                 cli.appendChild(ca);
+                 ul.appendChild(cli);
+               });
 
-      dropdown.appendChild(ul);
-      li.appendChild(dropdown);
-    }
+               dropdown.appendChild(ul);
+               li.appendChild(dropdown);
+             }
 
-    fragment.appendChild(li);
-  });
+             fragment.appendChild(li);
+           });
 
-  menuRoot.appendChild(fragment);
+           menuRoot.appendChild(fragment);
 
-  // Dropdown hover (jQuery)
-  if (window.jQuery) {
-    jQuery('.main-li.has-dropdown').each(function () {
-      const $item = jQuery(this);
-      $item.off('mouseenter mouseleave');
-      $item.on('mouseenter', function () { $item.addClass('open'); });
-      $item.on('mouseleave', function () { $item.removeClass('open'); });
-    });
-  }
-}
+           // Dropdown hover (jQuery)
+           if (window.jQuery) {
+             jQuery('.main-li.has-dropdown').each(function () {
+               const $item = jQuery(this);
+               $item.off('mouseenter mouseleave');
+               $item.on('mouseenter', function () { $item.addClass('open'); });
+               $item.on('mouseleave', function () { $item.removeClass('open'); });
+             });
+           }
+         }
 
 
          // Footer quick links
