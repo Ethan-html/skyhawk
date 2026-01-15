@@ -8,6 +8,21 @@
     ],
     "rewrites": [
       {
+        "source": "/login",
+        "destination": "/login.html"
+      },
+      {
+        "source": "/page",
+        "destination": "/page.html"
+      },
+      {
+        "source": "/member",
+        "destination": "/member.html"
+      },{
+        "source": "/memberpage",
+        "destination": "/memberpage.html"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
       }
