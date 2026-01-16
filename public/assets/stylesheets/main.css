@@ -11905,11 +11905,7 @@ a.no-border {
   .blue-line {
   border: none;           /* remove default border */
   height: 4px;            /* thickness */
-  background-color: blue; /* solid blue */
+  background-color: black; /* solid blue */
   margin-top: -5px;
 }
-
-
-
-
 
