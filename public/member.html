@@ -5,7 +5,7 @@
       <title></title>
       <link rel="icon" type="image/png" href="/media/website/skyhawks_logo_CAP_transparent.png">
       <link rel="stylesheet" href="assets/stylesheets/main.css">
-
+      <meta name="viewport" content="width=device-width, initial-scale=1">
       <script src="https://skyhawk.cap.gov/core/libraries/jquery/assets/3.3.1/jquery.min.js"></script>
       <script src="https://skyhawk.cap.gov/assets/javascripts/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js"></script>
       <script src="https://skyhawk.cap.gov/core/public/shared/assets/js/jquery.cycle2/2.1.6/jquery.cycle2-fef2f3645726cce4154911d6140d7d52.min.js"></script>
@@ -304,6 +304,12 @@
     renderMenu();
     renderMemberMenu();
   });
+const toggle = document.getElementById('mobile-menu-toggle');
+         const menu = document.querySelector('.desktop-navigation-menu');
+
+         toggle.addEventListener('click', () => {
+           menu.classList.toggle('open');
+         });
 </script>
 
       <style>
@@ -363,6 +369,9 @@
                <nav class="header-menu-wrap">
                   <div class="header-menu-inside-wrap">
                      <div class="nav-container w-container">
+                      <button id="mobile-menu-toggle" aria-label="Menu" class="mobile-menu-btn">
+                          ☰
+                        </button>
                         <nav class="desktop-navigation-menu">
                            <ul class="main-ul" id="main-menu"></ul>
                            <div class="link-block site-share-wrapper w-hidden-medium w-hidden-small w-hidden-tiny">

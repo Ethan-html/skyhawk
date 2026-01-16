@@ -5,6 +5,7 @@
       <title></title>
       <link rel="icon" type="image/png" href="/media/website/skyhawks_logo_CAP_transparent.png">
       <link rel="stylesheet" href="assets/stylesheets/main.css">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
 
       <script src="https://skyhawk.cap.gov/core/libraries/jquery/assets/3.3.1/jquery.min.js"></script>
       <script src="https://skyhawk.cap.gov/assets/javascripts/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js"></script>
@@ -242,10 +243,16 @@
            // Menu can load in background without blocking DOM
            renderMenu();
          });
+
+
+         const toggle = document.getElementById('mobile-menu-toggle');
+         const menu = document.querySelector('.desktop-navigation-menu');
+
+         toggle.addEventListener('click', () => {
+           menu.classList.toggle('open');
+         });
+
       </script>
-
-
-
    </head>
    <body>
       <div class="header-section">
@@ -275,8 +282,13 @@
                <nav class="header-menu-wrap">
                   <div class="header-menu-inside-wrap">
                      <div class="nav-container w-container">
+                        <button id="mobile-menu-toggle" aria-label="Menu" class="mobile-menu-btn">
+                          ☰
+                        </button>
+
                         <nav class="desktop-navigation-menu">
                            <ul class="main-ul" id="main-menu"></ul>
+
                            <div class="link-block site-share-wrapper w-hidden-medium w-hidden-small w-hidden-tiny">
                               <a href="" class="w-inline-block w--current" id="load-site-share"> <img src="/assets/images/share-icon.png" alt="Share" class="share-icon"> </a>
                               <nav class="nav-drop-list w-dropdown-list">
@@ -402,7 +414,7 @@
                         <li class="footer-signoff-list-item"><a href="https://www.gocivilairpatrol.com/legal-privacy-statement" target="_blank" rel="noopener" class="footer-link">Legal &amp; Privacy Statement</a></li>
                      </ul>
                   </div>
-                  <div class="column w-clearfix w-col w-col-3 w-col-stack">
+                  <div class="devby column w-clearfix w-col w-col-3 w-col-stack">
                      <div class="footer-signoff-grip w-inline-block">
                         <div id="GRIPFooterLogo" style="padding-top: 10px;">
                            <span id="GRIPFooterLogoText" style="
