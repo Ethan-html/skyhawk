@@ -33,6 +33,7 @@
           getDocs
         } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
         import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+        import Glide from "https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/glide.esm.min.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyBk_ikYB1PzkgHx4zJY73pe3EfzQRpZvqw",
@@ -318,24 +319,57 @@
                toggle.addEventListener('click', () => {
                  menu.classList.toggle('open');
                });
-      </script>
 
-      <style>
-        .menu-divider {
-          height: 3px;
-          width: 100%;
-          background: linear-gradient(
-            to right,
-            #001489,
-            #c8102e,
-            #001489
-          );
+
+          // --------------------
+        // Fetch slideshow URLs from Firebase
+        // --------------------
+        async function loadSlideshow() {
+          try {
+            const docRef = doc(db, "main", "slideshow");
+            const snap = await getDoc(docRef);
+            if (!snap.exists()) return [];
+
+            const data = snap.data();
+            if (!data.urls) return [];
+
+            // Split comma-separated list and remove empty items
+            return data.urls.split(",").map(u => u.trim()).filter(Boolean);
+          } catch (err) {
+            console.warn("Failed to load slideshow URLs:", err);
+            return [];
+          }
         }
 
+        // --------------------
+        // Render Glide.js slides dynamically
+        // --------------------
+        async function renderSlideshow() {
+          const urls = await loadSlideshow();
+          if (!urls.length) return;
 
+          const slidesContainer = document.getElementById("glide-slides");
+          urls.forEach(url => {
+            const li = document.createElement("li");
+            li.className = "glide__slide";
+            const img = document.createElement("img");
+            img.src = url;
+            li.appendChild(img);
+            slidesContainer.appendChild(li);
+          });
 
+          new Glide('#slideshow-container', {
+            type: 'carousel',
+            perView: 1,
+            focusAt: 'center',
+            gap: 0,
+            autoplay: 5000,
+            hoverpause: true,
+          }).mount();
+        }
 
-      </style>
+        document.addEventListener("DOMContentLoaded", renderSlideshow);
+      </script>
 
    </head>
     <body style="display:none;">
@@ -410,6 +444,7 @@
       <div id="main-page-content">
          <section class="main-section">
             <div class="content-box-section-new">
+              
                <div class="learn-more-heading"></div>
                <div class="content-box-section">
                   <div>

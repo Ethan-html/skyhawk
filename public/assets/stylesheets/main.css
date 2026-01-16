@@ -11890,3 +11890,26 @@ a.no-border {
   }
 }
 
+
+
+.menu-divider {
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(
+    to right,
+    #001489,
+    #c8102e,
+    #001489
+  );
+}
+  .blue-line {
+  border: none;           /* remove default border */
+  height: 4px;            /* thickness */
+  background-color: blue; /* solid blue */
+  margin-top: -5px;
+}
+
+
+
+
+

@@ -7,6 +7,11 @@
       <link rel="stylesheet" href="assets/stylesheets/main.css">
       <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.theme.min.css">
+  
+
+
       <script src="https://skyhawk.cap.gov/core/libraries/jquery/assets/3.3.1/jquery.min.js"></script>
       <script src="https://skyhawk.cap.gov/assets/javascripts/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js"></script>
       <script src="https://skyhawk.cap.gov/core/public/shared/assets/js/jquery.cycle2/2.1.6/jquery.cycle2-fef2f3645726cce4154911d6140d7d52.min.js"></script>
@@ -30,6 +35,7 @@
            getDoc,
            getDocs
          } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+        import Glide from "https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/glide.esm.min.js";
 
          // --------------------
          // Firebase config
@@ -261,7 +267,57 @@
            menu.classList.toggle('open');
          });
 
+         // --------------------
+        // Fetch slideshow URLs from Firebase
+        // --------------------
+        async function loadSlideshow() {
+          try {
+            const docRef = doc(db, "main", "slideshow");
+            const snap = await getDoc(docRef);
+            if (!snap.exists()) return [];
+
+            const data = snap.data();
+            if (!data.urls) return [];
+
+            // Split comma-separated list and remove empty items
+            return data.urls.split(",").map(u => u.trim()).filter(Boolean);
+          } catch (err) {
+            console.warn("Failed to load slideshow URLs:", err);
+            return [];
+          }
+        }
+
+        // --------------------
+        // Render Glide.js slides dynamically
+        // --------------------
+        async function renderSlideshow() {
+          const urls = await loadSlideshow();
+          if (!urls.length) return;
+
+          const slidesContainer = document.getElementById("glide-slides");
+          urls.forEach(url => {
+            const li = document.createElement("li");
+            li.className = "glide__slide";
+            const img = document.createElement("img");
+            img.src = url;
+            li.appendChild(img);
+            slidesContainer.appendChild(li);
+          });
+
+          new Glide('#slideshow-container', {
+            type: 'carousel',
+            perView: 1,
+            focusAt: 'center',
+            gap: 0,
+            autoplay: 5000,
+            hoverpause: true,
+          }).mount();
+        }
+
+        document.addEventListener("DOMContentLoaded", renderSlideshow);
       </script>
+
+
    </head>
    <body>
       <div class="header-section">
@@ -316,6 +372,23 @@
       <div id="main-page-content">
          <section class="main-section">
             <div class="content-box-section-new">
+               <div id="slideshow-container" class="glide">
+                 <div class="glide__track" data-glide-el="track">
+                   <ul class="glide__slides" id="glide-slides">
+                     <!-- Slides will be injected here -->
+                   </ul>
+                 </div>
+
+                 <div class="glide__arrows" data-glide-el="controls">
+                   <button class="glide__arrow glide__arrow--left" data-glide-dir="<">‹</button>
+                   <button class="glide__arrow glide__arrow--right" data-glide-dir=">">›</button>
+                 </div>
+
+                 <div class="glide__bullets" data-glide-el="controls[nav]"></div>
+               </div>
+
+               <div class="blue-line"></div>
+
                <div class="learn-more-heading"></div>
                <div class="content-box-section">
                   <div>
