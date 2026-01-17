@@ -100,8 +100,10 @@
           // ✅ Correct document path
           const pageRef = doc(db, "member", "pages", "children", sectionId);
           const pageSnap = await getDoc(pageRef);
-
-          if (!pageSnap.exists()) return;
+          if (!pageSnap.exists()) {
+            window.location.href = "/404"; // Redirect to 404 page
+            return;
+          }
 
           // ✅ Correct children collection path
           const childrenRef = collection(

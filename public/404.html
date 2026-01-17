@@ -10,15 +10,6 @@
       <script src="https://skyhawk.cap.gov/core/libraries/jquery/assets/3.3.1/jquery.min.js"></script>
       <script src="https://skyhawk.cap.gov/assets/javascripts/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js"></script>
       <script src="https://skyhawk.cap.gov/core/public/shared/assets/js/jquery.cycle2/2.1.6/jquery.cycle2-fef2f3645726cce4154911d6140d7d52.min.js"></script>
-      <!-- Google tag (gtag.js) -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-M2RSE2BRK2"></script>
-      <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-M2RSE2BRK2');
-      </script>
       <script type="module">
          import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
          import {
@@ -65,10 +56,7 @@
 
           // --- Always revalidate in background ---
           const pageSnap = await getDoc(doc(db, "pages", sectionId));
-          if (!pageSnap.exists()) {
-            window.location.href = "/404"; // Redirect to 404 page
-            return;
-          }
+          if (!pageSnap.exists()) return;
 
           const childrenSnap = await getDocs(
             collection(db, `pages/${sectionId}/children`)
@@ -364,9 +352,6 @@
            menu.classList.toggle('open');
          });
       </script>
-
-
-
    </head>
    <body>
       <div class="header-section">
@@ -415,49 +400,41 @@
             <div class="w-nav-overlay" data-wf-ignore=""></div>
          </div>
       </div>
-      <div id="page">
-        <div class="inside-content-section section-wrap">
-          <div class="inside-content-beckground">
-            <div class="inside-row w-row">
-
-              <!-- LEFT NAV -->
-              <div class="left-nav-column w-col w-col-3 w-col-stack w-hidden-medium w-hidden-small w-hidden-tiny">
-                <div class="left-nav-list-content-wrap">
-                  <h2 class="section-title">
-                    <a id="sideNavTitleLink"></a>
-                  </h2>
-                  <nav>
-                    <ul id="sideNavList" class="left-nav-list w-list-unstyled"></ul>
-                  </nav>
-                </div>
-              </div>
-
-              <!-- MAIN CONTENT -->
-              <div class="main-content-column w-col w-col-9 w-col-stack">
-
-                <!-- BREADCRUMBS -->
-                <div class="inside-page-header-content-wrap">
-                  <nav>
-                    <ol id="breadcrumbList" class="breadcrumb-list w-clearfix w-list-unstyled"></ol>
-                  </nav>
-                </div>
-
-                <!-- PAGE TITLE -->
-                <div class="landing-page-title-wrapper">
-                  <h1 id="pageTitle" class="h1-heading"></h1>
-                </div>
-
-                <!-- PAGE CONTENT -->
-                <div class="inside-row-nested w-row">
-                  <div class="main-content-column-nested w-col w-col-12 w-col-stack">
-                    <div id="pageContent" class="main-content-wrap nested-content-wrap"></div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
+<div class="inside-content-section section-wrap">
+    <div class="inside-content-beckground no-columns">
+     <div class="inside-row w-row">
+      <div class="main-content-column w-col w-col-12 w-col-stack">
+       <div class="inside-page-header-content-wrap">
+        <nav>
+         <ol class="breadcrumb-list w-clearfix w-list-unstyled">
+          <li class="breadcrumb-list-item"><a class="breadcrumb-link link" href="/">Home</a>
+           <div class="breadcrumb-divider">
+            /
+           </div></li>
+         </ol>
+        </nav>
+       </div>
+       <div class="landing-page-title-wrapper">
+        <h1 class="h1-heading">The Page You Requested is No Longer Available</h1>
+       </div>
+       <div class="inside-row-nested w-row">
+        <div class="main-content-column-nested w-col w-col-12 w-col-stack">
+         <div class="main-content-wrap nested-content-wrap">
+          <div id="session-message-wrapper">
           </div>
+          <p>You may not be able to find this page because of:</p>
+          <ul>
+           <li>An out-of-date bookmark or favorite</li>
+           <li>A search engine that has an out-of-date listing for us</li>
+           <li>A mistyped address</li>
+          </ul>
+         </div>
         </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
       </div>
       <div class="footer-section">
          <div class="middle-footer-div">
