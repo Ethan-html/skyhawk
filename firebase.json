@@ -22,10 +22,12 @@
         "source": "/memberpage",
         "destination": "/memberpage.html"
       },
+      { "source": "/photos", "destination": "/imgs.html" },
       {
         "source": "**",
         "destination": "/index.html"
       }
+
     ]
   }
 }

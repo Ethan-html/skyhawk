@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <title>Skyhawk Photo Gallery</title>
+  <link rel="icon" type="image/png" href="/media/website/skyhawks_logo_CAP_transparent.png">
+  <link rel="stylesheet" href="assets/stylesheets/main.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://skyhawk.cap.gov/core/libraries/jquery/assets/3.3.1/jquery.min.js"></script>
+  <script src="https://skyhawk.cap.gov/assets/javascripts/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js"></script>
+  <script src="https://skyhawk.cap.gov/core/public/shared/assets/js/jquery.cycle2/2.1.6/jquery.cycle2-fef2f3645726cce4154911d6140d7d52.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #F2F3F4;
+      color: black;
+    }
+    h1 {
+      text-align: center;
+    }
+    #albums {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+      color: white;
+
+    }
+    .album {
+      padding: 10px 20px;
+      background: #222;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+      background: #333;
+    }
+    .gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .thumb {
+      width: 220px;
+      height: 160px;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #222 url('noimg.jpg') center/cover no-repeat;
+      transition: transform 0.2s, opacity 0.3s, background-image 0.3s;
+    }
+    /* Lightbox overlay */
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.95);
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 9999;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+    .lightbox a {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+      background: #333;
+      padding: 10px 20px;
+      border-radius: 5px;
+      transition: background 0.2s;
+    }
+    .lightbox a:hover {
+      background: #555;
+    }
+    .lightbox.active {
+      display: flex;
+    }
+    .black-line {
+      border: none;           /* remove default border */
+      height: 4px;            /* thickness */
+      background-color: black; /* solid blue */
+    }
+  </style>
+  <script type="module">
+         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+         import {
+           initializeFirestore,
+           persistentLocalCache,
+           persistentMultipleTabManager,
+           collection,
+           doc,
+           getDoc,
+           getDocs
+         } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+         // --------------------
+         // Firebase config
+         // --------------------
+         const firebaseConfig = {
+           apiKey: "AIzaSyBk_ikYB1PzkgHx4zJY73pe3EfzQRpZvqw",
+           authDomain: "skyhawk-web.firebaseapp.com",
+           projectId: "skyhawk-web",
+           storageBucket: "skyhawk-web.firebasestorage.app",
+           messagingSenderId: "340655139001",
+           appId: "1:340655139001:web:7923a1fe83ac4a4c689368",
+           measurementId: "G-M2RSE2BRK2"
+         };
+
+         const app = initializeApp(firebaseConfig);
+         const db = initializeFirestore(app, {
+           cache: persistentLocalCache({
+             tabManager: persistentMultipleTabManager()
+           })
+         });
+
+         // --------------------
+         // Cache-first loader
+         // --------------------
+         async function loadDocOrCache(pathSegments, cacheKey) {
+           const cached = localStorage.getItem(cacheKey);
+           if (cached) {
+             try { return JSON.parse(cached); } catch {}
+           }
+
+           try {
+             const ref = doc(db, ...pathSegments);
+             const snap = await getDoc(ref);
+             if (snap.exists()) {
+               const data = snap.data();
+               localStorage.setItem(cacheKey, JSON.stringify(data));
+               return data;
+             }
+           } catch (err) {
+             console.warn(`Failed to load ${pathSegments.join("/")}`, err);
+           }
+           return null;
+         }
+
+         async function loadCollectionOrCache(pathSegments, cacheKey) {
+           const cached = localStorage.getItem(cacheKey);
+           if (cached) {
+             try { return JSON.parse(cached); } catch {}
+           }
+
+           try {
+             const colRef = collection(db, ...pathSegments);
+             const snap = await getDocs(colRef);
+             const data = snap.docs.map(d => d.data());
+             localStorage.setItem(cacheKey, JSON.stringify(data));
+             return data;
+           } catch (err) {
+             console.warn(`Failed to load collection ${pathSegments.join("/")}`, err);
+           }
+           return [];
+         }
+
+         // --------------------
+         // Render functions
+         // --------------------
+         function renderUnit(unit) {
+           if (!unit) return;
+           document.title = unit.name;
+           const el = document.getElementById("unit-name");
+           if (el) el.textContent = `${unit.name} (${unit.designation})`;
+         }
+
+         function renderContact(contact) {
+           if (!contact) return;
+           const addrEl = document.getElementById("address");
+           if (addrEl) addrEl.innerHTML = contact.address.replace(/\n/g, "<br>");
+
+           const phoneEl = document.getElementById("phone");
+           if (phoneEl) {
+             phoneEl.href = `tel:${contact.phone}`;
+             phoneEl.textContent = contact.phone;
+           }
+
+           const emailEl = document.getElementById("email");
+           if (emailEl) {
+             emailEl.innerHTML = `<a href="mailto:${contact.email}">${contact.email}</a>`;
+           }
+         }
+
+        async function renderMenu() {
+           const menuRoot = document.getElementById("main-menu");
+           if (!menuRoot) return;
+
+           // 1️⃣ Try to load menu from localStorage first
+           let pagesData = JSON.parse(localStorage.getItem("menuPages") || "null");
+
+           if (pagesData) {
+             buildMenu(pagesData, menuRoot);
+           }
+
+           // 2️⃣ Fetch fresh menu from Firestore (in background)
+           try {
+             const pagesCollection = collection(db, "main", "menu", "pages");
+             const pagesSnap = await getDocs(pagesCollection);
+
+             const pagesWithChildren = await Promise.all(
+               pagesSnap.docs.map(async pageDoc => {
+                 const childrenSnap = await getDocs(collection(pagesCollection, pageDoc.id, "children"));
+                 return {
+                   page: pageDoc.data(),
+                   children: childrenSnap.docs.map(d => d.data())
+                 };
+               })
+             );
+
+             // Save to cache
+             localStorage.setItem("menuPages", JSON.stringify(pagesWithChildren));
+
+             // Rebuild menu (replace existing)
+             menuRoot.innerHTML = "";
+             buildMenu(pagesWithChildren, menuRoot);
+
+           } catch (err) {
+             console.warn("Failed to load menu from Firestore", err);
+           }
+         }
+
+         // Helper: build menu from data
+         function buildMenu(pagesWithChildren, menuRoot) {
+           const fragment = document.createDocumentFragment();
+
+           pagesWithChildren.forEach(({ page, children }) => {
+             const li = document.createElement("li");
+             li.className = "main-li";
+             li.id = `menu-item-${page.id || page.title}`;
+
+             const a = document.createElement("a");
+             a.href = page.url || "#";
+             a.textContent = page.title;
+             a.target = "_self";
+             a.className = "main-nav-link";
+             li.appendChild(a);
+
+             if (children?.length) {
+               li.classList.add("has-dropdown");
+               const dropdown = document.createElement("div");
+               dropdown.className = "dropdown-container";
+
+               const ul = document.createElement("ul");
+               ul.className = "dropdown-list";
+
+               children.forEach(child => {
+                 const cli = document.createElement("li");
+                 const ca = document.createElement("a");
+                 ca.href = child.url || "#";
+                 ca.textContent = child.title;
+                 ca.target = "_self";
+                 cli.appendChild(ca);
+                 ul.appendChild(cli);
+               });
+
+               dropdown.appendChild(ul);
+               li.appendChild(dropdown);
+             }
+
+             fragment.appendChild(li);
+           });
+
+           menuRoot.appendChild(fragment);
+
+           // Dropdown hover (jQuery)
+           if (window.jQuery) {
+             jQuery('.main-li.has-dropdown').each(function () {
+               const $item = jQuery(this);
+               $item.off('mouseenter mouseleave');
+               $item.on('mouseenter', function () { $item.addClass('open'); });
+               $item.on('mouseleave', function () { $item.removeClass('open'); });
+             });
+           }
+         }
+
+
+         // Footer quick links
+         function renderQuickLinks(links) {
+           if (!links?.length) return;
+           const root = document.getElementById("footer-quick-links");
+           if (!root) return;
+
+           links.forEach(link => {
+             const li = document.createElement("li");
+             li.className = "footer-links-list-item";
+
+             const a = document.createElement("a");
+             a.className = "footer-link footer-list-item-link";
+             a.href = link.url;
+             a.textContent = link.title;
+             a.target = link.external === "true" ? "_blank" : "_self";
+             if (link.external === "true") a.rel = "noopener noreferrer";
+
+             li.appendChild(a);
+             root.appendChild(li);
+           });
+         }
+
+         // --------------------
+         // INIT
+         // --------------------
+         document.addEventListener("DOMContentLoaded", async () => {
+           // Fire all loads in parallel (cache-first)
+           const [unit, contact, quickLinks] = await Promise.all([
+             loadDocOrCache(["main", "unit"], "unit"),
+             loadDocOrCache(["main", "contact"], "contact"),
+             loadCollectionOrCache(["main", "quickLinks", "children"], "quickLinks")
+           ]);
+
+           renderUnit(unit);
+           renderContact(contact);
+           renderQuickLinks(quickLinks);
+
+           // Menu can load in background without blocking DOM
+           renderMenu();
+         });
+
+
+         const toggle = document.getElementById('mobile-menu-toggle');
+         const menu = document.querySelector('.desktop-navigation-menu');
+
+         toggle.addEventListener('click', () => {
+           menu.classList.toggle('open');
+         });
+      </script>
+    <script type="module">
+      import { getAuth, onAuthStateChanged } 
+        from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
+      const auth = getAuth();
+
+      // HARD GATE — no content allowed until auth resolves
+      onAuthStateChanged(auth, user => {
+        if (!user) {
+          // Not logged in → go home
+          window.location.replace("/");
+        } else {
+          // Authenticated → allow page to render
+          document.body.style.display = "block";
+        }
+      });
+  </script>
+</head>
+<body style="display: none;">
+<div class="header-section">
+  <div data-collapse="medium" data-animation="default" data-duration="400" class="nav-section w-nav">
+    <div class="header-contents-wrap">
+      <div class="header-container w-container">
+        <div class="logo-container">
+          <a href="/" class="logo w-clearfix w-nav-brand"> <img src="/assets/images/CAP-2017-logo-horizontal-optimized.png" alt="Skyhawk Composite Squadron" class="logo-image"> </a>
+          <h2 class="website-tagline" id="unit-name"></h2>
+        </div>
+        <div class="header-content-right-wrap">
+          <a href="/" id="donations-button" class="donations-btn">
+            <div class="donations-btn-text">
+              Back
+            </div>
+          </a>
+          <div class="website-logo-container">
+            <img src="/media/website/skyhawks_logo_CAP_transparent.png" alt="Skyhawk Composite Squadron" class="website-logo">
+          </div>
+          <a href="#main-content" class="cms_form_button primary skip-to-main-content sronly">Skip to main content</a>
+        </div>
+      </div>
+    </div>
+    <div class="w-nav-overlay" data-wf-ignore=""></div>
+  </div>
+</div>
+<div class="black-line"></div><br>
+<div id="main-page-content">
+  <h1>Skyhawk Photos</h1>
+
+  <!-- Albums -->
+  <div id="albums"></div>
+
+  <div class="gallery" id="gallery"></div>
+
+  <div id="lightbox" class="lightbox">
+    <img id="lightbox-img" alt="Full photo">
+    <a id="download-btn" href="#" download>Download</a>
+  </div>
+</div><br><br>
+<div class="footer-section">
+         <div class="middle-footer-div">
+            <div class="footer-container">
+               <div class="footer-row row">
+                  <div class="_1 footer-column-wrap">
+                     <h4 class="footer-column-title">Address</h4>
+                     <p id="address" class="footer-paragraph"></p>
+                     <p class="footer-paragraph" x-ms-format-detection="none"><span id="phone"></span></p>
+                     <p id="email" class="footer-paragraph"></p>
+                  </div>
+                  <div class="_3 footer-column-wrap">
+                     <h4 class="footer-column-title">Mission Statement</h4>
+                     <div class="footer-paragraph">
+                        Volunteers serving America's communities, saving lives, and shaping futures.
+                     </div>
+                  </div>
+                  <div class="_2 footer-column-wrap">
+                    <h4 class="footer-column-title">Quick Links</h4>
+                    <ul
+                      id="footer-quick-links"
+                      class="footer-links-list w-list-unstyled">
+                    </ul>
+                  </div>
+
+            </div>
+         </div>
+         <div class="container footer w-container"></div>
+         <div class="footer-signoff-section">
+            <div class="bottom-footer-container">
+               <div class="footer-signoff-row row w-row">
+                  <div class="column w-col w-col-9 w-col-stack">
+                     <div class="copyright-text">
+                        © 2026 Civil Air Patrol. All rights reserved.
+                     </div>
+                     <ul class="footer-signoff-list w-list-unstyled">
+                        <li class="footer-signoff-list-item"><a href="https://get.adobe.com/reader/" target="_blank" rel="noopener" class="footer-link">Get Adobe Acrobat Reader</a></li>
+                        <li class="footer-signoff-list-item"><a href="https://www.gocivilairpatrol.com/legal-privacy-statement" target="_blank" rel="noopener" class="footer-link">Legal &amp; Privacy Statement</a></li>
+                     </ul>
+                  </div>
+                  <div class="devby column w-clearfix w-col w-col-3 w-col-stack">
+                     <div class="footer-signoff-grip w-inline-block">
+                        <div id="GRIPFooterLogo" style="padding-top: 10px;">
+                           <span id="GRIPFooterLogoText" style="
+                              color: #919293;
+                              font-size: 10px;
+                              font-family: Arial, sans-serif;
+                              text-transform: uppercase;
+                              display: block;
+                              text-align: left;
+                              font-weight: 700;
+                              letter-spacing: 0.02rem;
+                              ">
+                           WEB DEVELOPMENT BY <a href="" target="_blank" rel="noopener noreferrer" style="
+                              color: #919293;
+                              text-decoration: underline;
+                              ">ETHAN LARSON</a>
+                           </span>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+<script>
+const OWNER = "Ethan-html";
+const REPO = "skyhawk-photos";
+const BATCH_SIZE = 50;
+
+let allFiles = [];
+let loadedCount = 0;
+let currentFolder = "images"; // default album
+const loadedThumbs = {};
+
+// IntersectionObserver for lazy-load
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const div = entry.target;
+      const full = div.dataset.full;
+
+      // Load high-res image in background
+      const img = new Image();
+      img.onload = () => div.style.backgroundImage = `url('${full}')`;
+      img.src = full;
+
+      observer.unobserve(div);
+    }
+  });
+}, { rootMargin: "200px" });
+
+// Fetch albums (folders)
+fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/`)
+  .then(res => res.json())
+  .then(items => {
+    const albumsDiv = document.getElementById("albums");
+    const folders = items.filter(f => f.type === "dir");
+    folders.forEach(folder => {
+      const div = document.createElement("div");
+      div.className = "album";
+      div.textContent = folder.name;
+      div.onclick = () => loadAlbum(folder.name);
+      albumsDiv.appendChild(div);
+    });
+  });
+
+// Load selected album
+function loadAlbum(folderName) {
+  currentFolder = folderName;
+  loadedCount = 0;
+  allFiles = [];
+  document.getElementById("gallery").innerHTML = "";
+
+  fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${folderName}`)
+    .then(res => res.json())
+    .then(files => {
+      allFiles = files.filter(f => f.type === "file");
+      loadNextBatch();
+      window.addEventListener("scroll", onScroll);
+    });
+}
+
+// Load next batch of images
+function loadNextBatch() {
+  const gallery = document.getElementById("gallery");
+  const batch = allFiles.slice(loadedCount, loadedCount + BATCH_SIZE);
+
+  batch.forEach(file => {
+    const div = document.createElement("div");
+    div.className = "thumb";
+    div.dataset.full = file.download_url; // full-res for lazy-load
+
+    div.onclick = () => {
+      const lightbox = document.getElementById("lightbox");
+      const lightboxImg = document.getElementById("lightbox-img");
+      const downloadBtn = document.getElementById("download-btn");
+
+      lightboxImg.src = file.download_url;
+
+      // Auto-download button
+      downloadBtn.onclick = async (e) => {
+        e.preventDefault();
+        try {
+          const res = await fetch(file.download_url);
+          const blob = await res.blob();
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = file.name;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        } catch(err) {
+          alert("Download failed. Try opening the image in a new tab.");
+          console.error(err);
+        }
+      };
+
+      lightbox.classList.add("active");
+    };
+
+    gallery.appendChild(div);
+    loadedThumbs[file.name] = div;
+    observer.observe(div);
+  });
+
+  loadedCount += batch.length;
+
+  if (gallery.scrollHeight < window.innerHeight && loadedCount < allFiles.length) {
+    loadNextBatch();
+  }
+}
+
+// Infinite scroll
+function onScroll() {
+  if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 500) {
+    if (loadedCount < allFiles.length) loadNextBatch();
+  }
+}
+
+// Close lightbox
+document.getElementById("lightbox").onclick = (e) => {
+  if (e.target.id === "lightbox" || e.target.id === "lightbox-img") {
+    e.currentTarget.classList.remove("active");
+  }
+};
+
+// Load default album on page load
+loadAlbum(currentFolder);
+
+</script>
+</body>
+</html>
