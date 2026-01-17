@@ -24,7 +24,7 @@
       },
       { 
         "source": "/photos",
-        "destination": "/img.html" 
+        "destination": "/photos.html" 
       },
       { 
         "source": "/404",
