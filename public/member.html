@@ -6,6 +6,7 @@
       <link rel="icon" type="image/png" href="/media/website/skyhawks_logo_CAP_transparent.png">
       <link rel="stylesheet" href="assets/stylesheets/main.css">
       <meta name="viewport" content="width=device-width, initial-scale=1">
+      
       <script src="https://skyhawk.cap.gov/core/libraries/jquery/assets/3.3.1/jquery.min.js"></script>
       <script src="https://skyhawk.cap.gov/assets/javascripts/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js"></script>
       <script src="https://skyhawk.cap.gov/core/public/shared/assets/js/jquery.cycle2/2.1.6/jquery.cycle2-fef2f3645726cce4154911d6140d7d52.min.js"></script>
@@ -188,29 +189,52 @@
         }
 
         async function renderMenu() {
-          const menuRoot = document.getElementById("main-menu");
-          if (!menuRoot) return;
+          const desktopRoot = document.getElementById("main-menu");
+          const mobileRoot = document.getElementById("mobile-menu-root");
 
-          let pagesData = JSON.parse(localStorage.getItem("menuPages") || "null");
-          if (pagesData) buildMenu(pagesData, menuRoot);
+          if (!desktopRoot && !mobileRoot) return;
 
+          // 1️⃣ Load cached menu immediately
+          const cached = JSON.parse(localStorage.getItem("menuPages") || "null");
+          if (cached) {
+            if (desktopRoot) buildMenu(cached, desktopRoot);
+            if (mobileRoot) buildMobileMenu(cached, mobileRoot);
+          }
+
+          // 2️⃣ Fetch fresh data
           try {
             const pagesCollection = collection(db, "main", "menu", "pages");
             const pagesSnap = await getDocs(pagesCollection);
+
             const pagesWithChildren = await Promise.all(
               pagesSnap.docs.map(async pageDoc => {
-                const childrenSnap = await getDocs(collection(pagesCollection, pageDoc.id, "children"));
-                return { page: pageDoc.data(), children: childrenSnap.docs.map(d => d.data()) };
+                const childrenSnap = await getDocs(
+                  collection(pagesCollection, pageDoc.id, "children")
+                );
+                return {
+                  page: pageDoc.data(),
+                  children: childrenSnap.docs.map(d => d.data())
+                };
               })
             );
+
             localStorage.setItem("menuPages", JSON.stringify(pagesWithChildren));
-            menuRoot.innerHTML = "";
-            buildMenu(pagesWithChildren, menuRoot);
+
+            if (desktopRoot) {
+              desktopRoot.innerHTML = "";
+              buildMenu(pagesWithChildren, desktopRoot);
+            }
+
+            if (mobileRoot) {
+              buildMobileMenu(pagesWithChildren, mobileRoot);
+            }
+
           } catch (err) {
-            console.warn("Failed to load menu from Firestore", err);
+            console.warn("Failed to load menu", err);
           }
         }
-          async function renderMemberMenu() {
+
+        async function renderMemberMenu() {
             const menuRoot = document.getElementById("member-menu");
             if (!menuRoot) return;
 
@@ -234,7 +258,7 @@
             } catch (err) {
               console.warn("Failed to load member menu from Firestore", err);
             }
-          }
+        }
 
         function buildMenu(pagesWithChildren, menuRoot) {
           const fragment = document.createDocumentFragment();
@@ -277,6 +301,45 @@
               $item.on('mouseleave', () => $item.removeClass('open'));
             });
           }
+        }
+        function buildMobileMenu(pagesWithChildren, root) {
+          root.innerHTML = "";
+
+          pagesWithChildren.forEach(({ page, children }) => {
+            const li = document.createElement("li");
+            li.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
+
+            const a = document.createElement("a");
+            a.className = "nav-link w-nav-link";
+            a.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
+            a.href = page.url || "#";
+            a.textContent = page.title;
+
+            li.appendChild(a);
+
+            // ---- children ----
+            if (children?.length) {
+              const ul = document.createElement("ul");
+
+              children.forEach(child => {
+                const cli = document.createElement("li");
+                cli.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
+
+                const ca = document.createElement("a");
+                ca.className = "nav-link w-nav-link";
+                ca.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
+                ca.href = child.url || "#";
+                ca.textContent = child.title;
+
+                cli.appendChild(ca);
+                ul.appendChild(cli);
+              });
+
+              li.appendChild(ul);
+            }
+
+            root.appendChild(li);
+          });
         }
 
         // ===============================
@@ -412,9 +475,6 @@
                <nav class="header-menu-wrap">
                   <div class="header-menu-inside-wrap">
                      <div class="nav-container w-container">
-                      <button id="mobile-menu-toggle" aria-label="Menu" class="mobile-menu-btn">
-                          ☰
-                        </button>
                         <nav class="desktop-navigation-menu">
                            <ul class="main-ul" id="main-menu"></ul>
                            <div class="link-block site-share-wrapper w-hidden-medium w-hidden-small w-hidden-tiny">
@@ -424,6 +484,15 @@
                               </nav>
                            </div>
                         </nav>
+                        <nav class="mobile-navigation-menu" aria-hidden="true">
+                          <ul id="mobile-menu-root"></ul>
+                        </nav>
+                        <div class="menu-button w-clearfix w-nav-button mobile-menu-button">
+                          <div class="menu-button-icon w-icon-nav-menu"></div>
+                          <div class="menu-button-text">
+                            Menu
+                          </div>
+                        </div>
                      </div>
                   </div>
                </nav>
