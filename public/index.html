@@ -291,34 +291,6 @@
              root.appendChild(li);
            });
          }
-
-         // --------------------
-         // INIT
-         // --------------------
-         document.addEventListener("DOMContentLoaded", async () => {
-           // Fire all loads in parallel (cache-first)
-           const [unit, contact, quickLinks] = await Promise.all([
-             loadDocOrCache(["main", "unit"], "unit"),
-             loadDocOrCache(["main", "contact"], "contact"),
-             loadCollectionOrCache(["main", "quickLinks", "children"], "quickLinks")
-           ]);
-
-           renderUnit(unit);
-           renderContact(contact);
-           renderQuickLinks(quickLinks);
-
-           // Menu can load in background without blocking DOM
-           renderMenu();
-         });
-
-
-         const toggle = document.getElementById('mobile-menu-toggle');
-         const menu = document.querySelector('.desktop-navigation-menu');
-
-         toggle.addEventListener('click', () => {
-           menu.classList.toggle('open');
-         });
-
          // --------------------
         // Fetch slideshow URLs from Firebase
         // --------------------
@@ -365,8 +337,34 @@
             hoverpause: true,
           }).mount();
         }
+         // --------------------
+         // INIT
+         // --------------------
+         document.addEventListener("DOMContentLoaded", async () => {
+          // Load menus and other content
+          const [unit, contact, quickLinks] = await Promise.all([
+            loadDocOrCache(["main", "unit"], "unit"),
+            loadDocOrCache(["main", "contact"], "contact"),
+            loadCollectionOrCache(["main", "quickLinks", "children"], "quickLinks")
+          ]);
 
-        document.addEventListener("DOMContentLoaded", renderSlideshow);
+          renderUnit(unit);
+          renderContact(contact);
+          renderQuickLinks(quickLinks);
+          await renderMenu();
+
+          // Now safely render slideshow
+          await renderSlideshow();
+        });
+
+
+
+         const toggle = document.getElementById('mobile-menu-toggle');
+         const menu = document.querySelector('.desktop-navigation-menu');
+
+         toggle.addEventListener('click', () => {
+           menu.classList.toggle('open');
+         });
       </script>
       <style type="text/css">
          @media (min-width: 1025px) {
