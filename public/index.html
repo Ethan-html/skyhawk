@@ -141,7 +141,7 @@
 
           // 2️⃣ Fetch fresh data
           try {
-            const pagesCollection = collection(db, "main", "menu", "pages");
+            const pagesCollection = collection("main", "menu", "pages");
             const pagesSnap = await getDocs(pagesCollection);
 
             const pagesWithChildren = await Promise.all(

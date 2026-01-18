@@ -213,26 +213,48 @@
         }
 
         async function renderMenu() {
-          const menuRoot = document.getElementById("main-menu");
-          if (!menuRoot) return;
+          const desktopRoot = document.getElementById("main-menu");
+          const mobileRoot = document.getElementById("mobile-menu-root");
 
-          let pagesData = JSON.parse(localStorage.getItem("menuPages") || "null");
-          if (pagesData) buildMenu(pagesData, menuRoot);
+          if (!desktopRoot && !mobileRoot) return;
 
+          // 1️⃣ Load cached menu immediately
+          const cached = JSON.parse(localStorage.getItem("menuPages") || "null");
+          if (cached) {
+            if (desktopRoot) buildMenu(cached, desktopRoot);
+            if (mobileRoot) buildMobileMenu(cached, mobileRoot);
+          }
+
+          // 2️⃣ Fetch fresh data
           try {
-            const pagesCollection = collection(db, "main", "menu", "pages");
+            const pagesCollection = collection("main", "menu", "pages");
             const pagesSnap = await getDocs(pagesCollection);
+
             const pagesWithChildren = await Promise.all(
               pagesSnap.docs.map(async pageDoc => {
-                const childrenSnap = await getDocs(collection(pagesCollection, pageDoc.id, "children"));
-                return { page: pageDoc.data(), children: childrenSnap.docs.map(d => d.data()) };
+                const childrenSnap = await getDocs(
+                  collection(pagesCollection, pageDoc.id, "children")
+                );
+                return {
+                  page: pageDoc.data(),
+                  children: childrenSnap.docs.map(d => d.data())
+                };
               })
             );
+
             localStorage.setItem("menuPages", JSON.stringify(pagesWithChildren));
-            menuRoot.innerHTML = "";
-            buildMenu(pagesWithChildren, menuRoot);
+
+            if (desktopRoot) {
+              desktopRoot.innerHTML = "";
+              buildMenu(pagesWithChildren, desktopRoot);
+            }
+
+            if (mobileRoot) {
+              buildMobileMenu(pagesWithChildren, mobileRoot);
+            }
+
           } catch (err) {
-            console.warn("Failed to load menu from Firestore", err);
+            console.warn("Failed to load menu", err);
           }
         }
           async function renderMemberMenu() {
@@ -302,6 +324,45 @@
               $item.on('mouseleave', () => $item.removeClass('open'));
             });
           }
+        }
+        function buildMobileMenu(pagesWithChildren, root) {
+          root.innerHTML = "";
+
+          pagesWithChildren.forEach(({ page, children }) => {
+            const li = document.createElement("li");
+            li.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
+
+            const a = document.createElement("a");
+            a.className = "nav-link w-nav-link";
+            a.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
+            a.href = page.url || "#";
+            a.textContent = page.title;
+
+            li.appendChild(a);
+
+            // ---- children ----
+            if (children?.length) {
+              const ul = document.createElement("ul");
+
+              children.forEach(child => {
+                const cli = document.createElement("li");
+                cli.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
+
+                const ca = document.createElement("a");
+                ca.className = "nav-link w-nav-link";
+                ca.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
+                ca.href = child.url || "#";
+                ca.textContent = child.title;
+
+                cli.appendChild(ca);
+                ul.appendChild(cli);
+              });
+
+              li.appendChild(ul);
+            }
+
+            root.appendChild(li);
+          });
         }
 
         // ===============================
@@ -390,6 +451,15 @@
                               </nav>
                            </div>
                         </nav>
+                        <nav class="mobile-navigation-menu" aria-hidden="true">
+                          <ul id="mobile-menu-root"></ul>
+                        </nav>
+                        <div class="menu-button w-clearfix w-nav-button mobile-menu-button">
+                          <div class="menu-button-icon w-icon-nav-menu"></div>
+                          <div class="menu-button-text">
+                            Menu
+                          </div>
+                        </div>
                      </div>
                   </div>
                </nav>
