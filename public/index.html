@@ -1,17 +1,13 @@
 <!DOCTYPE html>
 <html>
-   <head>
+  <head>
       <meta charset="utf-8">
       <title></title>
       <link rel="icon" type="image/png" href="/media/website/skyhawks_logo_CAP_transparent.png">
       <link rel="stylesheet" href="assets/stylesheets/main.css">
       <meta name="viewport" content="width=device-width, initial-scale=1">
-
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.theme.min.css">
-  
-
-
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css">
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.theme.min.css">
       <script src="https://skyhawk.cap.gov/core/libraries/jquery/assets/3.3.1/jquery.min.js"></script>
 
       <script src="assets/js/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js"></script>
@@ -383,215 +379,188 @@
          }
       </style>
       <script src="assets/js/admin.js" defer></script>
-
-
-
-   </head>
-   <body>
-      <div class="header-section">
-         <div data-collapse="medium" data-animation="default" data-duration="400" class="nav-section w-nav">
-            <div class="header-contents-wrap">
-               <div class="header-container w-container">
-                  <div class="logo-container">
-                     <a href="/" class="logo w-clearfix w-nav-brand"> <img src="/assets/images/CAP-2017-logo-horizontal-optimized.png" alt="Skyhawk Composite Squadron" class="logo-image"> </a>
-                     <h2 class="website-tagline" id="unit-name"></h2>
+  </head>
+  <body>
+    <div class="header-section">
+      <div data-collapse="medium" data-animation="default" data-duration="400" class="nav-section w-nav">
+        <div class="header-contents-wrap">
+            <div class="header-container w-container">
+              <div class="logo-container">
+                <a href="/" class="logo w-clearfix w-nav-brand"> <img src="/assets/images/CAP-2017-logo-horizontal-optimized.png" alt="Skyhawk Composite Squadron" class="logo-image"> </a>
+                <h2 class="website-tagline" id="unit-name"></h2>
+              </div>
+              <div class="header-content-right-wrap">
+                  <a href="https://www.gocivilairpatrol.com/?form=FUNEALECFQD" id="donations-button" class="donations-btn">
+                    <div class="donations-btn-image">
+                      <div class="donations-btn-ripple"></div>
+                      <img src="/assets/images/heart.svg" alt="">
+                    </div>
+                    <div class="donations-btn-text">
+                      Donate Today
+                    </div>
+                  </a>
+                  <div class="website-logo-container">
+                    <img id="squdron-icon" src="/media/website/skyhawks_logo_CAP_transparent.png" alt="Squdron Icon" class="website-logo">
                   </div>
-                  <div class="header-content-right-wrap">
-                     <a href="https://www.gocivilairpatrol.com/?form=FUNEALECFQD" id="donations-button" class="donations-btn">
-                        <div class="donations-btn-image">
-                           <div class="donations-btn-ripple"></div>
-                           <img src="/assets/images/heart.svg" alt="">
-                        </div>
-                        <div class="donations-btn-text">
-                           Donate Today
-                        </div>
-                     </a>
-                     <div class="website-logo-container">
-                        <img id="squdron-icon" src="/media/website/skyhawks_logo_CAP_transparent.png" alt="Skyhawk Composite Squadron" class="website-logo">
-                     </div>
-                     <a href="#main-content" class="cms_form_button primary skip-to-main-content sronly">Skip to main content</a>
-                  </div>
-               </div>
-               <nav class="header-menu-wrap">
-                  <div class="header-menu-inside-wrap">
-                     <div class="nav-container w-container">
-                        <nav class="desktop-navigation-menu">
-                           <ul class="main-ul" id="main-menu"></ul>
-
-                           <div class="link-block site-share-wrapper w-hidden-medium w-hidden-small w-hidden-tiny">
-                              <a href="" class="w-inline-block w--current" id="load-site-share"> <img src="/assets/images/share-icon.png" alt="Share" class="share-icon"> </a>
-                              <nav class="nav-drop-list w-dropdown-list">
-                                 <a href="mailto:?subject=Sitemap&amp;body=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap" class="nav-drop-list-link">Email this page</a> <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;t=Sitemap" class="nav-drop-list-link" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;t=Sitemap'); return false;" target="_blank">Share on Facebook</a> <a href="https://twitter.com/intent/tweet?source=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;text=" class="nav-drop-list-link" onclick="window.open('https://twitter.com/intent/tweet?text=Sitemap https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap'); return false;" title="Share on X (formerly Twitter)" target="_blank">Share on X</a> <a href="https://www.linkedin.com/sharing/share-offsite?mini=true&amp;summary=Sitemap&amp;source=Civil%20Air%20Patrol&amp;url=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;subject=Sitemap" class="nav-drop-list-link" onclick="window.open('https://www.linkedin.com/sharing/share-offsite?mini=true&amp;summary=Sitemap&amp;source=Civil%20Air%20Patrol&amp;url=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;subject=Sitemap'); return false;">Share on LinkedIn</a>
-                              </nav>
-                           </div>
-                        </nav>
-                        <nav class="mobile-navigation-menu" aria-hidden="true" >
-                          <ul id="mobile-menu-root"></ul>
-                        </nav>
-                        <div class="menu-button w-clearfix w-nav-button mobile-menu-button">
-                          <div class="menu-button-icon w-icon-nav-menu"></div>
-                          <div class="menu-button-text">
-                            Menu
-                          </div>
-                        </div>
-                     </div>
-                  </div>
-               </nav>
+                  <a href="#main-content" class="cms_form_button primary skip-to-main-content sronly">Skip to main content</a>
+              </div>
             </div>
-            <div class="w-nav-overlay" data-wf-ignore=""></div>
-         </div>
-      </div>
-
-      <div id="main-page-content">
-         <section class="main-section">
-            <div class="content-box-section-new">
-               <div id="slideshow-container" class="glide">
-                 <div class="glide__track" data-glide-el="track">
-                   <ul class="glide__slides" id="glide-slides">
-                     <!-- Slides will be injected here -->
-                   </ul>
-                 </div>
-
-                 <div class="glide__arrows" data-glide-el="controls">
-                   <button class="glide__arrow glide__arrow--left" data-glide-dir="<">‹</button>
-                   <button class="glide__arrow glide__arrow--right" data-glide-dir=">">›</button>
-                 </div>
-
-                 <div class="glide__bullets" data-glide-el="controls[nav]"></div>
-               </div>
-
-               <div class="blue-line"></div>
-
-               <div class="learn-more-heading"></div>
-               <div class="content-box-section">
-                  <div>
-                     <a href="/page?page=join/how-to-join/" class="donate-link w-inline-block">
-                        <div class="donate-button-container">
-                           <div class="donate-text">
-                              <strong>JOIN</strong>
-                           </div>
-                           <img src="/assets/images/circle-arrow.png" class="donate-button" alt="">
-                        </div>
-                     </a>
+            <nav class="header-menu-wrap">
+              <div class="header-menu-inside-wrap">
+                <div class="nav-container w-container">
+                  <nav class="desktop-navigation-menu">
+                    <ul class="main-ul" id="main-menu"></ul>
+                    <div class="link-block site-share-wrapper w-hidden-medium w-hidden-small w-hidden-tiny">
+                      <a href="" class="w-inline-block w--current" id="load-site-share"> <img src="/assets/images/share-icon.png" alt="Share" class="share-icon"> </a>
+                      <nav class="nav-drop-list w-dropdown-list">
+                        <a href="mailto:?subject=Sitemap&amp;body=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap" class="nav-drop-list-link">Email this page</a> <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;t=Sitemap" class="nav-drop-list-link" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;t=Sitemap'); return false;" target="_blank">Share on Facebook</a> <a href="https://twitter.com/intent/tweet?source=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;text=" class="nav-drop-list-link" onclick="window.open('https://twitter.com/intent/tweet?text=Sitemap https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap'); return false;" title="Share on X (formerly Twitter)" target="_blank">Share on X</a> <a href="https://www.linkedin.com/sharing/share-offsite?mini=true&amp;summary=Sitemap&amp;source=Civil%20Air%20Patrol&amp;url=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;subject=Sitemap" class="nav-drop-list-link" onclick="window.open('https://www.linkedin.com/sharing/share-offsite?mini=true&amp;summary=Sitemap&amp;source=Civil%20Air%20Patrol&amp;url=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;subject=Sitemap'); return false;">Share on LinkedIn</a>
+                      </nav>
+                    </div>
+                  </nav>
+                  <nav class="mobile-navigation-menu" aria-hidden="true" >
+                    <ul id="mobile-menu-root"></ul>
+                  </nav>
+                  <div class="menu-button w-clearfix w-nav-button mobile-menu-button">
+                    <div class="menu-button-icon w-icon-nav-menu"></div>
+                    <div class="menu-button-text">
+                      Menu
+                    </div>
                   </div>
-                  <div class="content-box-section-container"></div>
-                  <div class="cb-wrapper w-clearfix">
-                     <a class="custom-link cb left" href="/page?page=about/es/">
-                        <div class="cb-content w-clearfix">
-                           <div class="cb-text-heading">
-                              <span>Emergency Services</span>
-                           </div>
-                           <img src="/media/website/emergencyservices.jpg" loading="lazy" alt="Emergency Services" class="cb-image">
-                        </div>
-                     </a>
-                     <a class="custom-link cb right" href="/page?page=about/cp/">
-                        <div class="_2 cb-content w-clearfix">
-                           <div class="cb-text-heading">
-                              <span>Cadet Programs</span>
-                           </div>
-                           <img src="media/website/cadetprograms.jpg" loading="lazy" alt="Cadet Programs" class="cb-image">
-                        </div>
-                     </a>
-                     <a class="custom-link cb left" href="/page?page=about/ae/">
+                </div>
+              </div>
+            </nav>
+        </div>
+        <div class="w-nav-overlay" data-wf-ignore=""></div>
+      </div>
+    </div>
+    <div id="main-page-content">
+      <section class="main-section">
+        <div class="content-box-section-new">
+          <div id="slideshow-container" class="glide">
+            <div class="glide__track" data-glide-el="track">
+              <ul class="glide__slides" id="glide-slides"></ul>
+            </div>
+            <div class="glide__arrows" data-glide-el="controls">
+              <button class="glide__arrow glide__arrow--left" data-glide-dir="<">‹</button>
+              <button class="glide__arrow glide__arrow--right" data-glide-dir=">">›</button>
+            </div>
+            <div class="glide__bullets" data-glide-el="controls[nav]"></div>
+          </div>
+          <div class="blue-line"></div>
+          <div class="learn-more-heading"></div>
+          <div class="content-box-section">
+            <div>
+              <a href="/page?page=join/how-to-join/" class="donate-link w-inline-block">
+                <div class="donate-button-container">
+                  <div class="donate-text">
+                    <strong>JOIN</strong>
+                  </div>
+                  <img src="/assets/images/circle-arrow.png" class="donate-button" alt="">
+                </div>
+              </a>
+            </div>
+            <div class="content-box-section-container"></div>
+            <div class="cb-wrapper w-clearfix">
+              <a class="custom-link cb left" href="/page?page=about/es/">
+                <div class="cb-content w-clearfix">
+                  <div class="cb-text-heading">
+                    <span>Emergency Services</span>
+                  </div>
+                  <img src="/media/website/emergencyservices.jpg" loading="lazy" alt="Emergency Services" class="cb-image">
+                </div>
+              </a>
+              <a class="custom-link cb right" href="/page?page=about/cp/">
+                <div class="_2 cb-content w-clearfix">
+                  <div class="cb-text-heading">
+                    <span>Cadet Programs</span>
+                  </div>
+                  <img src="media/website/cadetprograms.jpg" loading="lazy" alt="Cadet Programs" class="cb-image">
+                </div>
+              </a>
+              <a class="custom-link cb left" href="/page?page=about/ae/">
                         <div class="cb-content w-clearfix">
                            <div class="cb-text-heading">
                               <span>Aerospace Education</span>
                            </div>
                            <img src="media/website/aerospaceeducation.jpg" loading="lazy" alt="Aerospace Education" class="cb-image">
                         </div>
-                     </a>
-                     <div class="w--mehiddendium w-hidden-small w-hidden-tiny clearBoth"></div>
-                     <a class="custom-link cb left" href="/page?page=events/skyhawk-calendar/">
+              </a>
+              <div class="w--mehiddendium w-hidden-small w-hidden-tiny clearBoth"></div>
+              <a class="custom-link cb left" href="/page?page=events/skyhawk-calendar/">
                         <div class="cb-content w-clearfix">
                            <div class="cb-text-heading">
                               <span>Squadron Calendar</span>
                            </div>
                            <img src="media/website/calendar.jpg" loading="lazy" width="76" alt="Squadron Calendar" class="cb-image">
                         </div>
-                     </a>
-                     <a class="custom-link cb left" href="https://www.gocivilairpatrol.com/about/who-we-are" target="_blank">
+              </a>
+              <a class="custom-link cb left" href="https://www.gocivilairpatrol.com/about/who-we-are" target="_blank">
                         <div class="cb-content w-clearfix">
                            <div class="cb-text-heading">
                               <span>What is CAP</span>
                            </div>
                            <img src="media/website/whatcap.jpg" loading="lazy" alt="What is CAP" class="cb-image">
                         </div>
-                     </a>
-                     <a class="custom-link cb left" href="https://mnwg.cap.gov/" target="_blank">
+              </a>
+              <a class="custom-link cb left" href="https://mnwg.cap.gov/" target="_blank">
                         <div class="cb-content w-clearfix">
                            <div class="cb-text-heading">
                               <span>MN Wing CAP</span>
                            </div>
                            <img src="media/website/mn_wing.jpg" loading="lazy" alt="MN Wing CAP" class="cb-image">
                         </div>
-                     </a>
-                  </div>
-               </div>
+              </a>
             </div>
-         </section>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div class="footer-section">
+      <div class="middle-footer-div">
+        <div class="footer-container">
+          <div class="footer-row row">
+            <div class="_1 footer-column-wrap">
+              <h4 class="footer-column-title">Address</h4>
+              <p id="address" class="footer-paragraph"></p>
+              <p class="footer-paragraph" x-ms-format-detection="none"><span id="phone"></span></p>
+              <p id="email" class="footer-paragraph"></p>
+            </div>
+            <div class="_3 footer-column-wrap">
+              <h4 class="footer-column-title">Mission Statement</h4>
+              <div class="footer-paragraph">
+                Volunteers serving America's communities, saving lives, and shaping futures.
+              </div>
+            </div>
+            <div class="_2 footer-column-wrap">
+              <h4 class="footer-column-title">Quick Links</h4>
+              <ul id="footer-quick-links" class="footer-links-list w-list-unstyled"></ul>
+            </div>
+          </div>
+        </div>
+        <div class="container footer w-container"></div>
+        <div class="footer-signoff-section">
+          <div class="bottom-footer-container">
+            <div class="footer-signoff-row row w-row">
+              <div class="column w-col w-col-9 w-col-stack">
+                <div id="copyright-text" class="copyright-text"></div>
+                <ul class="footer-signoff-list w-list-unstyled">
+                  <li class="footer-signoff-list-item"><a href="https://get.adobe.com/reader/" target="_blank" rel="noopener" class="footer-link">Get Adobe Acrobat Reader</a></li>
+                  <li class="footer-signoff-list-item"><a href="https://www.gocivilairpatrol.com/legal-privacy-statement" target="_blank" rel="noopener" class="footer-link">Legal &amp; Privacy Statement</a></li>
+                </ul>
+              </div>
+              <div class="devby column w-clearfix w-col w-col-3 w-col-stack">
+                <div class="footer-signoff-grip w-inline-block">
+                  <div id="GRIPFooterLogo" style="padding-top: 10px;">
+                    <span id="GRIPFooterLogoText" style="color: #919293; font-size: 10px; font-family: Arial, sans-serif; text-transform: uppercase; display: block; text-align: left; font-weight: 700; letter-spacing: 0.02rem;">
+                      WEB DEVELOPMENT BY <a href="" target="_blank" rel="noopener noreferrer" style="color: #919293; text-decoration: underline;">ETHAN LARSON</a>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="footer-section">
-         <div class="middle-footer-div">
-            <div class="footer-container">
-               <div class="footer-row row">
-                  <div class="_1 footer-column-wrap">
-                     <h4 class="footer-column-title">Address</h4>
-                     <p id="address" class="footer-paragraph"></p>
-                     <p class="footer-paragraph" x-ms-format-detection="none"><span id="phone"></span></p>
-                     <p id="email" class="footer-paragraph"></p>
-                  </div>
-                  <div class="_3 footer-column-wrap">
-                     <h4 class="footer-column-title">Mission Statement</h4>
-                     <div class="footer-paragraph">
-                        Volunteers serving America's communities, saving lives, and shaping futures.
-                     </div>
-                  </div>
-                  <div class="_2 footer-column-wrap">
-                    <h4 class="footer-column-title">Quick Links</h4>
-                    <ul
-                      id="footer-quick-links"
-                      class="footer-links-list w-list-unstyled">
-                    </ul>
-                  </div>
-
-            </div>
-         </div>
-         <div class="container footer w-container"></div>
-         <div class="footer-signoff-section">
-            <div class="bottom-footer-container">
-               <div class="footer-signoff-row row w-row">
-                  <div class="column w-col w-col-9 w-col-stack">
-                     <div id="copyright-text" class="copyright-text">
-                     </div>
-                     <ul class="footer-signoff-list w-list-unstyled">
-                        <li class="footer-signoff-list-item"><a href="https://get.adobe.com/reader/" target="_blank" rel="noopener" class="footer-link">Get Adobe Acrobat Reader</a></li>
-                        <li class="footer-signoff-list-item"><a href="https://www.gocivilairpatrol.com/legal-privacy-statement" target="_blank" rel="noopener" class="footer-link">Legal &amp; Privacy Statement</a></li>
-                     </ul>
-                  </div>
-                  <div class="devby column w-clearfix w-col w-col-3 w-col-stack">
-                     <div class="footer-signoff-grip w-inline-block">
-                        <div id="GRIPFooterLogo" style="padding-top: 10px;">
-                           <span id="GRIPFooterLogoText" style="
-                              color: #919293;
-                              font-size: 10px;
-                              font-family: Arial, sans-serif;
-                              text-transform: uppercase;
-                              display: block;
-                              text-align: left;
-                              font-weight: 700;
-                              letter-spacing: 0.02rem;
-                              ">
-                           WEB DEVELOPMENT BY <a href="" target="_blank" rel="noopener noreferrer" style="
-                              color: #919293;
-                              text-decoration: underline;
-                              ">ETHAN LARSON</a>
-                           </span>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-   </body>
+    </div>
+  </body>
 </html>
