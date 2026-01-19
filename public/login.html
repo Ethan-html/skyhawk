@@ -140,7 +140,13 @@
              root.appendChild(li);
            });
          }
+         // --------------------
+        // Render Copywrite Year
+        // --------------------
+        const el = document.getElementById("copyright-text");
+        const year = new Date().getFullYear();
 
+        el.innerHTML = `© ${year} Civil Air Patrol. All rights reserved.`;
          // --------------------
          // INIT
          // --------------------
@@ -323,8 +329,7 @@
             <div class="bottom-footer-container">
                <div class="footer-signoff-row row w-row">
                   <div class="column w-col w-col-9 w-col-stack">
-                     <div class="copyright-text">
-                        © 2026 Civil Air Patrol. All rights reserved.
+                     <div id="copyright-text" class="copyright-text">
                      </div>
                      <ul class="footer-signoff-list w-list-unstyled">
                         <li class="footer-signoff-list-item"><a href="https://get.adobe.com/reader/" target="_blank" rel="noopener" class="footer-link">Get Adobe Acrobat Reader</a></li>
