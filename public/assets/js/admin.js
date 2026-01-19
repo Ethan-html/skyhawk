@@ -11,33 +11,39 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-/* ===== Long‑press logo ===== */
+/* ===== Long-press logo & copyright ===== */
 window.addEventListener("DOMContentLoaded", () => {
-  const logo = document.getElementById("squdron-icon");
-  if (!logo) return;
+  const targets = [
+    document.getElementById("squdron-icon"),
+    document.getElementById("copyright-text")
+  ];
 
-  let pressTimer;
   const HOLD_TIME = 2500; // 2.5 seconds
+  let pressTimer;
 
   const goAdmin = () => {
     window.location.href = "https://skyhawk-admin.onrender.com/";
   };
 
   const startPress = (e) => {
-    e.preventDefault(); // prevent drag/tap highlighting
+    e.preventDefault(); // prevent selection / tap
     pressTimer = setTimeout(goAdmin, HOLD_TIME);
   };
 
   const cancelPress = () => clearTimeout(pressTimer);
 
-  // Desktop
-  logo.addEventListener("mousedown", startPress);
-  logo.addEventListener("mouseup", cancelPress);
-  logo.addEventListener("mouseleave", cancelPress);
-  logo.addEventListener("dragstart", (e) => e.preventDefault()); // prevent dragging
+  targets.forEach((el) => {
+    if (!el) return;
 
-  // Mobile
-  logo.addEventListener("touchstart", startPress, { passive: false });
-  logo.addEventListener("touchend", cancelPress);
-  logo.addEventListener("touchcancel", cancelPress);
+    // Desktop
+    el.addEventListener("mousedown", startPress);
+    el.addEventListener("mouseup", cancelPress);
+    el.addEventListener("mouseleave", cancelPress);
+    el.addEventListener("dragstart", (e) => e.preventDefault());
+
+    // Mobile
+    el.addEventListener("touchstart", startPress, { passive: false });
+    el.addEventListener("touchend", cancelPress);
+    el.addEventListener("touchcancel", cancelPress);
+  });
 });
