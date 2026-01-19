@@ -234,6 +234,66 @@
           }
         }
 
+        async function renderContentBoxes() {
+          const container = document.querySelector(".cb-wrapper");
+          if (!container) return;
+
+          // Clear existing content
+          container.innerHTML = "";
+
+          // Fetch contentBoxes from Firebase
+          const boxes = await loadCollectionOrCache(
+            ["main", "contentBoxes", "children"], // path to the subcollection
+            "contentBoxesChildren" // cache key
+          );
+
+          let counter = 0; // count boxes added
+          boxes.forEach(box => {
+            const a = document.createElement("a");
+            a.href = box.url || "#";
+            a.target = box.target || "_self";
+            a.className = `custom-link cb ${box.position || "left"}`;
+
+            const innerDiv = document.createElement("div");
+            innerDiv.className = "cb-content w-clearfix";
+
+            const headingDiv = document.createElement("div");
+            headingDiv.className = "cb-text-heading";
+
+            const span = document.createElement("span");
+            span.textContent = box.title || "No Title";
+
+            headingDiv.appendChild(span);
+
+            const img = document.createElement("img");
+            img.src = box.img || "";
+            img.alt = box.title || "";
+            img.loading = "lazy";
+            img.className = "cb-image";
+
+            innerDiv.appendChild(headingDiv);
+            innerDiv.appendChild(img);
+            a.appendChild(innerDiv);
+
+            container.appendChild(a);
+
+            counter++;
+
+            // Insert clearBoth div after every 3 boxes
+            if (counter % 3 === 0) {
+              const clearDiv = document.createElement("div");
+              clearDiv.className = "w--mehiddendium w-hidden-small w-hidden-tiny clearBoth";
+              container.appendChild(clearDiv);
+            }
+          });
+
+
+          // Optional: add clearBoth div for layout if needed
+          const clearDiv = document.createElement("div");
+          clearDiv.className = "w--mehiddendium w-hidden-small w-hidden-tiny clearBoth";
+          container.appendChild(clearDiv);
+        }
+
         async function renderMemberMenu() {
             const menuRoot = document.getElementById("member-menu");
             if (!menuRoot) return;
@@ -375,6 +435,7 @@
           // Menu loads in background
           renderMenu();
           renderMemberMenu();
+          await renderContentBoxes();
         });
             const menu = document.querySelector('.desktop-navigation-menu');
 
@@ -518,71 +579,28 @@
          <section class="main-section">
             <div class="content-box-section-new">
               
-               <div class="learn-more-heading"></div>
-               <div class="content-box-section">
-                  <div>
-                     <a href="/page?page=join/how-to-join/" class="donate-link w-inline-block">
-                        <div class="donate-button-container">
-                           <div class="donate-text">
-                              <strong>JOIN</strong>
-                           </div>
-                           <img src="/assets/images/circle-arrow.png" class="donate-button" alt="">
+              <div class="learn-more-heading"></div>
+              <div class="content-box-section">
+                  <!-- Optional JOIN button, can also be made dynamic -->
+                  <div id="join-button-container">
+                    <a href="/page?page=join/how-to-join/" class="donate-link w-inline-block">
+                      <div class="donate-button-container">
+                        <div class="donate-text">
+                          <strong>JOIN</strong>
                         </div>
-                     </a>
+                        <img src="/assets/images/circle-arrow.png" class="donate-button" alt="">
+                      </div>
+                    </a>
                   </div>
+
+                  <!-- Optional section for additional containers if needed -->
                   <div class="content-box-section-container"></div>
-                  <div class="cb-wrapper w-clearfix">
-                     <a class="custom-link cb left" href="/page?page=about/es/">
-                        <div class="cb-content w-clearfix">
-                           <div class="cb-text-heading">
-                              <span>Emergency Services</span>
-                           </div>
-                           <img src="/media/website/emergencyservices.jpg" loading="lazy" alt="Emergency Services" class="cb-image">
-                        </div>
-                     </a>
-                     <a class="custom-link cb right" href="/page?page=about/cp/">
-                        <div class="_2 cb-content w-clearfix">
-                           <div class="cb-text-heading">
-                              <span>Cadet Programs</span>
-                           </div>
-                           <img src="media/website/cadetprograms.jpg" loading="lazy" alt="Cadet Programs" class="cb-image">
-                        </div>
-                     </a>
-                     <a class="custom-link cb left" href="/page?page=about/ae/">
-                        <div class="cb-content w-clearfix">
-                           <div class="cb-text-heading">
-                              <span>Aerospace Education</span>
-                           </div>
-                           <img src="media/website/aerospaceeducation.jpg" loading="lazy" alt="Aerospace Education" class="cb-image">
-                        </div>
-                     </a>
-                     <div class="w--mehiddendium w-hidden-small w-hidden-tiny clearBoth"></div>
-                     <a class="custom-link cb left" href="/page?page=events/skyhawk-calendar/">
-                        <div class="cb-content w-clearfix">
-                           <div class="cb-text-heading">
-                              <span>Squadron Calendar</span>
-                           </div>
-                           <img src="media/website/calendar.jpg" loading="lazy" width="76" alt="Squadron Calendar" class="cb-image">
-                        </div>
-                     </a>
-                     <a class="custom-link cb left" href="https://www.gocivilairpatrol.com/about/who-we-are" target="_blank">
-                        <div class="cb-content w-clearfix">
-                           <div class="cb-text-heading">
-                              <span>What is CAP</span>
-                           </div>
-                           <img src="media/website/whatcap.jpg" loading="lazy" alt="What is CAP" class="cb-image">
-                        </div>
-                     </a>
-                     <a class="custom-link cb left" href="https://mnwg.cap.gov/" target="_blank">
-                        <div class="cb-content w-clearfix">
-                           <div class="cb-text-heading">
-                              <span>MN Wing CAP</span>
-                           </div>
-                           <img src="media/website/mn_wing.jpg" loading="lazy" alt="MN Wing CAP" class="cb-image">
-                        </div>
-                     </a>
+
+                  <!-- Wrapper where JS will inject all the content boxes -->
+                  <div class="cb-wrapper w-clearfix" id="content-boxes-wrapper">
+                    <!-- JS will populate <a class="custom-link cb ..."> dynamically here -->
                   </div>
-               </div>
+              </div>
             </div>
          </section>
       </div>

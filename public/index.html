@@ -22,6 +22,7 @@
         gtag('config', 'G-M2RSE2BRK2');
       </script>
       <script type="module">
+        window.currentUnit = null;
          import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
          import {
            initializeFirestore,
@@ -137,7 +138,7 @@
 
           // 2️⃣ Fetch fresh data
           try {
-            const pagesCollection = collection("main", "menu", "pages");
+            const pagesCollection = collection(db, "main", "menu", "pages");
             const pagesSnap = await getDocs(pagesCollection);
 
             const pagesWithChildren = await Promise.all(
@@ -263,6 +264,65 @@
           });
         }
 
+        async function renderContentBoxes() {
+          const container = document.querySelector(".cb-wrapper");
+          if (!container) return;
+
+          // Clear existing content
+          container.innerHTML = "";
+
+          // Fetch contentBoxes from Firebase
+          const boxes = await loadCollectionOrCache(
+            ["main", "contentBoxes", "children"], // path to the subcollection
+            "contentBoxesChildren" // cache key
+          );
+
+          let counter = 0; // count boxes added
+          boxes.forEach(box => {
+            const a = document.createElement("a");
+            a.href = box.url || "#";
+            a.target = box.target || "_self";
+            a.className = `custom-link cb ${box.position || "left"}`;
+
+            const innerDiv = document.createElement("div");
+            innerDiv.className = "cb-content w-clearfix";
+
+            const headingDiv = document.createElement("div");
+            headingDiv.className = "cb-text-heading";
+
+            const span = document.createElement("span");
+            span.textContent = box.title || "No Title";
+
+            headingDiv.appendChild(span);
+
+            const img = document.createElement("img");
+            img.src = box.img || "";
+            img.alt = box.title || "";
+            img.loading = "lazy";
+            img.className = "cb-image";
+
+            innerDiv.appendChild(headingDiv);
+            innerDiv.appendChild(img);
+            a.appendChild(innerDiv);
+
+            container.appendChild(a);
+
+            counter++;
+
+            // Insert clearBoth div after every 3 boxes
+            if (counter % 3 === 0) {
+              const clearDiv = document.createElement("div");
+              clearDiv.className = "w--mehiddendium w-hidden-small w-hidden-tiny clearBoth";
+              container.appendChild(clearDiv);
+            }
+          });
+
+
+          // Optional: add clearBoth div for layout if needed
+          const clearDiv = document.createElement("div");
+          clearDiv.className = "w--mehiddendium w-hidden-small w-hidden-tiny clearBoth";
+          container.appendChild(clearDiv);
+        }
 
 
 
@@ -350,14 +410,13 @@
             loadDocOrCache(["main", "contact"], "contact"),
             loadCollectionOrCache(["main", "quickLinks", "children"], "quickLinks")
           ]);
-
+          window.currentUnit = unit;
           renderUnit(unit);
           renderContact(contact);
           renderQuickLinks(quickLinks);
           await renderMenu();
-
-          // Now safely render slideshow
           await renderSlideshow();
+          await renderContentBoxes();
         });
 
 
@@ -402,7 +461,6 @@
                   <div class="website-logo-container">
                     <img id="squdron-icon" src="/media/website/skyhawks_logo_CAP_transparent.png" alt="Squdron Icon" class="website-logo">
                   </div>
-                  <a href="#main-content" class="cms_form_button primary skip-to-main-content sronly">Skip to main content</a>
               </div>
             </div>
             <nav class="header-menu-wrap">
@@ -413,11 +471,14 @@
                     <div class="link-block site-share-wrapper w-hidden-medium w-hidden-small w-hidden-tiny">
                       <a href="" class="w-inline-block w--current" id="load-site-share"> <img src="/assets/images/share-icon.png" alt="Share" class="share-icon"> </a>
                       <nav class="nav-drop-list w-dropdown-list">
-                        <a href="mailto:?subject=Sitemap&amp;body=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap" class="nav-drop-list-link">Email this page</a> <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;t=Sitemap" class="nav-drop-list-link" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;t=Sitemap'); return false;" target="_blank">Share on Facebook</a> <a href="https://twitter.com/intent/tweet?source=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;text=" class="nav-drop-list-link" onclick="window.open('https://twitter.com/intent/tweet?text=Sitemap https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap'); return false;" title="Share on X (formerly Twitter)" target="_blank">Share on X</a> <a href="https://www.linkedin.com/sharing/share-offsite?mini=true&amp;summary=Sitemap&amp;source=Civil%20Air%20Patrol&amp;url=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;subject=Sitemap" class="nav-drop-list-link" onclick="window.open('https://www.linkedin.com/sharing/share-offsite?mini=true&amp;summary=Sitemap&amp;source=Civil%20Air%20Patrol&amp;url=https%3A%2F%2Fskyhawk%2Ecap%2Egov%2Fsitemap&amp;subject=Sitemap'); return false;">Share on LinkedIn</a>
+                        <a href="#" class="nav-drop-list-link" onclick="window.location.href='mailto:?subject='+encodeURIComponent(window.currentUnit?.name||'Website')+'&body='+encodeURIComponent(location.origin);return false;">Email this site</a> 
+                        <a href="#" class="nav-drop-list-link" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.origin)+'&t='+encodeURIComponent(window.currentUnit?.name||'Website'));return false;">Share on Facebook</a> 
+                        <a href="#" class="nav-drop-list-link" onclick="window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent((window.currentUnit?.name||'Website')+' '+location.origin));return false;" title="Share on X (formerly Twitter)">Share on X</a> 
+                        <a href="#" class="nav-drop-list-link" onclick="window.open('https://www.linkedin.com/sharing/share-offsite/?url='+encodeURIComponent(location.origin)+'&title='+encodeURIComponent(window.currentUnit?.name||'Website'));return false;">Share on LinkedIn</a>
                       </nav>
                     </div>
                   </nav>
-                  <nav class="mobile-navigation-menu" aria-hidden="true" >
+                  <nav class="mobile-navigation-menu" aria-hidden="true">
                     <ul id="mobile-menu-root"></ul>
                   </nav>
                   <div class="menu-button w-clearfix w-nav-button mobile-menu-button">
@@ -449,7 +510,9 @@
           <div class="blue-line"></div>
           <div class="learn-more-heading"></div>
           <div class="content-box-section">
-            <div>
+
+            <!-- Optional JOIN button, can also be made dynamic -->
+            <div id="join-button-container">
               <a href="/page?page=join/how-to-join/" class="donate-link w-inline-block">
                 <div class="donate-button-container">
                   <div class="donate-text">
@@ -459,59 +522,16 @@
                 </div>
               </a>
             </div>
+
+            <!-- Optional section for additional containers if needed -->
             <div class="content-box-section-container"></div>
-            <div class="cb-wrapper w-clearfix">
-              <a class="custom-link cb left" href="/page?page=about/es/">
-                <div class="cb-content w-clearfix">
-                  <div class="cb-text-heading">
-                    <span>Emergency Services</span>
-                  </div>
-                  <img src="/media/website/emergencyservices.jpg" loading="lazy" alt="Emergency Services" class="cb-image">
-                </div>
-              </a>
-              <a class="custom-link cb right" href="/page?page=about/cp/">
-                <div class="_2 cb-content w-clearfix">
-                  <div class="cb-text-heading">
-                    <span>Cadet Programs</span>
-                  </div>
-                  <img src="media/website/cadetprograms.jpg" loading="lazy" alt="Cadet Programs" class="cb-image">
-                </div>
-              </a>
-              <a class="custom-link cb left" href="/page?page=about/ae/">
-                        <div class="cb-content w-clearfix">
-                           <div class="cb-text-heading">
-                              <span>Aerospace Education</span>
-                           </div>
-                           <img src="media/website/aerospaceeducation.jpg" loading="lazy" alt="Aerospace Education" class="cb-image">
-                        </div>
-              </a>
-              <div class="w--mehiddendium w-hidden-small w-hidden-tiny clearBoth"></div>
-              <a class="custom-link cb left" href="/page?page=events/skyhawk-calendar/">
-                        <div class="cb-content w-clearfix">
-                           <div class="cb-text-heading">
-                              <span>Squadron Calendar</span>
-                           </div>
-                           <img src="media/website/calendar.jpg" loading="lazy" width="76" alt="Squadron Calendar" class="cb-image">
-                        </div>
-              </a>
-              <a class="custom-link cb left" href="https://www.gocivilairpatrol.com/about/who-we-are" target="_blank">
-                        <div class="cb-content w-clearfix">
-                           <div class="cb-text-heading">
-                              <span>What is CAP</span>
-                           </div>
-                           <img src="media/website/whatcap.jpg" loading="lazy" alt="What is CAP" class="cb-image">
-                        </div>
-              </a>
-              <a class="custom-link cb left" href="https://mnwg.cap.gov/" target="_blank">
-                        <div class="cb-content w-clearfix">
-                           <div class="cb-text-heading">
-                              <span>MN Wing CAP</span>
-                           </div>
-                           <img src="media/website/mn_wing.jpg" loading="lazy" alt="MN Wing CAP" class="cb-image">
-                        </div>
-              </a>
+
+            <!-- Wrapper where JS will inject all the content boxes -->
+            <div class="cb-wrapper w-clearfix" id="content-boxes-wrapper">
+              <!-- JS will populate <a class="custom-link cb ..."> dynamically here -->
             </div>
           </div>
+
         </div>
       </section>
     </div>
