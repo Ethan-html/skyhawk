@@ -7,7 +7,7 @@ document.addEventListener("keydown", (e) => {
   keys = keys.slice(-secret.length);
 
   if (keys.join("") === secret) {
-    window.location.href = "https://skyhawk-admin.onrender.com/";
+    window.location.href = "https://admin.skyhawk-cap.org/";
   }
 });
 
@@ -22,7 +22,7 @@ window.addEventListener("DOMContentLoaded", () => {
   let pressTimer;
 
   const goAdmin = () => {
-    window.location.href = "https://skyhawk-admin.onrender.com/";
+    window.location.href = "https://admin.skyhawk-cap.org/";
   };
 
   const startPress = (e) => {
