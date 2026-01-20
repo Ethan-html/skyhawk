@@ -436,6 +436,29 @@
            }
 
          }
+         .glide__slides {
+            transform: translate3d(0,0,0)!important;
+            width: 100vw!important;
+
+          }
+          .glide__slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            order: 2;
+            opacity: 0;
+            transition: opacity 1350ms ease-in-out;
+          }
+
+          .glide__slide.glide__slide--active {
+            position: relative;
+            order: 1;
+            opacity: 1;
+            z-index: 1;
+          }
+
+
+
       </style>
       <script src="assets/js/admin.js" defer></script>
   </head>
