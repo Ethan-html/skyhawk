@@ -10297,7 +10297,8 @@ html.mm-wrapper_opening .mm-slideout {
     height: 50px;
   }
   .desktop-navigation-menu ul.main-ul li.main-li {
-    flex: 1;
+    flex: 1 1 0;
+    min-width: max-content;
     height: 50px;
     align-items: center;
     position: relative;
