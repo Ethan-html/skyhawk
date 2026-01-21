@@ -28,10 +28,7 @@ Conditions of Use:
    - You may **not license this template or derivatives** to others independently.
    - You may **not alter the credit line to suggest someone else created it**.
 
-6. **Technical credit protection (optional)**
-   - For extra enforcement, include this JS snippet in your template:
-
-7. **Disclaimer**
+6. **Disclaimer**
 
    * This template is provided "as-is".
    * Ethan Larson is **not responsible for any issues, damages, or misuse** of this template.

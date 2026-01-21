@@ -70,6 +70,50 @@ function initGA() {
   gtag('js', new Date());
   gtag('config', 'G-M2RSE2BRK2');
 }
+// ==============================
+// Universal asset loader (JS & CSS)
+// ==============================
+function loadAssets(urls) {
+  const promises = urls.map(url => {
+    return new Promise((resolve, reject) => {
+      if (url.endsWith(".js")) {
+        const s = document.createElement("script");
+        s.src = url;
+        s.defer = true;           // execute after DOM parses
+        s.onload = resolve;
+        s.onerror = reject;
+        document.head.appendChild(s);
+      } else if (url.endsWith(".css")) {
+        const l = document.createElement("link");
+        l.rel = "stylesheet";
+        l.href = url;
+        l.onload = resolve;
+        l.onerror = reject;
+        document.head.appendChild(l);
+      } else {
+        console.warn("Unknown asset type:", url);
+        resolve();
+      }
+    });
+  });
+
+  return Promise.allSettled(promises).then(results => {
+    results.forEach(r => {
+      if (r.status === "rejected") console.warn("Asset failed to load:", r.reason);
+    });
+  });
+}
+
+// ==============================
+// Example usage
+// ==============================
+const assets = [
+  "/assets/js/copywrite.js",
+  "/assets/js/admin.js",
+  "/assets/easter/boot.js",
+  "/assets/js/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js",
+  "/assets/stylesheets/main.css"
+];
 
 // ==============================
 // Logout button helper
@@ -158,8 +202,13 @@ async function authGate(callback) {
 // ==============================
 export async function initPage() {
   onReady(async () => {
+    // Wait for all assets to load
+    await loadAssets(assets);
+
+    // Initialize Google Analytics
     initGA();
 
+    // Run auth gate and page modules
     await authGate(async () => {
       const path = location.pathname;
       const config = pageConfigs.find(c => c.match(path));
@@ -174,3 +223,4 @@ export async function initPage() {
     });
   });
 }
+
