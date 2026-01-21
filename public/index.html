@@ -21,408 +21,44 @@
 
         gtag('config', 'G-M2RSE2BRK2');
       </script>
-      <script type="module">
-        window.currentUnit = null;
-         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-         import {
-           initializeFirestore,
-           persistentLocalCache,
-           persistentMultipleTabManager,
-           collection,
-           doc,
-           getDoc,
-           getDocs
-         } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
-        import Glide from "https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/glide.esm.min.js";
+<script type="module">
+  // --------------------
+  // Firebase
+  // --------------------
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+  import { initMenu } from "/assets/js/menu.js";
+  import { initContentBoxes } from "/assets/js/content-boxes.js";
+  import { initSlideshow } from "/assets/js/slideshow.js";
+  import { initHeaderFooter } from "/assets/js/header-footer.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBk_ikYB1PzkgHx4zJY73pe3EfzQRpZvqw",
+    authDomain: "skyhawk-web.firebaseapp.com",
+    projectId: "skyhawk-web",
+    storageBucket: "skyhawk-web.firebasestorage.app",
+    messagingSenderId: "340655139001",
+    appId: "1:340655139001:web:7923a1fe83ac4a4c689368"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  // --------------------
+  // Init all modules concurrently
+  // --------------------
+  document.addEventListener("DOMContentLoaded", async () => {
+    await Promise.all([
+      initMenu(db),
+      initContentBoxes(db),
+      initSlideshow(db),
+      initHeaderFooter(db)
+    ]);
+  });
+</script>
 
-         // --------------------
-         // Firebase config
-         // --------------------
-         const firebaseConfig = {
-           apiKey: "AIzaSyBk_ikYB1PzkgHx4zJY73pe3EfzQRpZvqw",
-           authDomain: "skyhawk-web.firebaseapp.com",
-           projectId: "skyhawk-web",
-           storageBucket: "skyhawk-web.firebasestorage.app",
-           messagingSenderId: "340655139001",
-           appId: "1:340655139001:web:7923a1fe83ac4a4c689368",
-           measurementId: "G-M2RSE2BRK2"
-         };
 
-         const app = initializeApp(firebaseConfig);
-         const db = initializeFirestore(app, {
-           cache: persistentLocalCache({
-             tabManager: persistentMultipleTabManager()
-           })
-         });
-
-         // --------------------
-         // Cache-first loader
-         // --------------------
-         async function loadDocOrCache(pathSegments, cacheKey) {
-           const cached = localStorage.getItem(cacheKey);
-           if (cached) {
-             try { return JSON.parse(cached); } catch {}
-           }
-
-           try {
-             const ref = doc(db, ...pathSegments);
-             const snap = await getDoc(ref);
-             if (snap.exists()) {
-               const data = snap.data();
-               localStorage.setItem(cacheKey, JSON.stringify(data));
-               return data;
-             }
-           } catch (err) {
-             console.warn(`Failed to load ${pathSegments.join("/")}`, err);
-           }
-           return null;
-         }
-
-         async function loadCollectionOrCache(pathSegments, cacheKey) {
-           const cached = localStorage.getItem(cacheKey);
-           if (cached) {
-             try { return JSON.parse(cached); } catch {}
-           }
-
-           try {
-             const colRef = collection(db, ...pathSegments);
-             const snap = await getDocs(colRef);
-             const data = snap.docs.map(d => d.data());
-             localStorage.setItem(cacheKey, JSON.stringify(data));
-             return data;
-           } catch (err) {
-             console.warn(`Failed to load collection ${pathSegments.join("/")}`, err);
-           }
-           return [];
-         }
-
-         // --------------------
-         // Render functions
-         // --------------------
-         function renderUnit(unit) {
-           if (!unit) return;
-           document.title = unit.name;
-           const el = document.getElementById("unit-name");
-           if (el) el.textContent = `${unit.name} (${unit.designation})`;
-         }
-
-         function renderContact(contact) {
-           if (!contact) return;
-           const addrEl = document.getElementById("address");
-           if (addrEl) addrEl.innerHTML = contact.address.replace(/\n/g, "<br>");
-
-           const phoneEl = document.getElementById("phone");
-           if (phoneEl) {
-             phoneEl.href = `tel:${contact.phone}`;
-             phoneEl.textContent = contact.phone;
-           }
-
-           const emailEl = document.getElementById("email");
-           if (emailEl) {
-             emailEl.innerHTML = `<a href="mailto:${contact.email}">${contact.email}</a>`;
-           }
-         }
-
-        async function renderMenu() {
-          const desktopRoot = document.getElementById("main-menu");
-          const mobileRoot = document.getElementById("mobile-menu-root");
-
-          if (!desktopRoot && !mobileRoot) return;
-
-          // 1️⃣ Load cached menu immediately
-          const cached = JSON.parse(localStorage.getItem("menuPages") || "null");
-          if (cached) {
-            if (desktopRoot) buildMenu(cached, desktopRoot);
-            if (mobileRoot) buildMobileMenu(cached, mobileRoot);
-          }
-
-          // 2️⃣ Fetch fresh data
-          try {
-            const pagesCollection = collection(db, "main", "menu", "pages");
-            const pagesSnap = await getDocs(pagesCollection);
-
-            const pagesWithChildren = await Promise.all(
-              pagesSnap.docs.map(async pageDoc => {
-                const childrenSnap = await getDocs(
-                  collection(pagesCollection, pageDoc.id, "children")
-                );
-                return {
-                  page: pageDoc.data(),
-                  children: childrenSnap.docs.map(d => d.data())
-                };
-              })
-            );
-
-            localStorage.setItem("menuPages", JSON.stringify(pagesWithChildren));
-
-            if (desktopRoot) {
-              desktopRoot.innerHTML = "";
-              buildMenu(pagesWithChildren, desktopRoot);
-            }
-
-            if (mobileRoot) {
-              buildMobileMenu(pagesWithChildren, mobileRoot);
-            }
-
-          } catch (err) {
-            console.warn("Failed to load menu", err);
-          }
-        }
-
-
-         // Helper: build menu from data
-         function buildMenu(pagesWithChildren, menuRoot) {
-           const fragment = document.createDocumentFragment();
-
-           pagesWithChildren.forEach(({ page, children }) => {
-             const li = document.createElement("li");
-             li.className = "main-li";
-             li.id = `menu-item-${page.id || page.title}`;
-
-             const a = document.createElement("a");
-             a.href = page.url || "#";
-             a.textContent = page.title;
-             a.target = "_self";
-             a.className = "main-nav-link";
-             li.appendChild(a);
-
-             if (children?.length) {
-               li.classList.add("has-dropdown");
-               const dropdown = document.createElement("div");
-               dropdown.className = "dropdown-container";
-
-               const ul = document.createElement("ul");
-               ul.className = "dropdown-list";
-
-               children.forEach(child => {
-                 const cli = document.createElement("li");
-                 const ca = document.createElement("a");
-                 ca.href = child.url || "#";
-                 ca.textContent = child.title;
-                 ca.target = "_self";
-                 cli.appendChild(ca);
-                 ul.appendChild(cli);
-               });
-
-               dropdown.appendChild(ul);
-               li.appendChild(dropdown);
-             }
-
-             fragment.appendChild(li);
-           });
-
-           menuRoot.appendChild(fragment);
-
-           // Dropdown hover (jQuery)
-           if (window.jQuery) {
-             jQuery('.main-li.has-dropdown').each(function () {
-               const $item = jQuery(this);
-               $item.off('mouseenter mouseleave');
-               $item.on('mouseenter', function () { $item.addClass('open'); });
-               $item.on('mouseleave', function () { $item.removeClass('open'); });
-             });
-           }
-         }
-
-         function buildMobileMenu(pagesWithChildren, root) {
-          root.innerHTML = "";
-
-          pagesWithChildren.forEach(({ page, children }) => {
-            const li = document.createElement("li");
-            li.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
-
-            const a = document.createElement("a");
-            a.className = "nav-link w-nav-link";
-            a.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
-            a.href = page.url || "#";
-            a.textContent = page.title;
-
-            li.appendChild(a);
-
-            // ---- children ----
-            if (children?.length) {
-              const ul = document.createElement("ul");
-
-              children.forEach(child => {
-                const cli = document.createElement("li");
-                cli.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
-
-                const ca = document.createElement("a");
-                ca.className = "nav-link w-nav-link";
-                ca.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
-                ca.href = child.url || "#";
-                ca.textContent = child.title;
-
-                cli.appendChild(ca);
-                ul.appendChild(cli);
-              });
-
-              li.appendChild(ul);
-            }
-
-            root.appendChild(li);
-          });
-        }
-
-        async function renderContentBoxes() {
-          const container = document.querySelector(".cb-wrapper");
-          if (!container) return;
-
-          // Clear existing content
-          container.innerHTML = "";
-
-          // Fetch contentBoxes from Firebase
-          const boxes = await loadCollectionOrCache(
-            ["main", "contentBoxes", "children"], // path to the subcollection
-            "contentBoxesChildren" // cache key
-          );
-
-          let counter = 0; // count boxes added
-          boxes.forEach(box => {
-            const a = document.createElement("a");
-            a.href = box.url || "#";
-            a.target = box.target || "_self";
-            a.className = `custom-link cb ${box.position || "left"}`;
-
-            const innerDiv = document.createElement("div");
-            innerDiv.className = "cb-content w-clearfix";
-
-            const headingDiv = document.createElement("div");
-            headingDiv.className = "cb-text-heading";
-
-            const span = document.createElement("span");
-            span.textContent = box.title || "No Title";
-
-            headingDiv.appendChild(span);
-
-            const img = document.createElement("img");
-            img.src = box.img || "";
-            img.alt = box.title || "";
-            img.loading = "lazy";
-            img.className = "cb-image";
-
-            innerDiv.appendChild(headingDiv);
-            innerDiv.appendChild(img);
-            a.appendChild(innerDiv);
-
-            container.appendChild(a);
-
-            counter++;
-
-            // Insert clearBoth div after every 3 boxes
-            if (counter % 3 === 0) {
-              const clearDiv = document.createElement("div");
-              clearDiv.className = "w--mehiddendium w-hidden-small w-hidden-tiny clearBoth";
-              container.appendChild(clearDiv);
-            }
-          });
-
-
-          // Optional: add clearBoth div for layout if needed
-          const clearDiv = document.createElement("div");
-          clearDiv.className = "w--mehiddendium w-hidden-small w-hidden-tiny clearBoth";
-          container.appendChild(clearDiv);
-        }
-
-
-
-         // Footer quick links
-         function renderQuickLinks(links) {
-           if (!links?.length) return;
-           const root = document.getElementById("footer-quick-links");
-           if (!root) return;
-
-           links.forEach(link => {
-             const li = document.createElement("li");
-             li.className = "footer-links-list-item";
-
-             const a = document.createElement("a");
-             a.className = "footer-link footer-list-item-link";
-             a.href = link.url;
-             a.textContent = link.title;
-             a.target = link.external === "true" ? "_blank" : "_self";
-             if (link.external === "true") a.rel = "noopener noreferrer";
-
-             li.appendChild(a);
-             root.appendChild(li);
-           });
-         }
-         // --------------------
-        // Fetch slideshow URLs from Firebase
-        // --------------------
-        async function loadSlideshow() {
-          try {
-            const docRef = doc(db, "main", "slideshow");
-            const snap = await getDoc(docRef);
-            if (!snap.exists()) return [];
-
-            const data = snap.data();
-            if (!data.urls) return [];
-
-            // Split comma-separated list and remove empty items
-            return data.urls.split(",").map(u => u.trim()).filter(Boolean);
-          } catch (err) {
-            console.warn("Failed to load slideshow URLs:", err);
-            return [];
-          }
-        }
-
-        // --------------------
-        // Render Glide.js slides dynamically
-        // --------------------
-        async function renderSlideshow() {
-          const urls = await loadSlideshow();
-          if (!urls.length) return;
-
-          const slidesContainer = document.getElementById("glide-slides");
-          urls.forEach(url => {
-            const li = document.createElement("li");
-            li.className = "glide__slide";
-            const img = document.createElement("img");
-            img.src = url;
-            li.appendChild(img);
-            slidesContainer.appendChild(li);
-          });
-
-          new Glide('#slideshow-container', {
-            type: 'carousel',
-            perView: 1,
-            focusAt: 'center',
-            gap: 0,
-            autoplay: 5000,
-            hoverpause: true,
-          }).mount();
-        }
-        // --------------------
-        // Render Copywrite Year
-        // --------------------
-        const el = document.getElementById("copyright-text");
-        const year = new Date().getFullYear();
-
-        el.innerHTML = `© ${year} Civil Air Patrol. All rights reserved.`;
-         // --------------------
-         // INIT
-         // --------------------
-         document.addEventListener("DOMContentLoaded", async () => {
-          // Load menus and other content
-          const [unit, contact, quickLinks] = await Promise.all([
-            loadDocOrCache(["main", "unit"], "unit"),
-            loadDocOrCache(["main", "contact"], "contact"),
-            loadCollectionOrCache(["main", "quickLinks", "children"], "quickLinks")
-          ]);
-          window.currentUnit = unit;
-          renderUnit(unit);
-          renderContact(contact);
-          renderQuickLinks(quickLinks);
-          await renderMenu();
-          await renderSlideshow();
-          await renderContentBoxes();
-        });
-
-
-
-         const menu = document.querySelector('.desktop-navigation-menu');
-      </script>
       <style type="text/css">
          @media (min-width: 1025px) {
 
@@ -456,9 +92,6 @@
             opacity: 1;
             z-index: 1;
           }
-
-
-
       </style>
       <script src="assets/js/admin.js" defer></script>
       <script src="assets/easter/boot.js" defer></script>

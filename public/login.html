@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="assets/stylesheets/main.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://skyhawk.cap.gov/core/libraries/jquery/assets/3.3.1/jquery.min.js"></script>
-    <script src="https://skyhawk.cap.gov/assets/javascripts/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js"></script>
+    <script src="assets/js/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js"></script>
     <script src="https://skyhawk.cap.gov/core/public/shared/assets/js/jquery.cycle2/2.1.6/jquery.cycle2-fef2f3645726cce4154911d6140d7d52.min.js"></script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-M2RSE2BRK2"></script>
@@ -18,154 +18,6 @@
 
       gtag('config', 'G-M2RSE2BRK2');
     </script>
-    <script type="module">
-         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-         import {
-           initializeFirestore,
-           persistentLocalCache,
-           persistentMultipleTabManager,
-           collection,
-           doc,
-           getDoc,
-           getDocs
-         } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
-
-         // --------------------
-         // Firebase config
-         // --------------------
-         const firebaseConfig = {
-           apiKey: "AIzaSyBk_ikYB1PzkgHx4zJY73pe3EfzQRpZvqw",
-           authDomain: "skyhawk-web.firebaseapp.com",
-           projectId: "skyhawk-web",
-           storageBucket: "skyhawk-web.firebasestorage.app",
-           messagingSenderId: "340655139001",
-           appId: "1:340655139001:web:7923a1fe83ac4a4c689368",
-           measurementId: "G-M2RSE2BRK2"
-         };
-
-         const app = initializeApp(firebaseConfig);
-         const db = initializeFirestore(app, {
-           cache: persistentLocalCache({
-             tabManager: persistentMultipleTabManager()
-           })
-         });
-
-         // --------------------
-         // Cache-first loader
-         // --------------------
-         async function loadDocOrCache(pathSegments, cacheKey) {
-           const cached = localStorage.getItem(cacheKey);
-           if (cached) {
-             try { return JSON.parse(cached); } catch {}
-           }
-
-           try {
-             const ref = doc(db, ...pathSegments);
-             const snap = await getDoc(ref);
-             if (snap.exists()) {
-               const data = snap.data();
-               localStorage.setItem(cacheKey, JSON.stringify(data));
-               return data;
-             }
-           } catch (err) {
-             console.warn(`Failed to load ${pathSegments.join("/")}`, err);
-           }
-           return null;
-         }
-
-         async function loadCollectionOrCache(pathSegments, cacheKey) {
-           const cached = localStorage.getItem(cacheKey);
-           if (cached) {
-             try { return JSON.parse(cached); } catch {}
-           }
-
-           try {
-             const colRef = collection(db, ...pathSegments);
-             const snap = await getDocs(colRef);
-             const data = snap.docs.map(d => d.data());
-             localStorage.setItem(cacheKey, JSON.stringify(data));
-             return data;
-           } catch (err) {
-             console.warn(`Failed to load collection ${pathSegments.join("/")}`, err);
-           }
-           return [];
-         }
-
-         // --------------------
-         // Render functions
-         // --------------------
-         function renderUnit(unit) {
-           if (!unit) return;
-           document.title = unit.name;
-           const el = document.getElementById("unit-name");
-           if (el) el.textContent = `${unit.name} (${unit.designation})`;
-         }
-
-         function renderContact(contact) {
-           if (!contact) return;
-           const addrEl = document.getElementById("address");
-           if (addrEl) addrEl.innerHTML = contact.address.replace(/\n/g, "<br>");
-
-           const phoneEl = document.getElementById("phone");
-           if (phoneEl) {
-             phoneEl.href = `tel:${contact.phone}`;
-             phoneEl.textContent = contact.phone;
-           }
-
-           const emailEl = document.getElementById("email");
-           if (emailEl) {
-             emailEl.innerHTML = `<a href="mailto:${contact.email}">${contact.email}</a>`;
-           }
-         }
-
-
-         // Footer quick links
-         function renderQuickLinks(links) {
-           if (!links?.length) return;
-           const root = document.getElementById("footer-quick-links");
-           if (!root) return;
-
-           links.forEach(link => {
-             const li = document.createElement("li");
-             li.className = "footer-links-list-item";
-
-             const a = document.createElement("a");
-             a.className = "footer-link footer-list-item-link";
-             a.href = link.url;
-             a.textContent = link.title;
-             a.target = link.external === "true" ? "_blank" : "_self";
-             if (link.external === "true") a.rel = "noopener noreferrer";
-
-             li.appendChild(a);
-             root.appendChild(li);
-           });
-         }
-         // --------------------
-        // Render Copywrite Year
-        // --------------------
-        const el = document.getElementById("copyright-text");
-        const year = new Date().getFullYear();
-
-        el.innerHTML = `© ${year} Civil Air Patrol. All rights reserved.`;
-         // --------------------
-         // INIT
-         // --------------------
-         document.addEventListener("DOMContentLoaded", async () => {
-           // Fire all loads in parallel (cache-first)
-           const [unit, contact, quickLinks] = await Promise.all([
-             loadDocOrCache(["main", "unit"], "unit"),
-             loadDocOrCache(["main", "contact"], "contact"),
-             loadCollectionOrCache(["main", "quickLinks", "children"], "quickLinks")
-           ]);
-
-           renderUnit(unit);
-           renderContact(contact);
-           renderQuickLinks(quickLinks);
-
-           // Menu can load in background without blocking DOM
-           renderMenu();
-         });
-      </script>
     <style>
         /* =========================
         LOGIN PAGE – ISOLATED
@@ -228,16 +80,6 @@
               background: #1161ee;
           }
 
-          .blue-line {
-            width: 100%;       /* full width of parent container */
-            height: 5px;       /* thickness of the line */
-            background-color: #001489; /* plain blue color */
-            border: none;      /* remove any default borders */
-            border-radius: 2px; /* optional, slightly rounded ends */
-          }
-
-
-
         /* Error / Status message */
         .login-card .error1 {
           margin-top: 12px;
@@ -250,6 +92,11 @@
           font-size: 13px;
           color: #666;
         }
+          .blue-line1 {
+            border: none;           /* remove default border */
+            height: 4px;            /* thickness */
+            background-color: #001489; /* solid blue */
+          }
     </style>
   </head>
   <body>
@@ -262,13 +109,6 @@
               <h2 class="website-tagline" id="unit-name"></h2>
             </div>
             <div class="header-content-right-wrap">
-              <a href="https://www.gocivilairpatrol.com/?form=FUNEALECFQD" id="donations-button" class="donations-btn">
-                <div class="donations-btn-image">
-                  <div class="donations-btn-ripple"></div>
-                  <img src="/assets/images/heart.svg" alt="">
-                </div>
-                <div class="donations-btn-text">Donate Today</div>
-              </a>
               <div class="website-logo-container">
                 <img src="/media/website/skyhawks_logo_CAP_transparent.png" alt="Skyhawk Composite Squadron" class="website-logo">
               </div>
@@ -278,7 +118,7 @@
         <div class="w-nav-overlay" data-wf-ignore=""></div>
       </div>
     </div>
-    <div class="blue-line"></div>
+    <div class="blue-line1"></div>
     <div class="login-page">
       <div class="login-card">
         <h2>Login to Your Account</h2>
@@ -360,11 +200,16 @@
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
       import { sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+      import { getFirestore } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
       import {
         getAuth,
         signInWithEmailAndPassword,
         onAuthStateChanged
       } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
+      import { initHeaderFooter } from "/assets/js/header-footer.js";
+
+
       const firebaseConfig = {
         apiKey: "AIzaSyBk_ikYB1PzkgHx4zJY73pe3EfzQRpZvqw",
         authDomain: "skyhawk-web.firebaseapp.com",
@@ -377,6 +222,7 @@
 
       const app = initializeApp(firebaseConfig);
       const auth = getAuth(app);
+      const db = getFirestore(app);
 
       const form = document.getElementById("loginForm");
       const errorMsg = document.getElementById("errorMsg");
@@ -498,6 +344,9 @@
           window.location.href = "/member";
         }
       });
+
+
+      document.addEventListener("DOMContentLoaded", async () => {await Promise.all([initHeaderFooter(db)]);});
     </script>
   </body>
 </html>

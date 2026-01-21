@@ -7,7 +7,7 @@
       <link rel="stylesheet" href="assets/stylesheets/main.css">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <script src="https://skyhawk.cap.gov/core/libraries/jquery/assets/3.3.1/jquery.min.js"></script>
-      <script src="https://skyhawk.cap.gov/assets/javascripts/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js"></script>
+      <script src="assets/js/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js"></script>
       <script src="https://skyhawk.cap.gov/core/public/shared/assets/js/jquery.cycle2/2.1.6/jquery.cycle2-fef2f3645726cce4154911d6140d7d52.min.js"></script>
       <!-- Google tag (gtag.js) -->
       <script async src="https://www.googletagmanager.com/gtag/js?id=G-M2RSE2BRK2"></script>
@@ -23,16 +23,15 @@
         // FIREBASE INITIALIZATION
         // ===============================
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-        import {
-          initializeFirestore,
-          persistentLocalCache,
-          persistentMultipleTabManager,
-          collection,
-          doc,
-          getDoc,
-          getDocs
-        } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
         import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
+        import { initMenu } from "/assets/js/menu.js";
+        import { initContentBoxes } from "/assets/js/content-boxes.js";
+        import { initSlideshow } from "/assets/js/slideshow.js";
+        import { initHeaderFooter } from "/assets/js/header-footer.js";
+        import { initMemberMenu } from "/assets/js/member-menu.js";
+        import { loadMemberPage, renderMemberPage } from "/assets/js/load-member-page.js";
 
         const firebaseConfig = {
           apiKey: "AIzaSyBk_ikYB1PzkgHx4zJY73pe3EfzQRpZvqw",
@@ -45,325 +44,8 @@
         };
 
         const app = initializeApp(firebaseConfig);
-        const db = initializeFirestore(app, {
-          cache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
-        });
+        const db = getFirestore(app);
         const auth = getAuth();
-
-        // ===============================
-        // CACHE-FIRST LOADERS
-        // ===============================
-        async function loadDocOrCache(pathSegments, cacheKey) {
-          const cached = localStorage.getItem(cacheKey);
-          if (cached) {
-            try { return JSON.parse(cached); } catch {}
-          }
-          try {
-            const ref = doc(db, ...pathSegments);
-            const snap = await getDoc(ref);
-            if (snap.exists()) {
-              const data = snap.data();
-              localStorage.setItem(cacheKey, JSON.stringify(data));
-              return data;
-            }
-          } catch (err) {
-            console.warn(`Failed to load ${pathSegments.join("/")}`, err);
-          }
-          return null;
-        }
-
-        async function loadCollectionOrCache(pathSegments, cacheKey) {
-          const cached = localStorage.getItem(cacheKey);
-          if (cached) {
-            try { return JSON.parse(cached); } catch {}
-          }
-          try {
-            const colRef = collection(db, ...pathSegments);
-            const snap = await getDocs(colRef);
-            const data = snap.docs.map(d => d.data());
-            localStorage.setItem(cacheKey, JSON.stringify(data));
-            return data;
-          } catch (err) {
-            console.warn(`Failed to load collection ${pathSegments.join("/")}`, err);
-          }
-          return [];
-        }
-
-         async function loadPage(sectionId, onUpdate) {
-          const cacheKey = `pageData_${sectionId}`;
-          const cachedRaw = localStorage.getItem(cacheKey);
-
-          if (cachedRaw) {
-            try { onUpdate(JSON.parse(cachedRaw)); } catch {}
-          }
-
-          // ✅ Correct document path
-          const pageRef = doc(db, "member", "pages", "children", sectionId);
-          const pageSnap = await getDoc(pageRef);
-          if (!pageSnap.exists()) {
-            window.location.href = "/404"; // Redirect to 404 page
-            return;
-          }
-
-          // ✅ Correct children collection path
-          const childrenRef = collection(
-            db,
-            "member",
-            "pages",
-            "children",
-            sectionId,
-            "children"
-          );
-
-          const childrenSnap = await getDocs(childrenRef);
-
-          const fresh = {
-            id: sectionId,
-            title: pageSnap.data().title,
-            children: {}
-          };
-
-          childrenSnap.forEach(c => {
-            const d = c.data();
-            fresh.children[d.slug] = {
-              title: d.title,
-              slug: d.slug,
-              content: d.content,
-              externalUrl: d.externalUrl || null
-            };
-          });
-
-          if (JSON.stringify(fresh) !== cachedRaw) {
-            localStorage.setItem(cacheKey, JSON.stringify(fresh));
-            onUpdate(fresh);
-          }
-        }
-
-
-        // ===============================
-        // RENDER FUNCTIONS
-        // ===============================
-        function renderPage(pageData) {
-          if (!pageData) return;
-          const params = new URLSearchParams(location.search);
-          const [, childSlug] = (params.get("page") || "").split("/");
-          const children = Object.values(pageData.children);
-          const active = children.find(c => c.slug === childSlug) || children[0];
-
-          // Side nav
-          const sideList = document.getElementById("sideNavList");
-          const sideTitle = document.getElementById("sideNavTitleLink");
-          sideTitle.textContent = pageData.title;
-          sideTitle.href = `/memberpage?page=${pageData.id}`;
-          sideList.innerHTML = "";
-          children.forEach(c => {
-            const li = document.createElement("li");
-            li.className = "left-nav-list-item";
-            const a = document.createElement("a");
-            a.className = "left-nav-list-link";
-            a.href = `/memberpage?page=${pageData.id}/${c.slug}`;
-            a.textContent = c.title;
-            if (c.slug === active.slug) a.classList.add("selected");
-            li.append(a, document.createElement("div"));
-            sideList.appendChild(li);
-          });
-
-          // Content
-          document.getElementById("pageTitle").textContent = active.title;
-          if (active.externalUrl) {
-            location.href = active.externalUrl;
-          } else {
-            document.getElementById("pageContent").innerHTML = active.content;
-          }
-        }
-
-        function renderUnit(unit) {
-          if (!unit) return;
-          document.title = unit.name;
-          const el = document.getElementById("unit-name");
-          if (el) el.textContent = `${unit.name} (${unit.designation})`;
-        }
-
-        function renderContact(contact) {
-          if (!contact) return;
-          const addrEl = document.getElementById("address");
-          if (addrEl) addrEl.innerHTML = contact.address.replace(/\n/g, "<br>");
-          const phoneEl = document.getElementById("phone");
-          if (phoneEl) { phoneEl.href = `tel:${contact.phone}`; phoneEl.textContent = contact.phone; }
-          const emailEl = document.getElementById("email");
-          if (emailEl) { emailEl.innerHTML = `<a href="mailto:${contact.email}">${contact.email}</a>`; }
-        }
-
-        function renderQuickLinks(links) {
-          if (!links?.length) return;
-          const root = document.getElementById("footer-quick-links");
-          if (!root) return;
-          links.forEach(link => {
-            const li = document.createElement("li");
-            li.className = "footer-links-list-item";
-            const a = document.createElement("a");
-            a.className = "footer-link footer-list-item-link";
-            a.href = link.url;
-            a.textContent = link.title;
-            a.target = link.external === "true" ? "_blank" : "_self";
-            if (link.external === "true") a.rel = "noopener noreferrer";
-            li.appendChild(a);
-            root.appendChild(li);
-          });
-        }
-
-        async function renderMenu() {
-          const desktopRoot = document.getElementById("main-menu");
-          const mobileRoot = document.getElementById("mobile-menu-root");
-
-          if (!desktopRoot && !mobileRoot) return;
-
-          // 1️⃣ Load cached menu immediately
-          const cached = JSON.parse(localStorage.getItem("menuPages") || "null");
-          if (cached) {
-            if (desktopRoot) buildMenu(cached, desktopRoot);
-            if (mobileRoot) buildMobileMenu(cached, mobileRoot);
-          }
-
-          // 2️⃣ Fetch fresh data
-          try {
-            const pagesCollection = collection("main", "menu", "pages");
-            const pagesSnap = await getDocs(pagesCollection);
-
-            const pagesWithChildren = await Promise.all(
-              pagesSnap.docs.map(async pageDoc => {
-                const childrenSnap = await getDocs(
-                  collection(pagesCollection, pageDoc.id, "children")
-                );
-                return {
-                  page: pageDoc.data(),
-                  children: childrenSnap.docs.map(d => d.data())
-                };
-              })
-            );
-
-            localStorage.setItem("menuPages", JSON.stringify(pagesWithChildren));
-
-            if (desktopRoot) {
-              desktopRoot.innerHTML = "";
-              buildMenu(pagesWithChildren, desktopRoot);
-            }
-
-            if (mobileRoot) {
-              buildMobileMenu(pagesWithChildren, mobileRoot);
-            }
-
-          } catch (err) {
-            console.warn("Failed to load menu", err);
-          }
-        }
-          async function renderMemberMenu() {
-            const menuRoot = document.getElementById("member-menu");
-            if (!menuRoot) return;
-
-            let pagesData = JSON.parse(localStorage.getItem("menuPagesMember") || "null");
-            if (pagesData) buildMenu(pagesData, menuRoot);
-
-            try {
-              const pagesCollection = collection(db, "member", "menu", "pages");
-              const pagesSnap = await getDocs(pagesCollection);
-              const pagesWithChildren = await Promise.all(
-                pagesSnap.docs.map(async pageDoc => {
-                  const childrenSnap = await getDocs(collection(pagesCollection, pageDoc.id, "children"));
-                  return { page: pageDoc.data(), children: childrenSnap.docs.map(d => d.data()) };
-                })
-              );
-              console.log('Member menu fetched from Firestore:', pagesWithChildren);
-
-              localStorage.setItem("menuPagesMember", JSON.stringify(pagesWithChildren));
-              menuRoot.innerHTML = "";
-              buildMenu(pagesWithChildren, menuRoot);
-            } catch (err) {
-              console.warn("Failed to load member menu from Firestore", err);
-            }
-          }
-
-        function buildMenu(pagesWithChildren, menuRoot) {
-          const fragment = document.createDocumentFragment();
-          pagesWithChildren.forEach(({ page, children }) => {
-            const li = document.createElement("li");
-            li.className = "main-li";
-            li.id = `menu-item-${page.id || page.title}`;
-            const a = document.createElement("a");
-            a.href = page.url || "#";
-            a.textContent = page.title;
-            a.target = "_self";
-            a.className = "main-nav-link";
-            li.appendChild(a);
-            if (children?.length) {
-              li.classList.add("has-dropdown");
-              const dropdown = document.createElement("div");
-              dropdown.className = "dropdown-container";
-              const ul = document.createElement("ul");
-              ul.className = "dropdown-list";
-              children.forEach(child => {
-                const cli = document.createElement("li");
-                const ca = document.createElement("a");
-                ca.href = child.url || "#";
-                ca.textContent = child.title;
-                ca.target = "_self";
-                cli.appendChild(ca);
-                ul.appendChild(cli);
-              });
-              dropdown.appendChild(ul);
-              li.appendChild(dropdown);
-            }
-            fragment.appendChild(li);
-          });
-          menuRoot.appendChild(fragment);
-          if (window.jQuery) {
-            jQuery('.main-li.has-dropdown').each(function () {
-              const $item = jQuery(this);
-              $item.off('mouseenter mouseleave');
-              $item.on('mouseenter', () => $item.addClass('open'));
-              $item.on('mouseleave', () => $item.removeClass('open'));
-            });
-          }
-        }
-        function buildMobileMenu(pagesWithChildren, root) {
-          root.innerHTML = "";
-
-          pagesWithChildren.forEach(({ page, children }) => {
-            const li = document.createElement("li");
-            li.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
-
-            const a = document.createElement("a");
-            a.className = "nav-link w-nav-link";
-            a.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
-            a.href = page.url || "#";
-            a.textContent = page.title;
-
-            li.appendChild(a);
-
-            // ---- children ----
-            if (children?.length) {
-              const ul = document.createElement("ul");
-
-              children.forEach(child => {
-                const cli = document.createElement("li");
-                cli.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
-
-                const ca = document.createElement("a");
-                ca.className = "nav-link w-nav-link";
-                ca.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
-                ca.href = child.url || "#";
-                ca.textContent = child.title;
-
-                cli.appendChild(ca);
-                ul.appendChild(cli);
-              });
-
-              li.appendChild(ul);
-            }
-
-            root.appendChild(li);
-          });
-        }
 
         // ===============================
         // AUTH LOGOUT
@@ -375,35 +57,21 @@
             catch (err) { console.error("Logout failed:", err); }
           });
         }
-        // --------------------
-        // Render Copywrite Year
-        // --------------------
-        const el = document.getElementById("copyright-text");
-        const year = new Date().getFullYear();
-
-        el.innerHTML = `© ${year} Civil Air Patrol. All rights reserved.`;
         // ===============================
         // INIT
         // ===============================
         document.addEventListener("DOMContentLoaded", async () => {
           const sectionId = (new URLSearchParams(location.search).get("page") || "").split("/")[0];
-          if (sectionId) document.getElementById("pageContent").textContent = "Loading...";
+          if (!sectionId) return;
           
-          const [unit, contact, quickLinks] = await Promise.all([
-            loadDocOrCache(["main", "unit"], "unit"),
-            loadDocOrCache(["main", "contact"], "contact"),
-            loadCollectionOrCache(["main", "quickLinks", "children"], "quickLinks")
+          loadMemberPage(db, sectionId, renderMemberPage);
+        });
+        document.addEventListener("DOMContentLoaded", async () => {
+          await Promise.all([
+            initMenu(db),
+            initMemberMenu(db),
+            initHeaderFooter(db)
           ]);
-
-          renderUnit(unit);
-          renderContact(contact);
-          renderQuickLinks(quickLinks);
-          
-          if (sectionId) loadPage(sectionId, renderPage);
-
-          // Menu loads in background
-          renderMenu();
-          renderMemberMenu();
         });
       </script>
       <script src="assets/js/admin.js"></script>

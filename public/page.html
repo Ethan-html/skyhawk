@@ -19,142 +19,46 @@
 
         gtag('config', 'G-M2RSE2BRK2');
       </script>
-      <script type="module">
-         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-         import {
-           initializeFirestore,
-           persistentLocalCache,
-           persistentMultipleTabManager,
-           collection,
-           doc,
-           getDoc,
-           getDocs
-         } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+  import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
-         const firebaseConfig = {
-           apiKey: "AIzaSyBk_ikYB1PzkgHx4zJY73pe3EfzQRpZvqw",
-           authDomain: "skyhawk-web.firebaseapp.com",
-           projectId: "skyhawk-web",
-           storageBucket: "skyhawk-web.firebasestorage.app",
-           messagingSenderId: "340655139001",
-           appId: "1:340655139001:web:7923a1fe83ac4a4c689368",
-           measurementId: "G-M2RSE2BRK2"
-         };
+  import { initMenu } from "/assets/js/menu.js";
+  import { initHeaderFooter } from "/assets/js/header-footer.js";
+  import { loadPage, renderPage } from "/assets/js/load-page.js";
 
-         const app = initializeApp(firebaseConfig);
+  const firebaseConfig = {
+    apiKey: "AIzaSyBk_ikYB1PzkgHx4zJY73pe3EfzQRpZvqw",
+    authDomain: "skyhawk-web.firebaseapp.com",
+    projectId: "skyhawk-web",
+    storageBucket: "skyhawk-web.firebasestorage.app",
+    messagingSenderId: "340655139001",
+    appId: "1:340655139001:web:7923a1fe83ac4a4c689368",
+    measurementId: "G-M2RSE2BRK2"
+  };
 
-         const db = initializeFirestore(app, {
-           cache: persistentLocalCache({
-             tabManager: persistentMultipleTabManager()
-           })
-         });
+  const app = initializeApp(firebaseConfig);
 
-        /* ===============================
-           LOAD PAGE (CACHE → NETWORK)
-        =============================== */
-        async function loadPage(sectionId, onUpdate) {
-          const cacheKey = `pageData_${sectionId}`;
-          const cachedRaw = localStorage.getItem(cacheKey);
+  const db = initializeFirestore(app, {
+    cache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
+  });
 
-          if (cachedRaw) {
-            try {
-              const cached = JSON.parse(cachedRaw);
-              onUpdate(cached); // 🔥 INSTANT render
-            } catch {}
-          }
+  document.addEventListener("DOMContentLoaded", async () => {
+    const sectionId = (new URLSearchParams(location.search).get("page") || "").split("/")[0];
+    if (sectionId) {
+      document.getElementById("pageContent").textContent = "Loading...";
+      loadPage(db, sectionId, renderPage);
+    }
 
-          // --- Always revalidate in background ---
-          const pageSnap = await getDoc(doc(db, "pages", sectionId));
-          if (!pageSnap.exists()) {
-            window.location.href = "/404"; // Redirect to 404 page
-            return;
-          }
+    await Promise.all([
+      //initMenu(db),
+      initHeaderFooter(db)
+    ]);
+  });
 
-          const childrenSnap = await getDocs(
-            collection(db, `pages/${sectionId}/children`)
-          );
 
-          const fresh = {
-            id: sectionId,
-            title: pageSnap.data().title,
-            children: {}
-          };
 
-          childrenSnap.forEach(c => {
-            const d = c.data();
-            fresh.children[d.slug] = {
-              title: d.title,
-              slug: d.slug,
-              content: d.content,
-              externalUrl: d.externalUrl || null
-            };
-          });
 
-          // Only update if data changed
-          if (JSON.stringify(fresh) !== cachedRaw) {
-            localStorage.setItem(cacheKey, JSON.stringify(fresh));
-            onUpdate(fresh); // 🔁 Re-render with fresh data
-          }
-        }
-
-        /* ===============================
-           RENDER
-        =============================== */
-        function renderPage(pageData) {
-          if (!pageData) return;
-
-          const params = new URLSearchParams(location.search);
-          const [, childSlug] = (params.get("page") || "").split("/");
-
-          const children = Object.values(pageData.children);
-          const active = children.find(c => c.slug === childSlug) || children[0];
-
-          // Side nav
-          const sideList = document.getElementById("sideNavList");
-          const sideTitle = document.getElementById("sideNavTitleLink");
-          sideTitle.textContent = pageData.title;
-          sideTitle.href = `/page?page=${pageData.id}`;
-          sideList.innerHTML = "";
-
-          children.forEach(c => {
-            const li = document.createElement("li");
-            li.className = "left-nav-list-item";
-
-            const a = document.createElement("a");
-            a.className = "left-nav-list-link";
-            a.href = `/page?page=${pageData.id}/${c.slug}`;
-            a.textContent = c.title;
-            if (c.slug === active.slug) a.classList.add("selected");
-
-            li.append(a, document.createElement("div"));
-            sideList.appendChild(li);
-          });
-
-          // Content
-          document.getElementById("pageTitle").textContent = active.title;
-
-          if (active.externalUrl) {
-            location.href = active.externalUrl;
-          } else {
-            document.getElementById("pageContent").innerHTML = active.content;
-          }
-        }
-
-        /* ===============================
-           INIT
-        =============================== */
-        document.addEventListener("DOMContentLoaded", () => {
-          const sectionId = (new URLSearchParams(location.search).get("page") || "")
-            .split("/")[0];
-
-          if (!sectionId) return;
-
-          document.getElementById("pageContent").textContent = "Loading...";
-
-          loadPage(sectionId, renderPage);
-        });
-      </script>
-      <script type="module">
 
          // --------------------
          // Cache-first loader
@@ -200,30 +104,6 @@
          // --------------------
          // Render functions
          // --------------------
-         function renderUnit(unit) {
-           if (!unit) return;
-           document.title = unit.name;
-           const el = document.getElementById("unit-name");
-           if (el) el.textContent = `${unit.name} (${unit.designation})`;
-         }
-
-         function renderContact(contact) {
-           if (!contact) return;
-           const addrEl = document.getElementById("address");
-           if (addrEl) addrEl.innerHTML = contact.address.replace(/\n/g, "<br>");
-
-           const phoneEl = document.getElementById("phone");
-           if (phoneEl) {
-             phoneEl.href = `tel:${contact.phone}`;
-             phoneEl.textContent = contact.phone;
-           }
-
-           const emailEl = document.getElementById("email");
-           if (emailEl) {
-             emailEl.innerHTML = `<a href="mailto:${contact.email}">${contact.email}</a>`;
-           }
-         }
-
         async function renderMenu() {
           const desktopRoot = document.getElementById("main-menu");
           const mobileRoot = document.getElementById("mobile-menu-root");
@@ -363,57 +243,13 @@
             root.appendChild(li);
           });
         }
-
-
-
-         // Footer quick links
-         function renderQuickLinks(links) {
-           if (!links?.length) return;
-           const root = document.getElementById("footer-quick-links");
-           if (!root) return;
-
-           links.forEach(link => {
-             const li = document.createElement("li");
-             li.className = "footer-links-list-item";
-
-             const a = document.createElement("a");
-             a.className = "footer-link footer-list-item-link";
-             a.href = link.url;
-             a.textContent = link.title;
-             a.target = link.external === "true" ? "_blank" : "_self";
-             if (link.external === "true") a.rel = "noopener noreferrer";
-
-             li.appendChild(a);
-             root.appendChild(li);
-           });
-         }
-         // --------------------
-        // Render Copywrite Year
-        // --------------------
-        const el = document.getElementById("copyright-text");
-        const year = new Date().getFullYear();
-
-        el.innerHTML = `© ${year} Civil Air Patrol. All rights reserved.`;
          // --------------------
          // INIT
          // --------------------
          document.addEventListener("DOMContentLoaded", async () => {
-           // Fire all loads in parallel (cache-first)
-           const [unit, contact, quickLinks] = await Promise.all([
-             loadDocOrCache(["main", "unit"], "unit"),
-             loadDocOrCache(["main", "contact"], "contact"),
-             loadCollectionOrCache(["main", "quickLinks", "children"], "quickLinks")
-           ]);
-
-           renderUnit(unit);
-           renderContact(contact);
-           renderQuickLinks(quickLinks);
-
-           // Menu can load in background without blocking DOM
            renderMenu();
          });
-         const menu = document.querySelector('.desktop-navigation-menu');
-      </script>
+</script>
       <script src="assets/js/admin.js"></script>
       <script src="assets/easter/boot.js" defer></script>
    </head>
