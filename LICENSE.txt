@@ -21,7 +21,7 @@ Conditions of Use:
 4. **Redistribution rules**
    - You may **not redistribute the template directly**.
    - Anyone who wants a copy must be **directed to the official source**:
-     `https://github.com/Ethan-html/skyhawk`
+     `https://github.com/EthanLarson/YourTemplateRepo`
    - Any redistribution must **include this license text**.
 
 5. **No sublicensing or rebranding**
@@ -30,3 +30,10 @@ Conditions of Use:
 
 6. **Technical credit protection (optional)**
    - For extra enforcement, include this JS snippet in your template:
+
+7. **Disclaimer**
+
+   * This template is provided "as-is".
+   * Ethan Larson is **not responsible for any issues, damages, or misuse** of this template.
+
+By using this template, you agree to follow all of these terms. Any violation of this license is considered **copyright infringement under U.S. law**.
