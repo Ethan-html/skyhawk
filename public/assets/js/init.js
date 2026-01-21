@@ -142,23 +142,23 @@ const loadSection = (loader, renderer) => async db => {
 const pageConfigs = [
   {
     match: path => path === "/" || path === "/index.html",
-    modules: [initMenu, initHeaderFooter, initSlideshow, initContentBoxes],
+    modules: [initHeaderFooter, initMenu, initSlideshow, initContentBoxes],
     requiresAuth: false
   },
   {
     match: path => path.startsWith("/page"),
-    modules: [initMenu, initHeaderFooter, loadSection(loadPage, renderPage)],
+    modules: [initHeaderFooter, initMenu, loadSection(loadPage, renderPage)],
     requiresAuth: false
   },
   {
     match: path => path === "/member",
-    modules: [initMenu, initMemberMenu, initContentBoxes, initHeaderFooter],
+    modules: [initHeaderFooter, initMenu, initMemberMenu, initContentBoxes],
     requiresAuth: true,
     logout: true
   },
   {
     match: path => path.startsWith("/memberpage"),
-    modules: [initMenu, initMemberMenu, initHeaderFooter, loadSection(loadMemberPage, renderMemberPage)],
+    modules: [initHeaderFooter, initMenu, initMemberMenu, loadSection(loadMemberPage, renderMemberPage)],
     requiresAuth: true,
     logout: true
   },
@@ -170,7 +170,7 @@ const pageConfigs = [
   },
   {
     match: () => true, // fallback 404 or unknown pages
-    modules: [initMenu, initHeaderFooter],
+    modules: [initHeaderFooter, initMenu],
     requiresAuth: false
   }
 ];
@@ -204,7 +204,7 @@ export async function initPage() {
   onReady(async () => {
     // Wait for all assets to load
     await loadAssets(assets);
-
+    document.body.style.display = "block";
     // Initialize Google Analytics
     initGA();
 
