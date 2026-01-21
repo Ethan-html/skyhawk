@@ -1,0 +1,32 @@
+Copyright (c) 2026 Ethan Larson
+
+Permission is granted **only to members of the Civil Air Patrol (CAP)** to use this template for CAP-related projects.
+
+Conditions of Use:
+
+1. **Credit line**
+   - The credit line "Web developed by Ethan Larson" **must remain intact and visible** on all pages.
+   - You may **not remove, modify, or obscure** this credit.
+   - You may **not claim authorship** of this template.
+
+2. **Usage restriction**
+   - This template may **only be used for projects directly related to the Civil Air Patrol organization**.
+   - Commercial use outside CAP or personal projects not related to CAP is **prohibited**.
+
+3. **Modification rules**
+   - You may modify the template to suit your CAP project.
+   - Modifications **must not remove the credit line**.
+   - All derivative works must **still display the credit line**.
+
+4. **Redistribution rules**
+   - You may **not redistribute the template directly**.
+   - Anyone who wants a copy must be **directed to the official source**:
+     `https://github.com/Ethan-html/skyhawk`
+   - Any redistribution must **include this license text**.
+
+5. **No sublicensing or rebranding**
+   - You may **not license this template or derivatives** to others independently.
+   - You may **not alter the credit line to suggest someone else created it**.
+
+6. **Technical credit protection (optional)**
+   - For extra enforcement, include this JS snippet in your template:
