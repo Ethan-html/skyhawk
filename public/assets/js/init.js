@@ -1,60 +1,4 @@
 // ==============================
-// Page configuration
-// ==============================
-const pageConfigs = [
-  {
-    match: path => path === "/" || path === "/index.html",
-    modules: [initMenu, initHeaderFooter, initSlideshow, initContentBoxes],
-    requiresAuth: false
-  },
-  {
-    match: path => path.startsWith("/page"),
-    modules: [initMenu, initHeaderFooter, loadSection(loadPage, renderPage)],
-    requiresAuth: false
-  },
-  {
-    match: path => path === "/member",
-    modules: [initMenu, initMemberMenu, initContentBoxes, initHeaderFooter],
-    requiresAuth: true,
-    logout: true
-  },
-  {
-    match: path => path.startsWith("/memberpage"),
-    modules: [initMenu, initMemberMenu, initHeaderFooter, loadSection(loadMemberPage, renderMemberPage)],
-    requiresAuth: true,
-    logout: true
-  },
-  {
-    match: path => path.startsWith("/photos"),
-    modules: [initHeaderFooter],
-    requiresAuth: true,
-    logout: true
-  },
-  {
-    match: () => true, // fallback 404 or unknown pages
-    modules: [initMenu, initHeaderFooter],
-    requiresAuth: false
-  }
-];
-// ==============================
-// CSS & JS FIles
-// ==============================
-const assets = [
-  "/assets/js/copywrite.js",
-  "/assets/js/admin.js",
-  "/assets/easter/boot.js",
-  "/assets/js/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js",
-  "/assets/stylesheets/main.css"
-];
-
-
-
-
-
-
-
-
-// ==============================
 // Firebase (singleton)
 // ==============================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
@@ -161,6 +105,17 @@ function loadAssets(urls) {
 }
 
 // ==============================
+// Example usage
+// ==============================
+const assets = [
+  "/assets/js/copywrite.js",
+  "/assets/js/admin.js",
+  "/assets/easter/boot.js",
+  "/assets/js/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js",
+  "/assets/stylesheets/main.css"
+];
+
+// ==============================
 // Logout button helper
 // ==============================
 function initLogout() {
@@ -180,6 +135,45 @@ const loadSection = (loader, renderer) => async db => {
   const sectionId = (new URLSearchParams(location.search).get("page") || "").split("/")[0];
   return sectionId && loader(db, sectionId, renderer);
 };
+
+// ==============================
+// Page configuration
+// ==============================
+const pageConfigs = [
+  {
+    match: path => path === "/" || path === "/index.html",
+    modules: [initMenu, initHeaderFooter, initSlideshow, initContentBoxes],
+    requiresAuth: false
+  },
+  {
+    match: path => path.startsWith("/page"),
+    modules: [initMenu, initHeaderFooter, loadSection(loadPage, renderPage)],
+    requiresAuth: false
+  },
+  {
+    match: path => path === "/member",
+    modules: [initMenu, initMemberMenu, initContentBoxes, initHeaderFooter],
+    requiresAuth: true,
+    logout: true
+  },
+  {
+    match: path => path.startsWith("/memberpage"),
+    modules: [initMenu, initMemberMenu, initHeaderFooter, loadSection(loadMemberPage, renderMemberPage)],
+    requiresAuth: true,
+    logout: true
+  },
+  {
+    match: path => path.startsWith("/photos"),
+    modules: [initHeaderFooter],
+    requiresAuth: true,
+    logout: true
+  },
+  {
+    match: () => true, // fallback 404 or unknown pages
+    modules: [initMenu, initHeaderFooter],
+    requiresAuth: false
+  }
+];
 
 // ==============================
 // Auth Gate
