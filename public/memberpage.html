@@ -9,90 +9,14 @@
       <script src="https://skyhawk.cap.gov/core/libraries/jquery/assets/3.3.1/jquery.min.js"></script>
       <script src="assets/js/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js"></script>
       <script src="https://skyhawk.cap.gov/core/public/shared/assets/js/jquery.cycle2/2.1.6/jquery.cycle2-fef2f3645726cce4154911d6140d7d52.min.js"></script>
-      <!-- Google tag (gtag.js) -->
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-M2RSE2BRK2"></script>
-      <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-M2RSE2BRK2');
-      </script>
       <script type="module">
-        // ===============================
-        // FIREBASE INITIALIZATION
-        // ===============================
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-        import { getFirestore } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
-        import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-
-        import { initMenu } from "/assets/js/menu.js";
-        import { initContentBoxes } from "/assets/js/content-boxes.js";
-        import { initSlideshow } from "/assets/js/slideshow.js";
-        import { initHeaderFooter } from "/assets/js/header-footer.js";
-        import { initMemberMenu } from "/assets/js/member-menu.js";
-        import { loadMemberPage, renderMemberPage } from "/assets/js/load-member-page.js";
-
-        const firebaseConfig = {
-          apiKey: "AIzaSyBk_ikYB1PzkgHx4zJY73pe3EfzQRpZvqw",
-          authDomain: "skyhawk-web.firebaseapp.com",
-          projectId: "skyhawk-web",
-          storageBucket: "skyhawk-web.firebasestorage.app",
-          messagingSenderId: "340655139001",
-          appId: "1:340655139001:web:7923a1fe83ac4a4c689368",
-          measurementId: "G-M2RSE2BRK2"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth();
-
-        // ===============================
-        // AUTH LOGOUT
-        // ===============================
-        const logoutBtn = document.getElementById("logoutBtn");
-        if (logoutBtn) {
-          logoutBtn.addEventListener("click", async () => {
-            try { await signOut(auth); window.location.replace("/"); }
-            catch (err) { console.error("Logout failed:", err); }
-          });
-        }
-        // ===============================
-        // INIT
-        // ===============================
-        document.addEventListener("DOMContentLoaded", async () => {
-          const sectionId = (new URLSearchParams(location.search).get("page") || "").split("/")[0];
-          if (!sectionId) return;
-          
-          loadMemberPage(db, sectionId, renderMemberPage);
-        });
-        document.addEventListener("DOMContentLoaded", async () => {
-          await Promise.all([
-            initMenu(db),
-            initMemberMenu(db),
-            initHeaderFooter(db)
-          ]);
-        });
+        import { initPage } from "/assets/js/init.js";
+        initPage();
       </script>
       <script src="assets/js/admin.js"></script>
       <script src="assets/easter/boot.js" defer></script>
    </head>
     <body style="display:none;">
-      <script type="module">
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-        const auth = getAuth();
-
-        // HARD GATE — no content allowed until auth resolves
-        onAuthStateChanged(auth, user => {
-          if (!user) {
-            // Not logged in → go home
-            window.location.replace("/");
-          } else {
-            // Authenticated → allow page to render
-            document.body.style.display = "block";
-          }
-        });
-      </script>
       <div class="header-section">
         <div data-collapse="medium" data-animation="default" data-duration="400" class="nav-section w-nav">
           <div class="header-contents-wrap">
