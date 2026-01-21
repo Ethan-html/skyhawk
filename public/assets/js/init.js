@@ -108,7 +108,7 @@ function loadAssets(urls) {
 // Example usage
 // ==============================
 const assets = [
-  "/assets/js/copywrite.js",
+  //"/assets/js/copywrite.js",
   "/assets/js/admin.js",
   "/assets/easter/boot.js",
   "/assets/js/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js",
