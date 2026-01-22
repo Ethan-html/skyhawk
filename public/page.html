@@ -13,13 +13,30 @@
         initPage();
       </script>
       <script>
-        window.onload = function() {
-          const img = document.getElementById('staffDiagram');
-          if (img) { // only run if element exists
-            const baseUrl = 'https://skyhawk-cap.org/media/pages/staff.svg';
-            img.src = baseUrl + '?v=' + Date.now(); // bypass cache
-          }
-        };
+        function reloadImageViaIframe(imgId) {
+          const img = document.getElementById(imgId);
+          if (!img) return;
+
+          const iframe = document.createElement('iframe');
+          iframe.style.display = 'none';
+          iframe.src = img.src;
+          document.body.appendChild(iframe);
+
+          // Force reload
+          iframe.onload = () => {
+            try {
+              iframe.contentWindow.location.reload(true);
+            } catch (e) {
+              console.warn('Iframe reload may be blocked by browser:', e);
+            }
+            // Clean up
+            setTimeout(() => document.body.removeChild(iframe), 1000);
+          };
+        }
+
+        // Usage
+        reloadImageViaIframe('staffDiagram');
+
       </script>
 
    </head>
