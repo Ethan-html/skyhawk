@@ -48,6 +48,11 @@ export function initHeaderFooter(db) {
     const el = document.getElementById("unit-name");
     if (el) el.textContent = `${unit.name} (${unit.designation})`;
   };
+  const renderDonate = (donate) => {
+    if (!donate) return;
+    const donateBtn = document.getElementById("donations-button");
+    if (donateBtn) donateBtn.href = donate.url;
+  };
 
   const renderFooter = (contact, quickLinks) => {
     const footer = document.getElementById("footer");
@@ -116,6 +121,7 @@ export function initHeaderFooter(db) {
   // Init loads
   // --------------------
   loadAndRevalidate("site_unit", () => fetchDocData(["main", "unit"]), renderUnit);
+  loadAndRevalidate("site_donate", () => fetchDocData(["main", "donate"]), renderDonate);
 
   loadAndRevalidate("site_footer", async () => {
     const [contact, quickLinks] = await Promise.all([
