@@ -12,6 +12,16 @@
         import { initPage } from "/assets/js/init.js";
         initPage();
       </script>
+      <script>
+        window.onload = function() {
+          const img = document.getElementById('staffDiagram');
+          if (img) { // only run if element exists
+            const baseUrl = 'https://skyhawk-cap.org/media/pages/staff.svg';
+            img.src = baseUrl + '?v=' + Date.now(); // bypass cache
+          }
+        };
+      </script>
+
    </head>
    <body style="display:none;">
       <div class="header-section">
