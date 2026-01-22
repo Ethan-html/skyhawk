@@ -111,9 +111,9 @@ const assets = [
   //"/assets/js/copywrite.js",
   "/assets/js/admin.js",
   "/assets/easter/boot.js",
-  "/assets/js/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js",
   "/assets/js/jquery.min.js",
   "/assets/js/jquery.cycle2-fef2f3645726cce4154911d6140d7d52.min.js",
+  "/assets/js/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js",
   "/assets/stylesheets/main.css"
 ];
 
