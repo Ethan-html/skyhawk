@@ -30,6 +30,90 @@
             setTimeout(() => document.body.removeChild(iframe), 1000);
           };
         }
+        document.addEventListener("DOMContentLoaded", () => {
+  const imgId = "staffDiagram";
+
+  // Create lightbox overlay once
+  const lightbox = document.createElement("div");
+  Object.assign(lightbox.style, {
+    position: "fixed",
+    top: "0",
+    left: "0",
+    width: "100vw",
+    height: "100vh",
+    background: "rgba(0,0,0,0.95)",
+    display: "none",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: "9999",
+    overflow: "hidden",        // prevent page scroll behind overlay
+  });
+
+  // Container for image
+  const imgContainer = document.createElement("div");
+  Object.assign(imgContainer.style, {
+    background: "white",
+    padding: "10px",
+    borderRadius: "8px",
+    boxShadow: "0 0 20px rgba(0,0,0,0.5)",
+    maxHeight: "90vh",
+    overflow: "auto",           // only image scrolls if too tall
+    boxSizing: "border-box",
+  });
+
+  // Image itself
+  const lightboxImg = document.createElement("img");
+  Object.assign(lightboxImg.style, {
+    display: "block",
+    maxWidth: "100%",
+    height: "auto",
+    touchAction: "pinch-zoom",
+    userSelect: "none",
+  });
+
+  imgContainer.appendChild(lightboxImg);
+  lightbox.appendChild(imgContainer);
+  document.body.appendChild(lightbox);
+
+  // Close lightbox on overlay click
+  lightbox.addEventListener("click", e => {
+    if (e.target === lightbox) {
+      lightbox.style.display = "none";
+      document.body.style.overflow = ""; // restore page scroll
+    }
+  });
+
+  // Attach click listener to current image
+  function attachLightbox() {
+    const img = document.getElementById(imgId);
+    if (!img) return;
+
+    img.style.cursor = "pointer";
+
+    // Remove old listeners
+    const newImg = img.cloneNode(true);
+    img.replaceWith(newImg);
+
+    newImg.addEventListener("click", () => {
+      lightboxImg.src = newImg.src;
+      lightbox.style.display = "flex";
+      document.body.style.overflow = "hidden"; // prevent scrolling behind
+    });
+  }
+
+  // Initial attach
+  attachLightbox();
+
+  // Observe parent for dynamic reloads
+  const parent = document.getElementById(imgId)?.parentNode;
+  if (parent) {
+    const observer = new MutationObserver(() => attachLightbox());
+    observer.observe(parent, { childList: true, subtree: true });
+  }
+
+  // Optional fallback for reloads
+  setInterval(attachLightbox, 1000);
+});
 
         // Usage
         reloadImageViaIframe('staffDiagram');
