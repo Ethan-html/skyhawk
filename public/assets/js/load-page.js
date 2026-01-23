@@ -71,6 +71,8 @@ export function renderPage(pageData) {
       title: pageData.title,
       content: pageData.content
     };
+  } else if (pageData.id === "page") {
+    window.location.href = "/404";
   } else {
     // No childSlug and root has no content → fallback to first child
     active = children[0];
