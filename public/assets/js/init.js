@@ -59,17 +59,37 @@ async function runParallel(tasks) {
 // ==============================
 function initGA() {
   if (window.gtag) return;
+
+  // Temporarily suppress the specific GA top-level optout warning
+  const originalConsoleError = console.error;
+  console.error = (...args) => {
+    if (
+      args[0] &&
+      typeof args[0] === "string" &&
+      args[0].includes("Unable to check top-level optout")
+    ) return; // ignore this warning
+    originalConsoleError(...args);
+  };
+
+  // Load GA script
   const script = document.createElement("script");
   script.async = true;
   script.src = "https://www.googletagmanager.com/gtag/js?id=G-M2RSE2BRK2";
   document.head.appendChild(script);
 
+  // GA setup
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   window.gtag = gtag;
   gtag('js', new Date());
   gtag('config', 'G-M2RSE2BRK2');
+
+  // Restore console.error after a short delay
+  setTimeout(() => {
+    console.error = originalConsoleError;
+  }, 1000);
 }
+
 // ==============================
 // Universal asset loader (JS & CSS)
 // ==============================
@@ -113,7 +133,7 @@ const assets = [
   "/assets/easter/boot.js",
   "/assets/js/jquery.min.js",
   "/assets/js/jquery.cycle2-fef2f3645726cce4154911d6140d7d52.min.js",
-  "/assets/js/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js",
+  "/assets/js/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js",//mmenu.js
   "/assets/stylesheets/main.css"
 ];
 

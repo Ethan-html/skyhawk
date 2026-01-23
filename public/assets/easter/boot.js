@@ -1,7 +1,8 @@
 // boot.js
 (function () {
   const scripts = [
-    "/assets/easter/bus.js"
+    "/assets/easter/bus.js",
+    "/assets/easter/base64.js"
   ];
 
   function loadScript(src) {
