@@ -30,6 +30,7 @@ export async function loadPage(db, sectionId, onUpdate) {
   const fresh = {
     id: sectionId,
     title: pageSnap.data().title,
+    content: pageSnap.data().content,
     children: {}
   };
 
@@ -59,9 +60,39 @@ export function renderPage(pageData) {
 
   const params = new URLSearchParams(location.search);
   const [, childSlug] = (params.get("page") || "").split("/");
-
   const children = Object.values(pageData.children);
-  const active = children.find(c => c.slug === childSlug) || children[0];
+  let active;
+  if (childSlug) {
+    // Load child page by slug or fallback to first child
+    active = children.find(c => c.slug === childSlug) || children[0];
+  } else if (pageData.content) {
+    // No childSlug → use root page if it has content
+    active = {
+      title: pageData.title,
+      content: pageData.content
+    };
+  } else if (pageData.id === "page") {
+    window.location.href = "/404";
+  } else {
+    // No childSlug and root has no content → fallback to first child
+    active = children[0];
+  }
+  
+
+
+  // --- Hide left nav and expand main content if page ID is 'page' ---
+  const leftNav = document.querySelector(".left-nav-column");
+  const mainContent = document.querySelector(".main-content-column");
+
+  if (pageData.id === "page") {
+    leftNav.style.display = "none";
+    mainContent.style.width = "100%";
+    mainContent.style.marginLeft = "0";
+  } else {
+    leftNav.style.display = "";
+    mainContent.style.width = "";
+    mainContent.style.marginLeft = "";
+  }
 
   // Side nav
   const sideList = document.getElementById("sideNavList");
@@ -93,3 +124,6 @@ export function renderPage(pageData) {
     document.getElementById("pageContent").innerHTML = active.content;
   }
 }
+
+
+
