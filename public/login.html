@@ -372,11 +372,16 @@
         firstResetStatus.style.color = "#333";
         firstResetStatus.textContent = "Sending password reset email…";
 
+        const actionCodeSettings = {
+          url: "https://skyhawk-cap.org/login",
+          handleCodeInApp: false, // default, but good to be explicit
+        };
+
         try {
-          await sendPasswordResetEmail(auth, email);
+          await sendPasswordResetEmail(auth, email, actionCodeSettings);
+
           firstTimeSection.style.display = "none";
           firstTimeResetSection.style.display = "block";
-
         } catch (err) {
           console.error(err);
           firstResetStatus.style.color = "red";
@@ -389,10 +394,12 @@
               firstResetStatus.textContent = "Invalid email address.";
               break;
             default:
-              firstResetStatus.textContent = "Failed to send reset email. Please try again later.";
+              firstResetStatus.textContent =
+                "Failed to send reset email. Please try again later.";
           }
         }
       });
+
       onAuthStateChanged(auth, (user) => {
         if (user && !isNew) {
           window.location.href = "/dashboard";
