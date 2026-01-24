@@ -124,7 +124,7 @@
         <h2>Login to Your Account</h2>
         <!-- Login Form -->
         <form id="loginForm">
-          <input type="text" id="username" placeholder="Email" required>
+          <input type="email" id="username" placeholder="Email" required>
           <input type="password" id="password" placeholder="Password" required>
           <button type="submit">Login</button>
           <div class="error1" style="display: none;" id="errorMsg"></div>
@@ -143,6 +143,28 @@
           <div id="reset-status" style="margin-top: 8px; font-size: 13px;"></div>
           <p style="margin-top: 12px;"><a href="#" id="back-to-login">Back to login</a></p>
         </div>
+        <!-- First Login Section (Hidden by default) -->
+        <div id="first-time-section" style="display: none; margin-top: 20px;">
+          <input type="email" id="first-time-email" placeholder="Enter your email" style="width: 100%; padding: 12px 14px; border-radius: 6px; border: 1px solid #d0d4d9; margin-bottom: 10px; font-size: 14px;">
+          <button id="first-time-reset-btn" style="width: 100%; padding: 12px; border-radius: 25px; border: none; background: #1161ee; color: #fff; font-weight: 600;">Login</button>
+          <div id="first-reset-status" style="margin-top: 8px; font-size: 13px;"></div>
+        </div>
+        <div id="first-time-reset-section" style="display: none; margin-top: 20px;">
+          <h4>An <strong>email</strong> has been sent to your inbox to set up your password. (Check your spam folder)</h4>
+          <p style="font-size: 14px; color: #555; margin-top: 8px;">
+            Once you set your password, return here to log in.
+          </p>
+
+          <p style="font-size: 14px; color: #555;">
+            Didn't receive it? <a href="#" id="resend-reset-email">Resend email</a>
+          </p>
+
+          <button onclick="window.location.href='/login'" 
+                  style="margin-top: 12px; padding: 12px 20px; border-radius: 25px; border: none; background: #1161ee; color: #fff; font-weight: 600; cursor: pointer;">
+            Login
+          </button>
+        </div>
+
 
 
         <div class="login-footer">
@@ -180,7 +202,9 @@
 
       const form = document.getElementById("loginForm");
       const errorMsg = document.getElementById("errorMsg");
-
+      const params = new URLSearchParams(window.location.search);
+      const isNew = params.has('new');
+      const newEmail = params.get('new');
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
@@ -237,12 +261,57 @@
       const loginForm = document.getElementById("loginForm");
       const forgotLink = document.getElementById("forgot-password-link");
       const resetSection = document.getElementById("password-reset-section");
+      const firstTimeSection = document.getElementById("first-time-section");
       const backToLogin = document.getElementById("back-to-login");
       const resetEmailInput = document.getElementById("reset-email");
+      const firstTimeEmailInput = document.getElementById("first-time-email");
       const resetStatus = document.getElementById("reset-status");
       const resetBtn = document.getElementById("reset-password-btn");
+      const firstTimeResetBtn = document.getElementById("first-time-reset-btn");
+      const firstResetStatus = document.getElementById("first-reset-status");
+      const firstTimeResetSection = document.getElementById("first-time-reset-section");
+      const resendResetLink = document.getElementById("resend-reset-email");
 
-      // Show reset form, hide login
+      resendResetLink.addEventListener("click", async (e) => {
+        e.preventDefault();
+
+        // Use the email from the first-time flow
+        const email = firstTimeEmailInput.value.trim() || newEmail;
+
+        if (!email) {
+          alert("Missing email address. Please return to login.");
+          return;
+        }
+
+        resendResetLink.textContent = "Sending…";
+        resendResetLink.style.pointerEvents = "none";
+
+        try {
+          await sendPasswordResetEmail(auth, email);
+          resendResetLink.textContent = "Email sent!";
+        } catch (err) {
+          console.error(err);
+          resendResetLink.textContent = "Resend email";
+          resendResetLink.style.pointerEvents = "auto";
+          alert("Failed to resend email. Please try again.");
+        }
+      });
+
+      if (isNew) {
+        // Hide login form and forgot link
+        loginForm.style.display = "none";
+        forgotLink.style.display = "none";
+
+        // Show first-time section
+        firstTimeSection.style.display = "block";
+
+        // Auto-fill the email input
+        const firstTimeEmailInput = firstTimeSection.querySelector('input[type="email"]');
+        firstTimeEmailInput.value = newEmail;
+
+        // Focus the email input for convenience
+        firstTimeEmailInput.focus();
+      }
       forgotLink.addEventListener("click", (e) => {
         e.preventDefault();
         loginForm.style.display = "none";
@@ -292,12 +361,44 @@
           }
         }
       });
+      firstTimeResetBtn.addEventListener("click", async () => {
+        const email = firstTimeEmailInput.value.trim();
+        if (!email) {
+          firstResetStatus.style.color = "red";
+          firstResetStatus.textContent = "Please enter your email address.";
+          return;
+        }
 
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          window.location.href = "/member";
+        firstResetStatus.style.color = "#333";
+        firstResetStatus.textContent = "Sending password reset email…";
+
+        try {
+          await sendPasswordResetEmail(auth, email);
+          firstTimeSection.style.display = "none";
+          firstTimeResetSection.style.display = "block";
+
+        } catch (err) {
+          console.error(err);
+          firstResetStatus.style.color = "red";
+
+          switch (err.code) {
+            case "auth/user-not-found":
+              firstResetStatus.textContent = "No account found with that email.";
+              break;
+            case "auth/invalid-email":
+              firstResetStatus.textContent = "Invalid email address.";
+              break;
+            default:
+              firstResetStatus.textContent = "Failed to send reset email. Please try again later.";
+          }
         }
       });
+      onAuthStateChanged(auth, (user) => {
+        if (user && !isNew) {
+          window.location.href = "/dashboard";
+        }
+      });
+
 
 
       document.addEventListener("DOMContentLoaded", async () => {await Promise.all([initHeaderFooter(db)]);});
