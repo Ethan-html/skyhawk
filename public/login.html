@@ -286,9 +286,12 @@
 
         resendResetLink.textContent = "Sending…";
         resendResetLink.style.pointerEvents = "none";
-
+        const actionCodeSettings = {
+          url: "https://skyhawk-cap.org/login",
+          handleCodeInApp: false, // default, but good to be explicit
+        };
         try {
-          await sendPasswordResetEmail(auth, email);
+          await sendPasswordResetEmail(auth, email, actionCodeSettings);
           resendResetLink.textContent = "Email sent!";
         } catch (err) {
           console.error(err);
@@ -340,9 +343,12 @@
 
         resetStatus.style.color = "#333";
         resetStatus.textContent = "Sending password reset email…";
-
+        const actionCodeSettings = {
+          url: "https://skyhawk-cap.org/login",
+          handleCodeInApp: false, // default, but good to be explicit
+        };
         try {
-          await sendPasswordResetEmail(auth, email);
+          await sendPasswordResetEmail(auth, email, actionCodeSettings);
           resetStatus.style.color = "green";
           resetStatus.textContent = "Password reset email sent! Please check your inbox.";
           resetEmailInput.value = "";
