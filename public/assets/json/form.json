@@ -1,0 +1,131 @@
+{
+  "googleFormUrl": "https://docs.google.com/forms/d/e/1FAIpQLSc1gSOQVrrLcLBm-alZww1YNWhgtr51LRyuUlnpnOwgDcz4pQ/formResponse",
+
+  "confirmationMessages": {
+    "attendYes": "Your answer has been submitted. See you Monday!",
+    "attendNo": "Your answer has been submitted. See you next week!"
+  },
+
+  "sections": [
+    {
+      "step": 1,
+      "title": "Cadet Calldown Form",
+      "questions": [
+        {
+          "name": "name",
+          "type": "text",
+          "label": "Name (First, Last)",
+          "required": true,
+          "googleId": "57817276"
+        },
+        {
+          "name": "rank",
+          "type": "select",
+          "label": "Rank",
+          "required": true,
+          "googleId": "1281318332",
+          "options": [
+            "C/AB",
+            "C/Amn",
+            "C/A1C",
+            "C/SSgt"
+          ]
+        },
+        {
+          "name": "flight",
+          "type": "radio",
+          "label": "Flight",
+          "required": true,
+          "googleId": "1167956420",
+          "options": [
+            "Alpha",
+            "Bravo",
+            "I don't know"
+          ]
+        },
+        {
+          "name": "attend",
+          "type": "radio",
+          "label": "Will you attend Monday's meeting?",
+          "required": true,
+          "googleId": "1799457051",
+          "options": [
+            "Yes",
+            "No"
+          ]
+        }
+      ]
+    },
+
+    {
+      "step": 2,
+      "title": "Excused Absence Notes",
+      "conditional": {
+        "field": "attend",
+        "value": "No"
+      },
+      "questions": [
+        {
+          "name": "notes",
+          "type": "textarea",
+          "label": "Excused Absence Notes (Optional)",
+          "required": false,
+          "googleId": "1397361617"
+        }
+      ]
+    },
+
+    {
+      "step": 3,
+      "title": "Test Requests",
+      "questions": [
+        {
+          "name": "drill_test",
+          "type": "select",
+          "label": "Request a Drill Test (Optional)",
+          "required": false,
+          "googleId": "1662692645",
+          "options": [
+            "Achievement 1 (Amn)",
+            "Achievement 2 (A1C)",
+            "Achievement 3 (SrA)",
+            "Wright Brothers (SSgt)"
+          ]
+        },
+        {
+          "name": "milestone_test",
+          "type": "select",
+          "label": "Request a Milestone Test (Optional)",
+          "required": false,
+          "googleId": "1806755973",
+          "options": [
+            "Wright Brothers written test",
+            "Mitchell Aerospace written test"
+          ]
+        },
+        {
+          "name": "cadet_eval",
+          "type": "radio",
+          "label": "Request a Cadet Evaluation or Presentation (Optional)",
+          "required": false,
+          "googleId": "1305054419",
+          "options": [
+            "Promotion Board",
+            "Chief Speech Oral Presentation",
+            "SDA Oral Presentation"
+          ]
+        },
+        {
+          "name": "final4",
+          "type": "select",
+          "label": "Request a Final 4 (Optional)",
+          "required": false,
+          "googleId": "353007884",
+          "options": [
+            "Yes"
+          ]
+        }
+      ]
+    }
+  ]
+}

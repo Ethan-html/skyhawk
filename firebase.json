@@ -27,6 +27,14 @@
         "destination": "/photos.html" 
       },
       { 
+        "source": "/form",
+        "destination": "/form.html" 
+      },
+      { 
+        "source": "/calldown",
+        "destination": "/form.html" 
+      },
+      { 
         "source": "/404",
         "destination": "/404.html" 
       },
