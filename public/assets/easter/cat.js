@@ -44,7 +44,7 @@ function showCat(endTime) {
 
   const img = document.createElement("img");
   img.id = "catEggImg";
-  img.src = "/assets/easter/cat.png"; // leading slash helps on subpages
+  img.src = "/assets/easter/cat.gif"; // leading slash helps on subpages
   img.style.position = "fixed";
   img.style.bottom = "0";
   img.style.left = "10px";
@@ -55,7 +55,7 @@ function showCat(endTime) {
   img.style.transition = "opacity 0.5s ease";
 
   document.body.appendChild(img);
-  
+
   requestAnimationFrame(() => {
     img.style.opacity = "1";
   });
