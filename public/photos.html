@@ -167,6 +167,7 @@
       let loadedCount = 0;
       let currentPath = "";
       const loadedThumbs = {};
+      let folderCache = {};
 
       // IntersectionObserver for lazy-load
       const observer = new IntersectionObserver((entries) => {
@@ -243,7 +244,7 @@
       };
 
       async function loadYears() {
-        const years = await fetchFolders("");
+        const years = await fetchFoldersCached("");
 
         yearSelect.innerHTML = `<option value="">Select Year</option>`;
 
@@ -255,7 +256,7 @@
           });
       }
       async function loadCadets() {
-        const cadetFolders = await fetchFolders("promotion photos");
+        const cadetFolders = await fetchFoldersCached("promotion photos");
 
 
         cadetSelect.innerHTML = `<option value="">Select Cadet</option>`;
@@ -289,7 +290,7 @@
 
         if (!year) return;
 
-        const months = await fetchFolders(year);
+        const months = await fetchFoldersCached(year);
         monthSelect.style.display = "inline-block";
         monthSelect.innerHTML = `<option value="">Select Month</option>`;
 
@@ -308,7 +309,7 @@
 
         if (!month) return;
 
-        const events = await fetchFolders(`${year}/${month}`);
+        const events = await fetchFoldersCached(`${year}/${month}`);
         eventSelect.style.display = "inline-block";
         eventSelect.innerHTML = `<option value="">Select Event</option>`;
 
@@ -343,6 +344,12 @@
 
         return `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${branch}/${path}`;
       }
+      async function fetchFoldersCached(path = "") {
+        if (folderCache[path]) return folderCache[path]; // return cached
+        const folders = await fetchFolders(path);
+        folderCache[path] = folders;
+        return folders;
+      }
 
       // Load next batch of images
       function loadNextBatch() {
@@ -354,32 +361,29 @@
           div.className = "thumb";
           div.dataset.full = toCDN(file.download_url);
 
+          // Start preloading full image immediately
+          const imgPrefetch = new Image();
+          imgPrefetch.src = div.dataset.full;
 
           div.onclick = () => {
             const lightbox = document.getElementById("lightbox");
             const lightboxImg = document.getElementById("lightbox-img");
             const downloadBtn = document.getElementById("download-btn");
 
-            lightboxImg.src = file.download_url;
+            lightboxImg.src = div.dataset.full; // instant lightbox load from CDN
 
-            // Auto-download button
             downloadBtn.onclick = async (e) => {
               e.preventDefault();
-              try {
-                const res = await fetch(file.download_url);
-                const blob = await res.blob();
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = file.name;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-              } catch(err) {
-                alert("Download failed. Try opening the image in a new tab.");
-                console.error(err);
-              }
+              const res = await fetch(div.dataset.full);
+              const blob = await res.blob();
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement('a');
+              a.href = url;
+              a.download = file.name;
+              document.body.appendChild(a);
+              a.click();
+              document.body.removeChild(a);
+              URL.revokeObjectURL(url);
             };
 
             lightbox.classList.add("active");
@@ -392,6 +396,11 @@
 
         loadedCount += batch.length;
 
+        allFiles.slice(loadedCount, loadedCount + BATCH_SIZE).forEach(file => {
+          const img = new Image();
+          img.src = toCDN(file.download_url);
+        });
+
         if (gallery.scrollHeight < window.innerHeight && loadedCount < allFiles.length) {
           loadNextBatch();
         }
@@ -402,7 +411,17 @@
         loadedCount = 0;
         window.removeEventListener("scroll", onScroll);
       }
-
+      async function preloadAllFolders() {
+        const years = await fetchFoldersCached(""); // top-level
+        for (const y of years) {
+          const months = await fetchFoldersCached(y.name);
+          for (const m of months) {
+            const events = await fetchFoldersCached(`${y.name}/${m.name}`);
+          }
+        }
+      }
+      preloadAllFolders(); 
+      
 
 
       // Infinite scroll
