@@ -43,8 +43,8 @@
         height: 160px;
         border-radius: 8px;
         cursor: pointer;
-        background: #222 url('noimg.jpg') center/cover no-repeat;
-        transition: transform 0.2s, opacity 0.3s, background-image 0.3s;
+        background: #222 url('assets/images/noimg.png') center/cover no-repeat;
+        /*transition: transform 0.2s, opacity 0.3s, background-image 0.3s;*/
       }
       /* Lightbox overlay */
       .lightbox {
@@ -84,6 +84,27 @@
         height: 4px;            /* thickness */
         background-color: black; /* solid blue */
       }
+      .album {
+        flex: 1 1 140px;
+        text-align: center;
+        font-weight: bold;
+      }
+      #breadcrumbs {
+        position: sticky;
+        top: 0;
+        background: #F2F3F4;
+        padding: 10px 0;
+        z-index: 5;
+      }
+      #folderNav select {
+        padding: 8px 12px;
+        margin: 5px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+      }
+
+
     </style>
     <script type="module">
       import { initPage } from "/assets/js/init.js";
@@ -115,7 +136,21 @@
     <div class="black-line"></div><br>
     <div id="main-page-content">
       <h1>Skyhawk Photos</h1>
-      <div id="albums"></div>
+      <div id="folderNav" style="text-align:center; margin-bottom:15px;">
+      <select id="photoTypeSelect">
+        <option value="">Select Photo Type</option>
+        <option value="meeting">Meeting Photos</option>
+        <option value="promotion">Promotion Photos</option>
+      </select>
+
+      <select id="yearSelect" style="display:none;"><option value="">Select Year</option></select>
+      <select id="monthSelect" style="display:none;"><option value="">Select Month</option></select>
+      <select id="eventSelect" style="display:none;"><option value="">Select Event</option></select>
+
+      <select id="cadetSelect" style="display:none;"><option value="">Select Cadet</option></select>
+    </div>
+
+
       <div class="gallery" id="gallery"></div>
       <div id="lightbox" class="lightbox">
         <img id="lightbox-img" alt="Full photo">
@@ -130,7 +165,7 @@
 
       let allFiles = [];
       let loadedCount = 0;
-      let currentFolder = "images"; // default album
+      let currentPath = "";
       const loadedThumbs = {};
 
       // IntersectionObserver for lazy-load
@@ -151,34 +186,162 @@
       }, { rootMargin: "200px" });
 
       // Fetch albums (folders)
-      fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/`)
-        .then(res => res.json())
-        .then(items => {
-          const albumsDiv = document.getElementById("albums");
-          const folders = items.filter(f => f.type === "dir");
-          folders.forEach(folder => {
-            const div = document.createElement("div");
-            div.className = "album";
-            div.textContent = folder.name;
-            div.onclick = () => loadAlbum(folder.name);
-            albumsDiv.appendChild(div);
+      const yearSelect = document.getElementById("yearSelect");
+      const monthSelect = document.getElementById("monthSelect");
+      const eventSelect = document.getElementById("eventSelect");
+      const photoTypeSelect = document.getElementById("photoTypeSelect");
+      const cadetSelect = document.getElementById("cadetSelect");
+      let BRANCH = "main"
+
+      async function fetchFolders(path = "") {
+        const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`);
+        const items = await res.json();
+        return items.filter(i => i.type === "dir");
+      }
+      async function fetchFolders(path = "") {
+        const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}?ref=${BRANCH}`;
+        try {
+          const res = await fetch(url);
+          const items = await res.json();
+          if (!Array.isArray(items)) {
+            console.error("GitHub API did not return an array:", items);
+            return [];
+          }
+          return items.filter(i => i.type === "dir");
+        } catch (err) {
+          console.error("Failed to fetch folders:", err);
+          return [];
+        }
+      }
+
+
+      async function fetchImages(path) {
+        const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`);
+        const items = await res.json();
+        return items.filter(i => i.type === "file" && i.name.match(/\.(jpg|jpeg|png|webp)$/i));
+      }
+      photoTypeSelect.onchange = async () => {
+        resetGallery();
+
+        const type = photoTypeSelect.value;
+
+        // Hide everything first
+        yearSelect.style.display = "none";
+        monthSelect.style.display = "none";
+        eventSelect.style.display = "none";
+        cadetSelect.style.display = "none";
+
+        if (type === "meeting") {
+          loadYears();
+          yearSelect.style.display = "inline-block";
+        }
+
+        if (type === "promotion") {
+          loadCadets();
+          cadetSelect.style.display = "inline-block";
+        }
+      };
+
+      async function loadYears() {
+        const years = await fetchFolders("");
+
+        yearSelect.innerHTML = `<option value="">Select Year</option>`;
+
+        years
+          .filter(y => y.name.toLowerCase() !== "promotion photos") // 🚫 hide this
+          .sort((a,b) => b.name.localeCompare(a.name))
+          .forEach(y => {
+            yearSelect.innerHTML += `<option value="${y.name}">${y.name}</option>`;
           });
+      }
+      async function loadCadets() {
+        const cadetFolders = await fetchFolders("promotion photos");
+
+
+        cadetSelect.innerHTML = `<option value="">Select Cadet</option>`;
+
+        cadetFolders
+          .sort((a,b) => a.name.localeCompare(b.name))
+          .forEach(c => {
+            cadetSelect.innerHTML += `<option value="${c.name}">${c.name}</option>`;
+          });
+      }
+      cadetSelect.onchange = async () => {
+        const cadet = cadetSelect.value;
+        resetGallery();
+
+        if (!cadet) return;
+
+        const images = await fetchImages(`promotion photos/${cadet}`);
+
+        // Sort in filename order (important for promotions)
+        images.sort((a,b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+
+        allFiles = images;
+        loadedCount = 0;
+        loadNextBatch();
+        window.addEventListener("scroll", onScroll);
+      };
+
+      yearSelect.onchange = async () => {
+        const year = yearSelect.value;
+        resetGallery();
+
+        if (!year) return;
+
+        const months = await fetchFolders(year);
+        monthSelect.style.display = "inline-block";
+        monthSelect.innerHTML = `<option value="">Select Month</option>`;
+
+        months.sort((a,b) => a.name.localeCompare(b.name, undefined, {numeric:true}));
+
+        months.forEach(m => {
+          monthSelect.innerHTML += `<option value="${m.name}">${m.name}</option>`;
         });
 
-      // Load selected album
-      function loadAlbum(folderName) {
-        currentFolder = folderName;
-        loadedCount = 0;
-        allFiles = [];
-        document.getElementById("gallery").innerHTML = "";
+        eventSelect.style.display = "none";
+      };
+      monthSelect.onchange = async () => {
+        const year = yearSelect.value;
+        const month = monthSelect.value;
+        resetGallery();
 
-        fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${folderName}`)
-          .then(res => res.json())
-          .then(files => {
-            allFiles = files.filter(f => f.type === "file");
-            loadNextBatch();
-            window.addEventListener("scroll", onScroll);
-          });
+        if (!month) return;
+
+        const events = await fetchFolders(`${year}/${month}`);
+        eventSelect.style.display = "inline-block";
+        eventSelect.innerHTML = `<option value="">Select Event</option>`;
+
+        events.forEach(e => {
+          eventSelect.innerHTML += `<option value="${e.name}">${e.name}</option>`;
+        });
+      };
+      eventSelect.onchange = async () => {
+        const year = yearSelect.value;
+        const month = monthSelect.value;
+        const event = eventSelect.value;
+        resetGallery();
+
+        if (!event) return;
+
+        const images = await fetchImages(`${year}/${month}/${event}`);
+        allFiles = images;
+        loadedCount = 0;
+        loadNextBatch();
+        window.addEventListener("scroll", onScroll);
+      };
+
+
+
+      function toCDN(url) {
+        const parts = url.split("/");
+        // ["https:", "", "raw.githubusercontent.com", OWNER, REPO, BRANCH, ...path]
+        const owner = parts[3];
+        const repo = parts[4];
+        const branch = parts[5];
+        const path = parts.slice(6).join("/");
+
+        return `https://cdn.jsdelivr.net/gh/${owner}/${repo}@${branch}/${path}`;
       }
 
       // Load next batch of images
@@ -189,7 +352,8 @@
         batch.forEach(file => {
           const div = document.createElement("div");
           div.className = "thumb";
-          div.dataset.full = file.download_url; // full-res for lazy-load
+          div.dataset.full = toCDN(file.download_url);
+
 
           div.onclick = () => {
             const lightbox = document.getElementById("lightbox");
@@ -232,6 +396,14 @@
           loadNextBatch();
         }
       }
+      function resetGallery() {
+        document.getElementById("gallery").innerHTML = "";
+        allFiles = [];
+        loadedCount = 0;
+        window.removeEventListener("scroll", onScroll);
+      }
+
+
 
       // Infinite scroll
       function onScroll() {
@@ -248,7 +420,8 @@
       };
 
       // Load default album on page load
-      loadAlbum(currentFolder);
+      loadYears();
+
     </script>
   </body>
 </html>
