@@ -2,7 +2,8 @@
 (function () {
   const scripts = [
     "/assets/easter/bus.js",
-    "/assets/easter/base64.js"
+    "/assets/easter/base64.js",
+    "/assets/easter/cat.js"
   ];
 
   function loadScript(src) {
