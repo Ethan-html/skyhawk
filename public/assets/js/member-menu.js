@@ -86,8 +86,49 @@ function buildMenu(pagesWithChildren, menuRoot) {
   }
 }
 
-function buildMobileMenu(pagesWithChildren, root) {
-  root.innerHTML = "";
+function buildMobileMenu(pagesWithChildren, root, isMemberMenu = false) {
+  if (!isMemberMenu) root.innerHTML = ""; // clear only if it's main menu
+  const fragment = document.createDocumentFragment();
+
+  // --------------------
+  // For member menu, add a divider first
+  if (isMemberMenu) {
+    const menuButtonText = document.getElementById("menu-button-text");
+    if (menuButtonText) menuButtonText.textContent = "Member Menu";
+    // Top divider
+    const topDivider = document.createElement("li");
+    topDivider.className = "mobile-menu-divider";
+    topDivider.style.borderTop = "2px solid #ccc";
+    topDivider.style.margin = "8px 0";
+    topDivider.style.height = "0";
+    topDivider.style.width = "100%";
+    topDivider.style.listStyle = "none"; // remove bullet
+    fragment.appendChild(topDivider);
+
+    // Member Menu title
+    const titleLi = document.createElement("li");
+    titleLi.className = "mobile-menu-title";
+    titleLi.textContent = "Member Menu";
+    titleLi.style.fontWeight = "bold";
+    titleLi.style.fontSize = "1.8em";       // double size (adjust as needed)
+    titleLi.style.color = "#fff";           // white text
+    titleLi.style.textAlign = "center";     // center text
+    titleLi.style.padding = "8px 0";        // vertical padding
+    titleLi.style.listStyle = "none";       // remove bullet
+    titleLi.style.pointerEvents = "none";   // make it non-clickable
+    fragment.appendChild(titleLi);
+
+
+    // Bottom divider
+    const bottomDivider = document.createElement("li");
+    bottomDivider.className = "mobile-menu-divider";
+    bottomDivider.style.borderTop = "2px solid #ccc";
+    bottomDivider.style.margin = "0 0 8px 0";
+    bottomDivider.style.height = "0";
+    bottomDivider.style.width = "100%";
+    bottomDivider.style.listStyle = "none"; // remove bullet
+    fragment.appendChild(bottomDivider);
+  }
 
   pagesWithChildren.forEach(({ page, children }) => {
     const li = document.createElement("li");
@@ -102,7 +143,6 @@ function buildMobileMenu(pagesWithChildren, root) {
 
     if (children?.length) {
       const ul = document.createElement("ul");
-
       children.forEach(child => {
         const cli = document.createElement("li");
         cli.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
@@ -116,38 +156,39 @@ function buildMobileMenu(pagesWithChildren, root) {
         cli.appendChild(ca);
         ul.appendChild(cli);
       });
-
       li.appendChild(ul);
     }
 
-    root.appendChild(li);
+    fragment.appendChild(li);
   });
+
+  root.appendChild(fragment);
 }
+
+
+
 
 // --------------------
 // Public init function
 // --------------------
 export async function initMemberMenu(db) {
   const desktopRoot = document.getElementById("member-menu");
-  const mobileRoot = document.getElementById("mobile-member-menu");
+  const mobileRoot = document.getElementById("mobile-menu-root"); // same UL as main menu
 
   if (!desktopRoot && !mobileRoot) return;
 
-  // 1️⃣ Render cached menu instantly
   const cachedRaw = localStorage.getItem(CACHE_KEY);
   if (cachedRaw) {
     try {
       const cached = JSON.parse(cachedRaw);
       if (desktopRoot) buildMenu(cached, desktopRoot);
-      if (mobileRoot) buildMobileMenu(cached, mobileRoot);
+      if (mobileRoot) buildMobileMenu(cached, mobileRoot, true); // <-- pass true
     } catch {}
   }
 
-  // 2️⃣ Fetch fresh menu from Firestore
   const fresh = await fetchMemberMenu(db);
   if (!fresh.length) return;
 
-  // 3️⃣ Only update if data changed
   if (JSON.stringify(fresh) !== cachedRaw) {
     localStorage.setItem(CACHE_KEY, JSON.stringify(fresh));
     if (desktopRoot) {
@@ -155,7 +196,9 @@ export async function initMemberMenu(db) {
       buildMenu(fresh, desktopRoot);
     }
     if (mobileRoot) {
-      buildMobileMenu(fresh, mobileRoot);
+      buildMobileMenu(fresh, mobileRoot, true); // <-- pass true
     }
   }
 }
+
+

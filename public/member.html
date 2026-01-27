@@ -9,8 +9,6 @@
         import { initPage } from "/assets/js/init.js";
         initPage();
       </script>
-      <script src="assets/js/admin.js"></script>
-      <script src="assets/easter/boot.js" defer></script>
    </head>
     <body style="display:none;">
       <div class="header-section">
@@ -35,23 +33,27 @@
                     <ul class="main-ul" id="main-menu"></ul>
                   </nav>
                   <nav class="mobile-navigation-menu" aria-hidden="true">
-                    <ul id="mobile-menu-root"></ul>
+                    <ul id="mobile-menu-root">
+                      <li class="mobile-menu-divider" style="border-top:1px solid #ccc; margin:8px 0;"></li>
+                    </ul>
                   </nav>
+
+
+
                   <div class="menu-button w-clearfix w-nav-button mobile-menu-button">
                     <div class="menu-button-icon w-icon-nav-menu"></div>
-                    <div class="menu-button-text">Menu</div>
+                    <div class="menu-button-text" id="menu-button-text">Menu</div>
                   </div>
                 </div>
               </div>
             </nav>
-            <div class="menu-divider"></div>
-            <nav class="header-menu-wrap">
+            <div class="menu-divider member-mobile"></div>
+            <nav class="header-menu-wrap member-mobile">
               <div class="header-menu-inside-wrap">
                 <div class="nav-container w-container">
                   <nav class="desktop-navigation-menu">
                     <ul class="main-ul" id="member-menu"></ul>
                   </nav>
-                  <div class="noMobile" style="display: none;">This Menu is Temporary Unavailable</div>
                 </div>
               </div>
             </nav>
