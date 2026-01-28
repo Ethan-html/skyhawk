@@ -26,7 +26,7 @@
   function showOpenVid(endTime) {
     if (!document.body) return setTimeout(() => showOpenVid(endTime), 50);
     if (document.getElementById("openVid")) return;
-
+    window.scrollTo({ top: 0, behavior: "smooth" });
     // Lock scrolling permanently
     document.body.style.overflow = "hidden";
     document.documentElement.style.overflow = "hidden";
