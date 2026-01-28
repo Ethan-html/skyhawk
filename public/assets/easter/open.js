@@ -1,8 +1,15 @@
 // open.js
 (() => {
+  if (window.self !== window.top) {
+    console.log("open.js blocked inside iframe");
+    return;
+  }
+
   const OPEN_SECRET = "noah";
   let openKeys = [];
   const STORAGE_KEY = "openVidEndTime";
+  if (window.__openVidInitialized) return;
+  window.__openVidInitialized = true;
 
   window.addEventListener("load", () => reviveOpenVidIfNeeded());
   setTimeout(reviveOpenVidIfNeeded, 300);
@@ -45,6 +52,10 @@
     iframe.scrolling = "yes";       // ensure iframe scrolls
     iframe.style.pointerEvents = "auto";
     document.body.appendChild(iframe);
+    iframe.allow = "autoplay"; // allow control
+    iframe.onload = () => {
+      iframe.contentWindow.postMessage({ type: "MUTE_ALL" }, "*");
+    };
 
     // Create video on top
     const video = document.createElement("video");
@@ -61,7 +72,7 @@
     video.style.opacity = "0";
     video.style.transform = "translateY(0)";
     video.style.transition = "opacity 1s ease, transform 1s ease";
-    video.autoplay = true;
+    video.autoplay = false;
     video.muted = false;
     video.playsInline = true;
 

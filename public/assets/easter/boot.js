@@ -1,5 +1,9 @@
 // boot.js
 (function () {
+  if (window.self !== window.top) {
+    console.log("Easter system blocked inside iframe");
+    return;
+  }
   const scripts = [
     "/assets/easter/bus.js",
     "/assets/easter/base64.js",
