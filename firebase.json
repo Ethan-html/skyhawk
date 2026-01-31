@@ -7,46 +7,16 @@
       "**/node_modules/**"
     ],
     "rewrites": [
-      {
-        "source": "/login",
-        "destination": "/login.html"
-      },
-      {
-        "source": "/page",
-        "destination": "/page.html"
-      },
-      {
-        "source": "/member",
-        "destination": "/member.html"
-      },{
-        "source": "/memberpage",
-        "destination": "/memberpage.html"
-      },
-      { 
-        "source": "/photos",
-        "destination": "/photos.html" 
-      },
-      { 
-        "source": "/form",
-        "destination": "/form.html" 
-      },
-      { 
-        "source": "/calldown",
-        "destination": "/form.html" 
-      },
-      { 
-        "source": "/404",
-        "destination": "/404.html" 
-      },
-      { 
-        "source": "/admin",
-        "destination": "https://skyhawk-admin.onrender.com/" 
-      },
-      {
-        "source": "**",
-        "destination": "/index.html"
-      }
-
+      { "source": "/login", "destination": "/login.html" },
+      { "source": "/page", "destination": "/page.html" },
+      { "source": "/member", "destination": "/member.html" },
+      { "source": "/memberpage", "destination": "/memberpage.html" },
+      { "source": "/photos", "destination": "/photos.html" },
+      { "source": "/form", "destination": "/form.html" },
+      { "source": "/calldown", "destination": "/form.html" },
+      { "source": "/404", "destination": "/404.html" },
+      { "source": "/admin", "destination": "https://skyhawk-admin.onrender.com/" },
+      { "source": "**", "destination": "/index.html" }
     ]
   }
 }

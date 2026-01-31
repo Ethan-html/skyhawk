@@ -1,0 +1,16 @@
+# =============================
+# robots.txt for Skyhawk CAP
+# =============================
+
+# Block sensitive or member/admin pages
+User-agent: *
+Disallow: /member
+Disallow: /memberpage
+Disallow: /edit
+Disallow: /memberpage?page=cadet-programs/cadet-promotions
+
+# Optional: allow everything else
+Allow: /
+
+# Sitemap reference (if you generate one)
+Sitemap: https://skyhawk-cap.org/sitemap.xml
