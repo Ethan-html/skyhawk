@@ -55,18 +55,22 @@
            }
 
          }
+         #slideshow-container {
+            aspect-ratio: 16/9; /* adjust to your images */
+            width: 100%;
+            position: relative;
+          }
          .glide__slides {
             transform: translate3d(0,0,0)!important;
             width: 100vw!important;
-
-          }
-          .glide__slide {
             position: absolute;
             top: 0;
             left: 0;
             order: 2;
             opacity: 0;
             transition: opacity 1350ms ease-in-out;
+            width: 100%;
+            height: 100%;
           }
 
           .glide__slide.glide__slide--active {
@@ -75,6 +79,12 @@
             opacity: 1;
             z-index: 1;
           }
+
+
+          /*Placeholder test*/
+          #unit-name { min-height: 2rem; }
+        #main-menu li { min-height: 2rem; }
+        #footer { min-height: 200px; }
       </style>
   </head>
   <body style="display:none;">
@@ -83,14 +93,14 @@
         <div class="header-contents-wrap">
             <div class="header-container w-container">
               <div class="logo-container">
-                <a href="/" class="logo w-clearfix w-nav-brand"> <img src="/assets/images/CAP-2017-logo-horizontal-optimized.png" alt="Skyhawk Composite Squadron" class="logo-image"> </a>
+                <a href="/" class="logo w-clearfix w-nav-brand"> <img src="/assets/images/CAP-2017-logo-horizontal-optimized.png" alt="Skyhawk Composite Squadron" loading="lazy" class="logo-image"> </a>
                 <h2 class="website-tagline" id="unit-name"></h2>
               </div>
               <div class="header-content-right-wrap">
                   <a id="donations-button" class="donations-btn">
                     <div class="donations-btn-image">
                       <div class="donations-btn-ripple"></div>
-                      <img src="/assets/images/heart.svg" alt="">
+                      <img src="/assets/images/heart.svg" loading="lazy" alt="">
                     </div>
                     <div class="donations-btn-text">
                       Donate Today
@@ -107,7 +117,7 @@
                   <nav class="desktop-navigation-menu">
                     <ul class="main-ul" id="main-menu"></ul>
                     <div class="link-block site-share-wrapper w-hidden-medium w-hidden-small w-hidden-tiny">
-                      <a href="" class="w-inline-block w--current" id="load-site-share"> <img src="/assets/images/share-icon.png" alt="Share" class="share-icon"> </a>
+                      <a href="" class="w-inline-block w--current" id="load-site-share"> <img src="/assets/images/share-icon.png" alt="Share" loading="lazy" class="share-icon"> </a>
                       <nav class="nav-drop-list w-dropdown-list">
                         <a href="#" class="nav-drop-list-link" onclick="window.location.href='mailto:?subject='+encodeURIComponent(window.currentUnit?.name||'Website')+'&body='+encodeURIComponent(location.origin);return false;">Email this site</a> 
                         <a href="#" class="nav-drop-list-link" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.origin)+'&t='+encodeURIComponent(window.currentUnit?.name||'Website'));return false;">Share on Facebook</a> 
@@ -154,7 +164,7 @@
                   <div class="donate-text">
                     <strong>JOIN</strong>
                   </div>
-                  <img src="/assets/images/circle-arrow.png" class="donate-button" alt="">
+                  <img src="/assets/images/circle-arrow.png" loading="lazy" class="donate-button" alt="">
                 </div>
               </a>
             </div>
