@@ -71,19 +71,19 @@ export function initHeaderFooter(db) {
           <div class="footer-container">
             <div class="footer-row row">
               <div class="_1 footer-column-wrap">
-                <h4 class="footer-column-title">Address</h4>
+                <h4 class="footer-column-title" role="heading" aria-level="3">Address</h4>
                 <p class="footer-paragraph">${address}</p>
                 <p class="footer-paragraph" x-ms-format-detection="none">${phone}</p>
                 <p class="footer-paragraph">${email}</p>
               </div>
               <div class="_3 footer-column-wrap">
-                <h4 class="footer-column-title">Mission Statement</h4>
+                <h4 class="footer-column-title" role="heading" aria-level="3">Mission Statement</h4>
                 <div class="footer-paragraph">
                   Volunteers serving America's communities, saving lives, and shaping futures.
                 </div>
               </div>
               <div class="_2 footer-column-wrap">
-                <h4 class="footer-column-title">Quick Links</h4>
+                <h4 class="footer-column-title" role="heading" aria-level="3">Quick Links</h4>
                 <ul class="footer-links-list w-list-unstyled">
                   ${linksHTML}
                 </ul>
