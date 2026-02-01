@@ -57,10 +57,11 @@ async function runParallel(tasks) {
 // ==============================
 // Google Analytics
 // ==============================
+// initGA.js
 function initGA() {
   if (window.gtag) return;
 
-  // Temporarily suppress the specific GA top-level optout warning
+  // Optional: temporarily suppress the GA top-level opt-out warning
   const originalConsoleError = console.error;
   console.error = (...args) => {
     if (
@@ -71,23 +72,37 @@ function initGA() {
     originalConsoleError(...args);
   };
 
-  // Load GA script
-  const script = document.createElement("script");
-  script.async = true;
-  script.src = "https://www.googletagmanager.com/gtag/js?id=G-M2RSE2BRK2";
-  document.head.appendChild(script);
+  // Test if GA is reachable before loading
+  fetch("https://www.googletagmanager.com/gtag/js?id=G-M2RSE2BRK2", { method: "HEAD", mode: "no-cors" })
+    .then(() => {
+      // GA is reachable, load the script
+      const script = document.createElement("script");
+      script.async = true;
+      script.src = "https://www.googletagmanager.com/gtag/js?id=G-M2RSE2BRK2";
+      document.head.appendChild(script);
 
-  // GA setup
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  window.gtag = gtag;
-  gtag('js', new Date());
-  gtag('config', 'G-M2RSE2BRK2');
-
-  // Restore console.error after a short delay
-  setTimeout(() => {
-    console.error = originalConsoleError;
-  }, 1000);
+      // GA setup
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.gtag = gtag;
+      gtag('js', new Date());
+      gtag('config', 'G-M2RSE2BRK2');
+    })
+    .catch(() => {
+      // GA blocked/unreachable — silently skip it
+      console.log("Google Analytics blocked or unreachable, skipping load.");
+      
+      // Fallback: fake gtag so code calling it won't break
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      window.gtag = gtag;
+    })
+    .finally(() => {
+      // Restore console.error
+      setTimeout(() => {
+        console.error = originalConsoleError;
+      }, 500);
+    });
 }
 
 // ==============================
