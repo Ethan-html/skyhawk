@@ -5943,7 +5943,7 @@ button[type="submit"].tertiary:hover {
   flex: 0 0 auto;
   border-style: none;
   background-color: #ba0c2f;
-  background-image: url(/20160710165515/assets/images/search.svg);
+  background-image: url(/assets/images/search.svg);
   background-position: 50% 50%;
   background-size: 1em 1em;
   background-repeat: no-repeat;
@@ -7554,7 +7554,7 @@ span.nav-drop-toggle-link {
 .main-content-wrap a.donate-button-block:after {
   content: "";
   display: inline-block;
-  background-image: url(/20160710165515/assets/images/circle-arrow-02.png);
+  background-image: url(/assets/images/circle-arrow-02.png);
   width: 30px;
   height: 30px;
   background-position: 0 0;
@@ -7727,7 +7727,7 @@ span.nav-drop-toggle-link {
 .donate-button {
   width: 30px;
   height: 30px;
-  background-image: url(/20160710165515/assets/images/circle-arrow-02.png);
+  background-image: url(/assets/images/circle-arrow-02.png);
   background-position: 0 0;
   background-size: cover;
   background-repeat: repeat-y;

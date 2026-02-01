@@ -139,18 +139,6 @@ function loadAssets(urls) {
   });
 }
 
-// ==============================
-// Example usage
-// ==============================
-const assets = [
-  //"/assets/js/copywrite.js",
-  "/assets/js/admin.js",
-  "/assets/easter/boot.js",
-  "/assets/js/jquery.min.js",
-  "/assets/js/jquery.cycle2-fef2f3645726cce4154911d6140d7d52.min.js",
-  "/assets/js/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js",//mmenu.js
-  "/assets/stylesheets/main.css"
-];
 
 // ==============================
 // Logout button helper
@@ -239,25 +227,61 @@ async function authGate(callback) {
 // ==============================
 export async function initPage() {
   onReady(async () => {
-    // Wait for all assets to load
-    await loadAssets(assets);
-    document.body.style.display = "block";
-    // Initialize Google Analytics
-    initGA();
 
-    // Run auth gate and page modules
-    await authGate(async () => {
+    // ==============================
+    // TIER 0 — Critical CSS only
+    // ==============================
+    await loadAssets([
+      "/assets/stylesheets/main.css"
+    ]);
+
+    // Show page immediately
+    document.body.style.display = "block";
+
+    // ==============================
+    // TIER 1 — jQuery dependency chain (non-blocking)
+    // ==============================
+    (async () => {
+      await loadAssets(["/assets/js/jquery.min.js"]);
+      await loadAssets(["/assets/js/jquery.cycle2-fef2f3645726cce4154911d6140d7d52.min.js"]);
+    })();
+
+    // ==============================
+    // TIER 2 & 3 — Everything else (parallel)
+    // ==============================
+    loadAssets([
+      "/assets/js/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js",
+      "/assets/js/admin.js",
+      "/assets/easter/boot.js"
+    ]);
+
+    // ==============================
+    // Analytics — idle only
+    // ==============================
+    if ("requestIdleCallback" in window) {
+      requestIdleCallback(initGA);
+    } else {
+      setTimeout(initGA, 3000);
+    }
+
+    // ==============================
+    // Auth + page modules
+    // ==============================
+    authGate(async () => {
       const path = location.pathname;
       const config = pageConfigs.find(c => c.match(path));
-
       if (!config) return;
 
-      // Run all modules in parallel
+      // Run page modules in parallel
       await runParallel(config.modules.map(fn => fn(db)));
 
-      // Init logout if needed
-      if (config.requiresAuth && config.logout) initLogout();
+      // Logout button
+      if (config.requiresAuth && config.logout) {
+        initLogout();
+      }
     });
+
   });
 }
+
 
