@@ -6,6 +6,44 @@
       "**/.*",
       "**/node_modules/**"
     ],
+    "headers": [
+      {
+        "source": "/assets/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public,max-age=2592000"  // 30 days
+          }
+        ]
+      },
+      {
+        "source": "/media/**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public,max-age=2592000"  // 30 days
+          }
+        ]
+      },
+      {
+        "source": "/assets/js/main-*.js",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public,max-age=2592000"  // 30 days for versioned JS
+          }
+        ]
+      },
+      {
+        "source": "/assets/stylesheets/main*.css",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public,max-age=2592000"  // 30 days for versioned CSS
+          }
+        ]
+      }
+    ],
     "rewrites": [
       { "source": "/login", "destination": "/login.html" },
       { "source": "/page", "destination": "/page.html" },
