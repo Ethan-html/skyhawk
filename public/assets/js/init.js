@@ -61,48 +61,23 @@ async function runParallel(tasks) {
 function initGA() {
   if (window.gtag) return;
 
-  // Optional: temporarily suppress the GA top-level opt-out warning
-  const originalConsoleError = console.error;
-  console.error = (...args) => {
-    if (
-      args[0] &&
-      typeof args[0] === "string" &&
-      args[0].includes("Unable to check top-level optout")
-    ) return; // ignore this warning
-    originalConsoleError(...args);
+  // Always create a safe no-op gtag first
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function(){ dataLayer.push(arguments); };
+
+  const script = document.createElement("script");
+  script.async = true;
+  script.src = "https://www.googletagmanager.com/gtag/js?id=G-M2RSE2BRK2";
+
+  script.onload = () => {
+    gtag("js", new Date());
+    gtag("config", "G-M2RSE2BRK2");
   };
 
-  // Test if GA is reachable before loading
-  fetch("https://www.googletagmanager.com/gtag/js?id=G-M2RSE2BRK2", { method: "HEAD", mode: "no-cors" })
-    .then(() => {
-      // GA is reachable, load the script
-      const script = document.createElement("script");
-      script.async = true;
-      script.src = "https://www.googletagmanager.com/gtag/js?id=G-M2RSE2BRK2";
-      document.head.appendChild(script);
+  // If blocked or fails, do absolutely nothing
+  script.onerror = () => {};
 
-      // GA setup
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      window.gtag = gtag;
-      gtag('js', new Date());
-      gtag('config', 'G-M2RSE2BRK2');
-    })
-    .catch(() => {
-      // GA blocked/unreachable — silently skip it
-      console.log("Google Analytics blocked or unreachable, skipping load.");
-      
-      // Fallback: fake gtag so code calling it won't break
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      window.gtag = gtag;
-    })
-    .finally(() => {
-      // Restore console.error
-      setTimeout(() => {
-        console.error = originalConsoleError;
-      }, 500);
-    });
+  document.head.appendChild(script);
 }
 
 // ==============================

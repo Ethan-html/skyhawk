@@ -6825,7 +6825,7 @@ button[type="submit"].tertiary:hover {
   text-transform: uppercase;
 }
 .footer-link {
-  color: #9ea1a1;
+  color: #e6e6e6;
   text-decoration: none;
   background-color: transparent;
 }
@@ -11915,3 +11915,9 @@ a.no-border {
 }
 
 
+.cb-image-placeholder {
+  width: 186px;
+  height: 186px;
+  background: #f0f0f0;
+  display: block;
+}

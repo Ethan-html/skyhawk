@@ -44,6 +44,8 @@ function renderBoxes(boxes) {
     img.alt = box.title || "";
     img.loading = "lazy";
     img.className = "cb-image";
+    img.width = 186;
+    img.height = 186;
 
     innerDiv.appendChild(headingDiv);
     innerDiv.appendChild(img);

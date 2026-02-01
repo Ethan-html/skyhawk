@@ -27,9 +27,8 @@ function renderSlides(urls) {
 
     const img = document.createElement("img");
     img.src = url;
-    img.loading = "lazy";
-    img.width = 1920;   // actual image width
-    img.height = 1080;  // actual image height
+    img.loading = "lazy"
+    img.alt = `Slideshow image`;
 
     li.appendChild(img);
     slidesContainer.appendChild(li);
