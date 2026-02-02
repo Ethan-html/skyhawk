@@ -11921,3 +11921,52 @@ a.no-border {
   background: #f0f0f0;
   display: block;
 }
+
+/* ================= LOGIN PAGE ================= */
+
+.login-page {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  background: #f5f7fa;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 380px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 32px 28px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
+  text-align: center;
+}
+
+.login-card img { width: 110px; margin-bottom: 16px; }
+
+.login-card input {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+  border-radius: 6px;
+  border: 1px solid #d0d4d9;
+  font-size: 15px;
+}
+
+.login-card button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 25px;
+  border: none;
+  background: #1161ee;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-footer { margin-top: 18px; font-size: 13px; color: #666; }
+
+.blue-line1 { height: 4px; background:#001489; border: none; }
+.hidden-section { display:none; }
+.login-links { margin-top:12px; }

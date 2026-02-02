@@ -1,135 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-
-    <title>Skyhawk Squadron</title>
-    <link rel="icon" type="image/png" href="/media/website/skyhawks_logo_CAP_transparent.ico">
-    <meta name="description" content="Skyhawk Composite Squadron 47 of the Civil Air Patrol transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota.">
-
     <meta charset="utf-8">
-    <meta name="language" content="en-US">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="index,follow">
-    <meta name="googlebot" content="index,follow">
-    <meta name="msnbot" content="index,follow">
+    <title>Skyhawk Squadron | Member Login</title>
 
-    <link rel="canonical" href="https://skyhawk-cap.org/">
+    <meta name="description" content="Member login for Skyhawk Composite Squadron 47 Civil Air Patrol in Delano, Minnesota.">
+    <link rel="canonical" href="https://skyhawk-cap.org/login">
 
-    <!-- Social Sharing (OG + Twitter) -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Home | Skyhawk Composite Squadron">
-    <meta property="og:description" content="Skyhawk Composite Squadron 47 of the Civil Air Patrol transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota.">
-    <meta property="og:image" content="https://skyhawk-cap.org/assets/images/webclip.png">
-    <meta property="og:url" content="https://skyhawk-cap.org/">
-    <meta property="og:locale" content="en_US">
-    <meta property="article:author" content="https://www.facebook.com/capnhq/">
-
-    <meta property="twitter:card" content="summary">
-    <meta property="twitter:title" content="Home | Skyhawk Composite Squadron">
-    <meta property="twitter:description" content="Skyhawk Composite Squadron 47 of the Civil Air Patrol transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota.">
-    <meta property="twitter:image" content="https://skyhawk-cap.org/assets/images/webclip.png">
-
-    <!-- Favicon & App Icons -->
+    <!-- Icons -->
+    <link rel="icon" href="/media/websites/skyhawks_logo_CAP_transparent.png" type="image/png">
     <link rel="apple-touch-icon" href="/assets/images/webclip.png">
     <link rel="manifest" href="/assets/manifest.json">
-    <link rel="icon" href="/media/websites/skyhawks_logo_CAP_transparent.png">
-    <link rel="shortcut icon" href="/media/websites/skyhawks_logo_CAP_transparent.png" type="image/png">
 
-    <link rel="stylesheet" href="assets/stylesheets/main.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://skyhawk.cap.gov/core/libraries/jquery/assets/3.3.1/jquery.min.js"></script>
-    <script src="assets/js/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js"></script>
-    <script src="https://skyhawk.cap.gov/core/public/shared/assets/js/jquery.cycle2/2.1.6/jquery.cycle2-fef2f3645726cce4154911d6140d7d52.min.js"></script>
-    <!-- Google tag (gtag.js) -->
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Member Login | Skyhawk Squadron">
+    <meta property="og:description" content="Secure member login for Skyhawk Composite Squadron 47.">
+    <meta property="og:image" content="https://skyhawk-cap.org/assets/images/webclip.png">
+    <meta property="og:url" content="https://skyhawk-cap.org/login">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Member Login | Skyhawk Squadron">
+    <meta name="twitter:description" content="Secure member login for Skyhawk Composite Squadron 47.">
+    <meta name="twitter:image" content="https://skyhawk-cap.org/assets/images/webclip.png">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/assets/stylesheets/main.css">
+
+    <!-- Defer non-critical JS -->
+    <script defer src="/assets/js/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js"></script>
+
+    <!-- Google Analytics (async is correct) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-M2RSE2BRK2"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-
       gtag('config', 'G-M2RSE2BRK2');
     </script>
-    <style>
-        /* =========================
-        LOGIN PAGE – ISOLATED
-        ========================= */
-
-        .login-page {
-          min-height: calc(100vh - 200px); /* avoids header/footer overlap */
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 40px 20px;
-          background: #f5f7fa;
-        }
-
-        .login-card {
-          width: 100%;
-          max-width: 380px;
-          background: #ffffff;
-          border-radius: 10px;
-          padding: 32px 28px;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-          text-align: center;
-        }
-
-        /* Logo */
-        .login-card img {
-          width: 110px;
-          margin-bottom: 16px;
-        }
-
-        /* Title */
-        .login-card h2 {
-          font-size: 20px;
-          margin-bottom: 20px;
-          color: #1a1a1a;
-          font-weight: 600;
-        }
-
-        /* Inputs */
-        .login-card input[type="text"],
-        .login-card input[type="email"],
-        .login-card input[type="password"] {
-          width: 100%;
-          padding: 12px 14px;
-          margin-bottom: 12px;
-          border-radius: 6px;
-          border: 1px solid #d0d4d9;
-          font-size: 15px;
-          background: #fff;
-          transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        /* Button */
-          .login-card button {
-              width: 100%;
-              color: #fff;
-              display: block;
-              border: none;
-              padding: 15px 20px;
-              border-radius: 25px;
-              background: #1161ee;
-          }
-
-        /* Error / Status message */
-        .login-card .error1 {
-          margin-top: 12px;
-          font-size: 14px;
-        }
-
-        /* Footer text */
-        .login-footer {
-          margin-top: 18px;
-          font-size: 13px;
-          color: #666;
-        }
-          .blue-line1 {
-            border: none;           /* remove default border */
-            height: 4px;            /* thickness */
-            background-color: #001489; /* solid blue */
-          }
-    </style>
   </head>
   <body>
     <div class="header-section">
@@ -154,50 +64,38 @@
     <div class="login-page">
       <div class="login-card">
         <h2>Login to Your Account</h2>
-        <!-- Login Form -->
+
         <form id="loginForm">
           <input type="email" id="username" placeholder="Email" required>
           <input type="password" id="password" placeholder="Password" required>
           <button type="submit">Login</button>
-          <div class="error1" style="display: none;" id="errorMsg"></div>
+          <div class="error1" id="errorMsg" hidden></div>
         </form>
 
-        <!-- Forgot Password Link -->
-        <p style="margin-top: 12px;">
+        <p class="login-links">
           <a href="#" id="forgot-password-link">Forgot your password?</a>
         </p>
 
-        <!-- Password Reset Section (Hidden by default) -->
-        <div id="password-reset-section" style="display: none; margin-top: 20px;">
-          <p style="font-size: 14px; color: #555;">Enter your email to reset your password:</p>
-          <input type="email" id="reset-email" placeholder="Enter your email" style="width: 100%; padding: 12px 14px; border-radius: 6px; border: 1px solid #d0d4d9; margin-bottom: 10px; font-size: 14px;">
-          <button id="reset-password-btn" style="width: 100%; padding: 12px; border-radius: 25px; border: none; background: #1161ee; color: #fff; font-weight: 600;">Send Reset Email</button>
-          <div id="reset-status" style="margin-top: 8px; font-size: 13px;"></div>
-          <p style="margin-top: 12px;"><a href="#" id="back-to-login">Back to login</a></p>
-        </div>
-        <!-- First Login Section (Hidden by default) -->
-        <div id="first-time-section" style="display: none; margin-top: 20px;">
-          <input type="email" id="first-time-email" placeholder="Enter your email" style="width: 100%; padding: 12px 14px; border-radius: 6px; border: 1px solid #d0d4d9; margin-bottom: 10px; font-size: 14px;">
-          <button id="first-time-reset-btn" style="width: 100%; padding: 12px; border-radius: 25px; border: none; background: #1161ee; color: #fff; font-weight: 600;">Login</button>
-          <div id="first-reset-status" style="margin-top: 8px; font-size: 13px;"></div>
-        </div>
-        <div id="first-time-reset-section" style="display: none; margin-top: 20px;">
-          <h4>An <strong>email</strong> has been sent to your inbox to set up your password. (Check your spam folder)</h4>
-          <p style="font-size: 14px; color: #555; margin-top: 8px;">
-            Once you set your password, return here to log in.
-          </p>
-
-          <p style="font-size: 14px; color: #555;">
-            Didn't receive it? <a href="#" id="resend-reset-email">Resend email</a>
-          </p>
-
-          <button onclick="window.location.href='/login'" 
-                  style="margin-top: 12px; padding: 12px 20px; border-radius: 25px; border: none; background: #1161ee; color: #fff; font-weight: 600; cursor: pointer;">
-            Login
-          </button>
+        <div id="password-reset-section" class="hidden-section">
+          <p>Enter your email to reset your password:</p>
+          <input type="email" id="reset-email" placeholder="Enter your email">
+          <button id="reset-password-btn">Send Reset Email</button>
+          <div id="reset-status"></div>
+          <p><a href="#" id="back-to-login">Back to login</a></p>
         </div>
 
+        <div id="first-time-section" class="hidden-section">
+          <input type="email" id="first-time-email" placeholder="Enter your email">
+          <button id="first-time-reset-btn">Login</button>
+          <div id="first-reset-status"></div>
+        </div>
 
+        <div id="first-time-reset-section" class="hidden-section">
+          <h4>An <strong>email</strong> has been sent to set up your password.</h4>
+          <p>Once you set your password, return here to log in.</p>
+          <p>Didn't receive it? <a href="#" id="resend-reset-email">Resend email</a></p>
+          <button onclick="window.location.href='/login'">Login</button>
+        </div>
 
         <div class="login-footer">
           <p>Members only</p>
@@ -207,14 +105,13 @@
     <div id="footer"></div>
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-      import { sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-      import { getFirestore } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
-      import {
+      import { 
         getAuth,
         signInWithEmailAndPassword,
+        sendPasswordResetEmail,
         onAuthStateChanged
       } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-
+      import { getFirestore } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
       import { initHeaderFooter } from "/assets/js/header-footer.js";
 
 
@@ -269,7 +166,7 @@
           errorMsg.textContent = "Login successful! Redirecting…";
 
           setTimeout(() => {
-            window.location.href = "/"; // or "/member" if that’s your home page
+            window.location.href = "/member"; // or "/member" if that’s your home page
           }, 800);
 
         } catch (err) {
