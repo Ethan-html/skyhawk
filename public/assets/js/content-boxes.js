@@ -15,15 +15,15 @@ async function fetchContentBoxes(db) {
   }
 }
 
-// Render content boxes into DOM
+// Render content boxes into DOM (uses DocumentFragment for fewer reflows)
 function renderBoxes(boxes) {
   const container = document.querySelector(".cb-wrapper");
   if (!container) return;
 
-  container.innerHTML = "";
-
+  const fragment = document.createDocumentFragment();
   let counter = 0;
-  boxes.forEach(box => {
+
+  for (const box of boxes) {
     const a = document.createElement("a");
     a.href = box.url || "#";
     a.target = box.target || "_self";
@@ -34,7 +34,6 @@ function renderBoxes(boxes) {
 
     const headingDiv = document.createElement("div");
     headingDiv.className = "cb-text-heading";
-
     const span = document.createElement("span");
     span.textContent = box.title || "No Title";
     headingDiv.appendChild(span);
@@ -50,21 +49,22 @@ function renderBoxes(boxes) {
     innerDiv.appendChild(headingDiv);
     innerDiv.appendChild(img);
     a.appendChild(innerDiv);
-
-    container.appendChild(a);
+    fragment.appendChild(a);
 
     counter++;
     if (counter % 3 === 0) {
       const clearDiv = document.createElement("div");
       clearDiv.className = "w--mehiddendium w-hidden-small w-hidden-tiny clearBoth";
-      container.appendChild(clearDiv);
+      fragment.appendChild(clearDiv);
     }
-  });
+  }
 
-  // Optional: extra clearBoth for layout
   const clearDiv = document.createElement("div");
   clearDiv.className = "w--mehiddendium w-hidden-small w-hidden-tiny clearBoth";
-  container.appendChild(clearDiv);
+  fragment.appendChild(clearDiv);
+
+  container.innerHTML = "";
+  container.appendChild(fragment);
 }
 
 // Public function to initialize content boxes with cache + revalidate

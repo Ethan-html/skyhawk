@@ -54,15 +54,22 @@ export function initHeaderFooter(db) {
     if (donateBtn) donateBtn.href = donate.url;
   };
 
+  const escapeHtml = (s) => {
+    if (!s) return "";
+    const div = document.createElement("div");
+    div.textContent = s;
+    return div.innerHTML;
+  };
+
   const renderFooter = (contact, quickLinks) => {
     const footer = document.getElementById("footer");
     if (!footer) return;
 
-    const address = contact?.address?.replace(/\n/g, "<br>") || "";
-    const phone = contact?.phone || "";
-    const email = contact?.email || "";
+    const address = (contact?.address || "").split("\n").map(escapeHtml).join("<br>");
+    const phone = escapeHtml(contact?.phone || "");
+    const email = escapeHtml(contact?.email || "");
     const linksHTML = (quickLinks || [])
-      .map(l => `<li><a href="${l.url || '#'}" class="footer-link"${l.external === "true" ? ' target="_blank" rel="noopener noreferrer"' : ''}>${l.title || ""}</a></li>`)
+      .map((l) => `<li><a href="${escapeHtml(l.url || "#")}" class="footer-link"${l.external === "true" ? ' target="_blank" rel="noopener noreferrer"' : ""}>${escapeHtml(l.title || "")}</a></li>`)
       .join("");
 
     footer.innerHTML = `
@@ -94,7 +101,7 @@ export function initHeaderFooter(db) {
             <div class="bottom-footer-container">
               <div class="footer-signoff-row row w-row">
                 <div class="column w-col w-col-9 w-col-stack">
-                  <div class="copyright-text">© ${new Date().getFullYear()} Civil Air Patrol. All rights reserved.</div>
+                  <div id="copyright-text" class="copyright-text">© ${new Date().getFullYear()} Civil Air Patrol. All rights reserved.</div>
                   <ul class="footer-signoff-list w-list-unstyled">
                     <li class="footer-signoff-list-item"><a href="https://get.adobe.com/reader/" target="_blank" rel="noopener" class="footer-link">Get Adobe Acrobat Reader</a></li>
                     <li class="footer-signoff-list-item"><a href="https://www.gocivilairpatrol.com/legal-privacy-statement" target="_blank" rel="noopener" class="footer-link">Legal &amp; Privacy Statement</a></li>

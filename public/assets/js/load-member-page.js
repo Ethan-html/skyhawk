@@ -67,39 +67,37 @@ export async function loadMemberPage(db, sectionId, onUpdate) {
 export function renderMemberPage(pageData) {
   if (!pageData) return;
 
-  const params = new URLSearchParams(location.search);
-  const [, childSlug] = (params.get("page") || "").split("/");
-
+  const [, childSlug] = (new URLSearchParams(location.search).get("page") || "").split("/");
   const children = Object.values(pageData.children);
-  const active = children.find(c => c.slug === childSlug) || children[0];
+  const active = children.find((c) => c.slug === childSlug) || children[0];
 
-  // Side nav
   const sideList = document.getElementById("sideNavList");
   const sideTitle = document.getElementById("sideNavTitleLink");
+  const pageTitleEl = document.getElementById("pageTitle");
+  const pageContentEl = document.getElementById("pageContent");
+
   sideTitle.textContent = pageData.title;
   sideTitle.href = `/memberpage?page=${pageData.id}`;
   sideList.innerHTML = "";
 
-  children.forEach(c => {
+  const navFragment = document.createDocumentFragment();
+  for (const c of children) {
     const li = document.createElement("li");
     li.className = "left-nav-list-item";
-
     const a = document.createElement("a");
     a.className = "left-nav-list-link";
     a.href = `/memberpage?page=${pageData.id}/${c.slug}`;
     a.textContent = c.title;
     if (c.slug === active.slug) a.classList.add("selected");
-
     li.append(a, document.createElement("div"));
-    sideList.appendChild(li);
-  });
+    navFragment.appendChild(li);
+  }
+  sideList.appendChild(navFragment);
 
-  // Content
-  document.getElementById("pageTitle").textContent = active.title;
-
+  pageTitleEl.textContent = active.title;
   if (active.externalUrl) {
     location.href = active.externalUrl;
   } else {
-    document.getElementById("pageContent").innerHTML = active.content;
+    pageContentEl.innerHTML = active.content;
   }
 }

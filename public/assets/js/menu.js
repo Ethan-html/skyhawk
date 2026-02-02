@@ -71,15 +71,15 @@ function buildMenu(pagesWithChildren, menuRoot) {
 
   menuRoot.appendChild(fragment);
 
-  // Dropdown hover (jQuery)
-  if (window.jQuery) {
-    jQuery('.main-li.has-dropdown').each(function () {
-      const $item = jQuery(this);
-      $item.off('mouseenter mouseleave');
-      $item.on('mouseenter', function () { $item.addClass('open'); });
-      $item.on('mouseleave', function () { $item.removeClass('open'); });
-    });
-  }
+  // Single delegated listener for all dropdowns (better performance)
+  menuRoot.addEventListener("mouseenter", (e) => {
+    const li = e.target.closest(".main-li.has-dropdown");
+    if (li) li.classList.add("open");
+  }, true);
+  menuRoot.addEventListener("mouseleave", (e) => {
+    const li = e.target.closest(".main-li.has-dropdown");
+    if (li && !li.contains(e.relatedTarget)) li.classList.remove("open");
+  }, true);
 }
 
 // Render mobile menu

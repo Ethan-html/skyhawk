@@ -32,9 +32,12 @@
     <!-- Favicon & App Icons -->
     <link rel="apple-touch-icon" href="/assets/images/webclip.png">
     <link rel="manifest" href="/assets/manifest.json">
-    <link rel="icon" href="/media/websites/skyhawks_logo_CAP_transparent.png">
-    <link rel="shortcut icon" href="/media/websites/skyhawks_logo_CAP_transparent.png" type="image/png">
+    <link rel="icon" href="/media/website/skyhawks_logo_CAP_transparent.png">
+    <link rel="shortcut icon" href="/media/website/skyhawks_logo_CAP_transparent.png" type="image/png">
 
+    <!-- Preconnect for faster loads -->
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.theme.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -47,49 +50,41 @@
         initPage();
       </script>
       <style type="text/css">
-         @media (min-width: 1025px) {
-
-         .learn-more-heading {
-             display: none;
-           }
-
-           .donate-button-container {
-             margin-top: 110px;
-             margin-bottom: 50px;
-           }
-
-         }
-         #slideshow-container {
-            aspect-ratio: 1903/520; /* adjust to your images */
-            width: 100%;
-            position: relative;
+        @media (min-width: 1025px) {
+          .learn-more-heading {
+            display: none;
           }
-         .glide__slides {
-            transform: translate3d(0,0,0)!important;
-            width: 100vw!important;
-            width: 100%;
-            height: 100%;
+          .donate-button-container {
+            margin-top: 110px;
+            margin-bottom: 50px;
           }
-
-          .glide__slide {
-            position: absolute;
-            top: 0;
-            left: 0;
-            order: 2;
-            opacity: 0;
-            transition: opacity 1350ms ease-in-out;
-          }
-
-          .glide__slide.glide__slide--active {
-            position: relative;
-            order: 1;
-            opacity: 1;
-            z-index: 1;
-          }
-
-
-          /*Placeholder test*/
-          #unit-name { min-height: 2rem; }
+        }
+        #slideshow-container {
+          aspect-ratio: 1903/520;
+          width: 100%;
+          position: relative;
+        }
+        .glide__slides {
+          transform: translate3d(0,0,0) !important;
+          width: 100vw !important;
+          width: 100%;
+          height: 100%;
+        }
+        .glide__slide {
+          position: absolute;
+          top: 0;
+          left: 0;
+          order: 2;
+          opacity: 0;
+          transition: opacity 1350ms ease-in-out;
+        }
+        .glide__slide.glide__slide--active {
+          position: relative;
+          order: 1;
+          opacity: 1;
+          z-index: 1;
+        }
+        #unit-name { min-height: 2rem; }
         #main-menu li { min-height: 2rem; }
         #footer { min-height: 200px; }
       </style>
@@ -114,7 +109,7 @@
                     </div>
                   </a>
                   <div class="website-logo-container">
-                    <img id="squdron-icon" src="/media/website/skyhawks_logo_CAP_transparent.webp" alt="Squdron Icon" class="website-logo">
+                    <img id="squadron-icon" src="/media/website/skyhawks_logo_CAP_transparent.webp" alt="Squadron Icon" class="website-logo">
                   </div>
               </div>
             </div>

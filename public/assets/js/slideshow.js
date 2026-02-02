@@ -21,18 +21,19 @@ function renderSlides(urls) {
 
   slidesContainer.innerHTML = "";
 
-  urls.forEach(url => {
+  const fragment = document.createDocumentFragment();
+  urls.forEach((url, i) => {
     const li = document.createElement("li");
     li.className = "glide__slide";
-
     const img = document.createElement("img");
     img.src = url;
-    img.loading = "lazy"
-    img.alt = `Slideshow image`;
-
+    img.loading = i === 0 ? "eager" : "lazy";
+    img.alt = "Slideshow image";
+    if (i === 0) img.fetchPriority = "high";
     li.appendChild(img);
-    slidesContainer.appendChild(li);
+    fragment.appendChild(li);
   });
+  slidesContainer.appendChild(fragment);
 
   mountGlide();
 }

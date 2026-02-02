@@ -75,15 +75,14 @@ function buildMenu(pagesWithChildren, menuRoot) {
 
   menuRoot.appendChild(fragment);
 
-  // jQuery hover for dropdowns
-  if (window.jQuery) {
-    jQuery('.main-li.has-dropdown').each(function () {
-      const $item = jQuery(this);
-      $item.off('mouseenter mouseleave');
-      $item.on('mouseenter', () => $item.addClass('open'));
-      $item.on('mouseleave', () => $item.removeClass('open'));
-    });
-  }
+  menuRoot.addEventListener("mouseenter", (e) => {
+    const li = e.target.closest(".main-li.has-dropdown");
+    if (li) li.classList.add("open");
+  }, true);
+  menuRoot.addEventListener("mouseleave", (e) => {
+    const li = e.target.closest(".main-li.has-dropdown");
+    if (li && !li.contains(e.relatedTarget)) li.classList.remove("open");
+  }, true);
 }
 
 function buildMobileMenu(pagesWithChildren, root, isMemberMenu = false) {
@@ -164,9 +163,6 @@ function buildMobileMenu(pagesWithChildren, root, isMemberMenu = false) {
 
   root.appendChild(fragment);
 }
-
-
-
 
 // --------------------
 // Public init function

@@ -15,7 +15,7 @@
   /* ===== Long-press logo & copyright ===== */
   window.addEventListener("DOMContentLoaded", () => {
     const targets = [
-      document.getElementById("squdron-icon"),
+      document.getElementById("squadron-icon"),
       document.getElementById("copyright-text")
     ];
 

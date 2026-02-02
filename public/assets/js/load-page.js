@@ -74,16 +74,11 @@ export function renderPage(pageData) {
   } else if (pageData.id === "page") {
     window.location.href = "/404";
   } else {
-    // No childSlug and root has no content → fallback to first child
     active = children[0];
   }
-  
 
-
-  // --- Hide left nav and expand main content if page ID is 'page' ---
   const leftNav = document.querySelector(".left-nav-column");
   const mainContent = document.querySelector(".main-content-column");
-
   if (pageData.id === "page") {
     leftNav.style.display = "none";
     mainContent.style.width = "100%";
@@ -94,36 +89,33 @@ export function renderPage(pageData) {
     mainContent.style.marginLeft = "";
   }
 
-  // Side nav
   const sideList = document.getElementById("sideNavList");
   const sideTitle = document.getElementById("sideNavTitleLink");
+  const pageTitleEl = document.getElementById("pageTitle");
+  const pageContentEl = document.getElementById("pageContent");
+
   sideTitle.textContent = pageData.title;
   sideTitle.href = `/page?page=${pageData.id}`;
   sideList.innerHTML = "";
 
-  children.forEach(c => {
+  const navFragment = document.createDocumentFragment();
+  for (const c of children) {
     const li = document.createElement("li");
     li.className = "left-nav-list-item";
-
     const a = document.createElement("a");
     a.className = "left-nav-list-link";
     a.href = `/page?page=${pageData.id}/${c.slug}`;
     a.textContent = c.title;
     if (c.slug === active.slug) a.classList.add("selected");
-
     li.append(a, document.createElement("div"));
-    sideList.appendChild(li);
-  });
+    navFragment.appendChild(li);
+  }
+  sideList.appendChild(navFragment);
 
-  // Content
-  document.getElementById("pageTitle").textContent = active.title;
-
+  pageTitleEl.textContent = active.title;
   if (active.externalUrl) {
     location.href = active.externalUrl;
   } else {
-    document.getElementById("pageContent").innerHTML = active.content;
+    pageContentEl.innerHTML = active.content;
   }
 }
-
-
-

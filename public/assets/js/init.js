@@ -63,7 +63,7 @@ function initGA() {
 
   // Always create a safe no-op gtag first
   window.dataLayer = window.dataLayer || [];
-  window.gtag = function(){ dataLayer.push(arguments); };
+  window.gtag = function () { dataLayer.push(arguments); };
 
   const script = document.createElement("script");
   script.async = true;
@@ -84,12 +84,12 @@ function initGA() {
 // Universal asset loader (JS & CSS)
 // ==============================
 function loadAssets(urls) {
-  const promises = urls.map(url => {
-    return new Promise((resolve, reject) => {
+  const promises = urls.map((url) =>
+    new Promise((resolve, reject) => {
       if (url.endsWith(".js")) {
         const s = document.createElement("script");
         s.src = url;
-        s.defer = true;           // execute after DOM parses
+        s.defer = true;
         s.onload = resolve;
         s.onerror = reject;
         document.head.appendChild(s);
@@ -104,16 +104,14 @@ function loadAssets(urls) {
         console.warn("Unknown asset type:", url);
         resolve();
       }
-    });
-  });
-
-  return Promise.allSettled(promises).then(results => {
-    results.forEach(r => {
+    })
+  );
+  return Promise.allSettled(promises).then((results) => {
+    results.forEach((r) => {
       if (r.status === "rejected") console.warn("Asset failed to load:", r.reason);
     });
   });
 }
-
 
 // ==============================
 // Logout button helper
@@ -122,8 +120,12 @@ function initLogout() {
   const logoutBtn = document.getElementById("logoutBtn");
   if (logoutBtn) {
     logoutBtn.addEventListener("click", async () => {
-      try { await signOut(auth); window.location.replace("/"); }
-      catch (err) { console.error("Logout failed:", err); }
+      try {
+        await signOut(auth);
+        window.location.replace("/");
+      } catch (err) {
+        console.error("Logout failed:", err);
+      }
     });
   }
 }
