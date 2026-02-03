@@ -12011,6 +12011,6 @@ a.no-border {
   z-index: 1;
 }
 
-.home-page #unit-name { min-height: 2rem; }
+.home-page #unit-name { min-height: 2rem; text-align: center;}
 .home-page #main-menu li { min-height: 2rem; }
 .home-page #footer { min-height: 200px; }
