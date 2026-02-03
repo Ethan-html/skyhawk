@@ -12014,3 +12014,65 @@ a.no-border {
 .home-page #unit-name { min-height: 2rem; text-align: center;}
 .home-page #main-menu li { min-height: 2rem; }
 .home-page #footer { min-height: 200px; }
+
+
+
+
+
+
+
+.mobile-logout-container {
+  display: none; /* hidden on desktop */
+}
+
+.mobile-logout-btn {
+  height: 42px;
+  width: 42px;
+  fill: white;
+  stroke: none;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+/* Icon animation parts */
+.mobile-logout-btn .icon-part1 {
+  transition: fill 0.3s, stroke 0.3s;
+}
+
+.mobile-logout-btn .icon-part2 {
+  transition: fill 0.3s;
+}
+
+/* Hover / tap feedback */
+.mobile-logout-btn:hover {
+  transform: scale(1.1);
+}
+
+.mobile-logout-btn:hover .icon-part1 {
+  fill: transparent;
+  stroke: white;
+  stroke-width: 4;
+}
+
+.mobile-logout-btn:hover .icon-part2 {
+  fill: tomato;
+}
+.mobile-logout-btn {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mobile-logout-btn:active {
+  transform: scale(0.92);
+}
+@media (max-width: 998px) {
+  .mobile-logout-container {
+    display: flex;
+    position: absolute;
+    right: 16px;   /* distance from right edge */
+    top: 50%;
+    transform: translateY(-50%);
+    align-items: center;
+    justify-content: center;
+  }
+}

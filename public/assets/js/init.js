@@ -119,17 +119,26 @@ function loadAssets(urls) {
 // ==============================
 function initLogout() {
   const logoutBtn = document.getElementById("logoutBtn");
+  const mobileLogoutIcon = document.querySelector(".mobile-logout-btn");
+
+  async function handleLogout() {
+    try {
+      await signOut(auth);
+      window.location.replace("/");
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
+  }
+
   if (logoutBtn) {
-    logoutBtn.addEventListener("click", async () => {
-      try {
-        await signOut(auth);
-        window.location.replace("/");
-      } catch (err) {
-        console.error("Logout failed:", err);
-      }
-    });
+    logoutBtn.addEventListener("click", handleLogout);
+  }
+
+  if (mobileLogoutIcon) {
+    mobileLogoutIcon.addEventListener("click", handleLogout);
   }
 }
+
 
 // ==============================
 // Helper for loading sections
