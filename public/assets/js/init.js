@@ -1,4 +1,11 @@
 // ==============================
+// Versioned assets (cache-busting)
+// ==============================
+const ASSET_VERSION = typeof window !== "undefined" && window.ASSET_VERSION ? window.ASSET_VERSION : "";
+const withVersion = (url) =>
+  ASSET_VERSION ? url + (url.includes("?") ? "&" : "?") + "v=" + ASSET_VERSION : url;
+
+// ==============================
 // Firebase (singleton)
 // ==============================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
@@ -87,14 +94,15 @@ function initGA() {
 function loadAssets(urls) {
   const promises = urls.map((url) =>
     new Promise((resolve, reject) => {
-      if (url.endsWith(".js")) {
+      const path = url.split("?")[0];
+      if (path.endsWith(".js")) {
         const s = document.createElement("script");
         s.src = url;
         s.defer = true;
         s.onload = resolve;
         s.onerror = reject;
         document.head.appendChild(s);
-      } else if (url.endsWith(".css")) {
+      } else if (path.endsWith(".css")) {
         const l = document.createElement("link");
         l.rel = "stylesheet";
         l.href = url;
@@ -224,7 +232,7 @@ export async function initPage() {
     // TIER 0 — Critical CSS only
     // ==============================
     await loadAssets([
-      "/assets/stylesheets/main.css"
+      withVersion("/assets/stylesheets/main.css")
     ]);
 
     // Show page immediately
@@ -234,17 +242,17 @@ export async function initPage() {
     // TIER 1 — jQuery dependency chain (non-blocking)
     // ==============================
     (async () => {
-      await loadAssets(["/assets/js/jquery.min.js"]);
-      await loadAssets(["/assets/js/jquery.cycle2-fef2f3645726cce4154911d6140d7d52.min.js"]);
+      await loadAssets([withVersion("/assets/js/jquery.min.js")]);
+      await loadAssets([withVersion("/assets/js/jquery.cycle2-fef2f3645726cce4154911d6140d7d52.min.js")]);
     })();
 
     // ==============================
     // TIER 2 & 3 — Everything else (parallel)
     // ==============================
     loadAssets([
-      "/assets/js/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js",
-      "/assets/js/admin.js",
-      "/assets/easter/boot.js"
+      withVersion("/assets/js/main-3e47b52a9c95aa9cd957b34befd0acf5.min.js"),
+      withVersion("/assets/js/admin.js"),
+      withVersion("/assets/easter/boot.js")
     ]);
 
     // ==============================
