@@ -30,7 +30,7 @@
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "public,max-age=2592000"  // 30 days
+            "value": "public,max-age=2592000"
           }
         ]
       },
@@ -39,7 +39,7 @@
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "public,max-age=2592000"  // 30 days for versioned JS
+            "value": "public,max-age=2592000"
           }
         ]
       },
@@ -48,7 +48,7 @@
         "headers": [
           {
             "key": "Cache-Control",
-            "value": "public,max-age=2592000"  // 30 days for versioned CSS
+            "value": "public,max-age=2592000"
           }
         ]
       }

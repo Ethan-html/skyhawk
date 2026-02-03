@@ -6682,7 +6682,7 @@ button[type="submit"].tertiary:hover {
   min-height: 120px;
   background-color: #373a3d;
 }
-.inside-content-beckground {
+.inside-content-background {
   position: relative;
   display: block;
   max-width: 100%;
@@ -6695,18 +6695,18 @@ button[type="submit"].tertiary:hover {
   background-image: -webkit-linear-gradient(270deg, #f2f3f4, #f2f3f4);
   background-image: linear-gradient(180deg, #f2f3f4, #f2f3f4);
 }
-.inside-content-beckground.right-column .main-content-column {
+.inside-content-background.right-column .main-content-column {
   width: 100%;
 }
-.inside-content-beckground.no-columns .main-content-column {
+.inside-content-background.no-columns .main-content-column {
   width: 100%;
 }
-.inside-content-beckground.no-columns .main-content-wrap.nested-content-wrap {
+.inside-content-background.no-columns .main-content-wrap.nested-content-wrap {
   padding-top: 2rem;
   padding-right: 8rem;
   padding-left: 8rem;
 }
-.inside-content-beckground.right-column .right-sidebar-column {
+.inside-content-background.right-column .right-sidebar-column {
   padding-right: 10px;
   padding-left: 10px;
 }
@@ -8537,7 +8537,7 @@ html.w-mod-js [data-ix="new-nav-drop-list"] {
     padding-bottom: 0;
     opacity: 1;
   }
-  .inside-content-beckground {
+  .inside-content-background {
     max-width: 100%;
     margin-top: 0;
     padding-top: 0;
@@ -9028,7 +9028,7 @@ html.w-mod-js [data-ix="new-nav-drop-list"] {
     box-shadow: none;
     font-size: 2rem;
   }
-  .inside-content-beckground.no-columns .main-content-wrap.nested-content-wrap {
+  .inside-content-background.no-columns .main-content-wrap.nested-content-wrap {
     padding: 1.5rem 2rem;
   }
   .right-sidebar-column .box.tools input[type="text"] {
@@ -9508,11 +9508,11 @@ html.w-mod-js [data-ix="new-nav-drop-list"] {
   .learn-more-heading {
     margin-bottom: 0;
   }
-  .inside-content-beckground.right-column .right-sidebar-column {
+  .inside-content-background.right-column .right-sidebar-column {
     padding-right: 0;
     padding-left: 0;
   }
-  .inside-content-beckground.no-columns .main-content-wrap.nested-content-wrap {
+  .inside-content-background.no-columns .main-content-wrap.nested-content-wrap {
     padding-top: 1rem;
     padding-bottom: 1rem;
   }
@@ -10019,7 +10019,7 @@ html.w-mod-js [data-ix="new-nav-drop-list"] {
     padding-bottom: 3.3rem;
     font-size: 3rem;
   }
-  .inside-content-beckground.no-columns .main-content-wrap.nested-content-wrap {
+  .inside-content-background.no-columns .main-content-wrap.nested-content-wrap {
     padding-right: 1rem;
     padding-left: 1rem;
   }

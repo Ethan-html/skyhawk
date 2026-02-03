@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
   <head>
 
     <title>Skyhawk Photo Gallery</title>
@@ -13,27 +13,27 @@
     <meta name="googlebot" content="index,follow">
     <meta name="msnbot" content="index,follow">
 
-    <link rel="canonical" href="https://skyhawk-cap.org/">
+    <link rel="canonical" href="https://skyhawk-cap.org/photos">
 
     <!-- Social Sharing (OG + Twitter) -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Home | Skyhawk Composite Squadron">
+    <meta property="og:title" content="Photo Gallery | Skyhawk Composite Squadron">
     <meta property="og:description" content="Skyhawk Composite Squadron 47 of the Civil Air Patrol transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota.">
     <meta property="og:image" content="https://skyhawk-cap.org/assets/images/webclip.png">
-    <meta property="og:url" content="https://skyhawk-cap.org/">
+    <meta property="og:url" content="https://skyhawk-cap.org/photos">
     <meta property="og:locale" content="en_US">
     <meta property="article:author" content="https://www.facebook.com/capnhq/">
 
     <meta property="twitter:card" content="summary">
-    <meta property="twitter:title" content="Home | Skyhawk Composite Squadron">
+    <meta property="twitter:title" content="Photo Gallery | Skyhawk Composite Squadron">
     <meta property="twitter:description" content="Skyhawk Composite Squadron 47 of the Civil Air Patrol transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota.">
     <meta property="twitter:image" content="https://skyhawk-cap.org/assets/images/webclip.png">
 
     <!-- Favicon & App Icons -->
     <link rel="apple-touch-icon" href="/assets/images/webclip.png">
     <link rel="manifest" href="/assets/manifest.json">
-    <link rel="icon" href="/media/websites/skyhawks_logo_CAP_transparent.png">
-    <link rel="shortcut icon" href="/media/websites/skyhawks_logo_CAP_transparent.png" type="image/png">
+    <link rel="icon" href="/media/website/skyhawks_logo_CAP_transparent.png">
+    <link rel="shortcut icon" href="/media/website/skyhawks_logo_CAP_transparent.png" type="image/png">
 
 
     <style>
@@ -74,7 +74,7 @@
         height: 160px;
         border-radius: 8px;
         cursor: pointer;
-        background: #222 url('assets/images/noimg.png') center/cover no-repeat;
+        background: #222 url('/assets/images/noimg.png') center/cover no-repeat;
         /*transition: transform 0.2s, opacity 0.3s, background-image 0.3s;*/
       }
       /* Lightbox overlay */
@@ -224,11 +224,6 @@
       let BRANCH = "main"
 
       async function fetchFolders(path = "") {
-        const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`);
-        const items = await res.json();
-        return items.filter(i => i.type === "dir");
-      }
-      async function fetchFolders(path = "") {
         const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}?ref=${BRANCH}`;
         try {
           const res = await fetch(url);
@@ -246,9 +241,19 @@
 
 
       async function fetchImages(path) {
-        const res = await fetch(`https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}`);
-        const items = await res.json();
-        return items.filter(i => i.type === "file" && i.name.match(/\.(jpg|jpeg|png|webp)$/i));
+        const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}?ref=${BRANCH}`;
+        try {
+          const res = await fetch(url);
+          const items = await res.json();
+          if (!Array.isArray(items)) {
+            console.error("GitHub API did not return an array:", items);
+            return [];
+          }
+          return items.filter(i => i.type === "file" && i.name.match(/\.(jpg|jpeg|png|webp)$/i));
+        } catch (err) {
+          console.error("Failed to fetch images:", err);
+          return [];
+        }
       }
       photoTypeSelect.onchange = async () => {
         resetGallery();
