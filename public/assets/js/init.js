@@ -15,6 +15,7 @@ import { initSlideshow } from "/assets/js/slideshow.js";
 import { initHeaderFooter } from "/assets/js/header-footer.js";
 import { loadPage, renderPage } from "/assets/js/load-page.js";
 import { loadMemberPage, renderMemberPage } from "/assets/js/load-member-page.js";
+import { initLogin } from "/assets/js/login.js";
 
 // ==============================
 // Firebase config
@@ -169,6 +170,11 @@ const pageConfigs = [
     modules: [initHeaderFooter],
     requiresAuth: true,
     logout: true
+  },
+  {
+    match: path => path.startsWith("/login"),
+    modules: [initLogin],
+    requiresAuth: false
   },
   {
     match: () => true, // fallback 404 or unknown pages

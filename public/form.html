@@ -2,7 +2,6 @@
 <html lang="en">
   <head>
 
-
     <title>Cadet Calldown Form</title>
     <link rel="icon" type="image/png" href="/media/website/skyhawks_logo_CAP_transparent.ico">
     <meta name="description" content="Skyhawk Composite Squadron 47 of the Civil Air Patrol transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota.">
@@ -201,339 +200,326 @@
         background: #f9f9f9;
       }
       .form-nav {
-		  display: flex;
-		  justify-content: space-between;
-		  align-items: center;
-		  margin-top: 20px;
-		  gap: 10px;
-		}
+  		  display: flex;
+  		  justify-content: space-between;
+  		  align-items: center;
+  		  margin-top: 20px;
+  		  gap: 10px;
+  		}
 
-		.form-nav .right {
-		  margin-left: auto;
-		}
-		.error-box {
-		  background: #fdecea;
-		  color: #b00020;
-		  border: 1px solid #f5c2c7;
-		  padding: 12px 14px;
-		  border-radius: 8px;
-		  margin-bottom: 20px;
-		  font-size: 0.95rem;
-		}
+  		.form-nav .right {
+  		  margin-left: auto;
+  		}
+  		.error-box {
+  		  background: #fdecea;
+  		  color: #b00020;
+  		  border: 1px solid #f5c2c7;
+  		  padding: 12px 14px;
+  		  border-radius: 8px;
+  		  margin-bottom: 20px;
+  		  font-size: 0.95rem;
+  		}
 
-		.field-error {
-		  border-color: #b00020 !important;
-		  background: #fff5f5;
-		}
-    html.iframed,
-    html.iframed body {
-      background: transparent !important;
-    }
+  		.field-error {
+  		  border-color: #b00020 !important;
+  		  background: #fff5f5;
+  		}
+      html.iframed,
+      html.iframed body {
+        background: transparent !important;
+      }
 
-    html.iframed form {
-      background: transparent !important;  /* keep the form see-through */
-      box-shadow: none;                    /* remove shadow if you want */
-      border: 2px solid black;             /* add a black border */
-      border-radius: 12px;                 /* optional: keep rounded corners */
-      padding: 30px 35px;                  /* keep padding inside the form */
-    }
-
-
-
-
-
+      html.iframed form {
+        background: transparent !important;  /* keep the form see-through */
+        box-shadow: none;                    /* remove shadow if you want */
+        border: 2px solid black;             /* add a black border */
+        border-radius: 12px;                 /* optional: keep rounded corners */
+        padding: 30px 35px;                  /* keep padding inside the form */
+      }
     </style>
   </head>
   <body>
-    <form id="cadetForm">
-	  <div id="formContainer"></div>
-	</form>
-
+    <form id="cadetForm"><div id="formContainer"></div></form>
     <script>
-    if (window.self !== window.top) {
-      document.documentElement.classList.add("iframed");
-    }
+      if (window.self !== window.top) {
+        document.documentElement.classList.add("iframed");
+      }
 
       const form = document.getElementById("cadetForm");
-let formConfig = null;
-let currentStep = 1;
-const STORAGE_KEY = "cadetFormData";
-const COMPLETED_KEY = "cadetFormCompleted";
+      let formConfig = null;
+      let currentStep = 1;
+      const STORAGE_KEY = "cadetFormData";
+      const COMPLETED_KEY = "cadetFormCompleted";
 
-if (localStorage.getItem(COMPLETED_KEY) === "true") {
-  localStorage.removeItem(STORAGE_KEY);
-  localStorage.removeItem(COMPLETED_KEY);
-}
+      if (localStorage.getItem(COMPLETED_KEY) === "true") {
+        localStorage.removeItem(STORAGE_KEY);
+        localStorage.removeItem(COMPLETED_KEY);
+      }
 
-/* ---------- Load JSON ---------- */
-fetch("assets/json/form.json")
-  .then(res => res.json())
-  .then(config => {
-    formConfig = config;
-    renderForm();
-    loadFormData();
-  })
-  .catch(err => console.error("Failed to load form.json", err));
+      /* ---------- Load JSON ---------- */
+      fetch("assets/json/form.json")
+        .then(res => res.json())
+        .then(config => {
+          formConfig = config;
+          renderForm();
+          loadFormData();
+        })
+        .catch(err => console.error("Failed to load form.json", err));
 
-/* ---------- Render Form ---------- */
-function renderForm() {
-  form.innerHTML = "";
+      /* ---------- Render Form ---------- */
+      function renderForm() {
+        form.innerHTML = "";
 
-  formConfig.sections.forEach(section => {
-    const sec = document.createElement("section");
-    sec.dataset.step = section.step;
-    if (section.step === 1) sec.classList.add("active");
+        formConfig.sections.forEach(section => {
+          const sec = document.createElement("section");
+          sec.dataset.step = section.step;
+          if (section.step === 1) sec.classList.add("active");
 
-    sec.innerHTML = `
-	  <h2>${section.title}</h2>
-	  <div class="error-box" style="display:none"></div>
-	`;
-
-
-    section.questions.forEach(q => {
-      sec.appendChild(renderQuestion(q));
-    });
-
-    const nav = document.createElement("div");
-	nav.className = "form-nav";
+          sec.innerHTML = `
+      	  <h2>${section.title}</h2>
+      	  <div class="error-box" style="display:none"></div>
+      	`;
 
 
-	if (section.step > 1) {
-	  const back = document.createElement("button");
-	  back.type = "button";
-	  back.textContent = "Back";
-	  back.onclick = prevStep;
-	  nav.appendChild(back);
-	}
+          section.questions.forEach(q => {
+            sec.appendChild(renderQuestion(q));
+          });
 
-	if (section.step < formConfig.sections.length) {
-	  const next = document.createElement("button");
-	  next.type = "button";
-	  next.textContent = "Next";
-	  next.className = "right";
-	  next.onclick = nextStep;
-	  nav.appendChild(next);
-	} else {
-	  const submit = document.createElement("button");
-	  submit.type = "submit";
-	  submit.textContent = "Submit";
-	  submit.className = "right";
-	  nav.appendChild(submit);
-	}
+          const nav = document.createElement("div");
+      	nav.className = "form-nav";
 
 
-    sec.appendChild(nav);
-    form.appendChild(sec);
-  });
+      	if (section.step > 1) {
+      	  const back = document.createElement("button");
+      	  back.type = "button";
+      	  back.textContent = "Back";
+      	  back.onclick = prevStep;
+      	  nav.appendChild(back);
+      	}
 
-  // confirmation section
-  const done = document.createElement("section");
-  done.dataset.step = "4";
-  done.innerHTML = `
-    <h2>Submission Complete</h2>
-    <p id="confirmationMessage"></p>
-  `;
-  form.appendChild(done);
-}
+      	if (section.step < formConfig.sections.length) {
+      	  const next = document.createElement("button");
+      	  next.type = "button";
+      	  next.textContent = "Next";
+      	  next.className = "right";
+      	  next.onclick = nextStep;
+      	  nav.appendChild(next);
+      	} else {
+      	  const submit = document.createElement("button");
+      	  submit.type = "submit";
+      	  submit.textContent = "Submit";
+      	  submit.className = "right";
+      	  nav.appendChild(submit);
+      	}
 
-/* ---------- Question Renderer ---------- */
-function renderQuestion(q) {
-  const wrap = document.createElement("div");
 
-  const label = document.createElement("label");
-  label.textContent = q.label;
-  wrap.appendChild(label);
+          sec.appendChild(nav);
+          form.appendChild(sec);
+        });
 
-  let el;
-
-  switch (q.type) {
-    case "text":
-      el = document.createElement("input");
-      el.type = "text";
-      break;
-
-    case "textarea":
-      el = document.createElement("textarea");
-      break;
-
-    case "select":
-      el = document.createElement("select");
-      el.innerHTML = `<option value="">Pick one…</option>`;
-      q.options.forEach(opt => {
-        el.innerHTML += `<option value="${opt}">${opt}</option>`;
-      });
-      break;
-
-    case "radio":
-      el = document.createElement("div");
-      el.className = "radio-group";
-
-      q.options.forEach(opt => {
-        const id = `${q.name}_${opt.replace(/\W/g, "")}`;
-        el.innerHTML += `
-          <input type="radio" id="${id}" name="${q.name}" value="${opt}">
-          <label for="${id}">${opt}</label>
+        // confirmation section
+        const done = document.createElement("section");
+        done.dataset.step = "4";
+        done.innerHTML = `
+          <h2>Submission Complete</h2>
+          <p id="confirmationMessage"></p>
         `;
+        form.appendChild(done);
+      }
+
+      function renderQuestion(q) {
+        const wrap = document.createElement("div");
+
+        const label = document.createElement("label");
+        label.textContent = q.label;
+        wrap.appendChild(label);
+
+        let el;
+
+        switch (q.type) {
+          case "text":
+            el = document.createElement("input");
+            el.type = "text";
+            break;
+
+          case "textarea":
+            el = document.createElement("textarea");
+            break;
+
+          case "select":
+            el = document.createElement("select");
+            el.innerHTML = `<option value="">Pick one…</option>`;
+            q.options.forEach(opt => {
+              el.innerHTML += `<option value="${opt}">${opt}</option>`;
+            });
+            break;
+
+          case "radio":
+            el = document.createElement("div");
+            el.className = "radio-group";
+
+            q.options.forEach(opt => {
+              const id = `${q.name}_${opt.replace(/\W/g, "")}`;
+              el.innerHTML += `
+                <input type="radio" id="${id}" name="${q.name}" value="${opt}">
+                <label for="${id}">${opt}</label>
+              `;
+            });
+            break;
+        }
+
+        if (el.tagName !== "DIV") {
+          el.name = q.name;
+          if (q.required) el.required = true;
+        }
+
+        wrap.appendChild(el);
+        return wrap;
+      }
+      /* ---------- Navigation ---------- */
+      function showStep(step) {
+        document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
+        document.querySelector(`section[data-step="${step}"]`)?.classList.add("active");
+        currentStep = step;
+        saveFormData();
+      }
+
+      function getAttend() {
+        return form.querySelector('input[name="attend"]:checked')?.value;
+      }
+
+      function nextStep() {
+        if (!validateCurrentSection()) return;
+
+        // Step 1 logic
+        if (currentStep === 1) {
+          if (getAttend() === "No") {
+            showStep(2);
+          } else {
+            showStep(3); // ✅ SKIP section 2
+          }
+          return;
+        }
+
+        showStep(currentStep + 1);
+      }
+
+      function prevStep() {
+        // Coming back from step 3
+        if (currentStep === 3 && getAttend() === "Yes") {
+          showStep(1); // skip section 2 on the way back
+          return;
+        }
+
+        showStep(currentStep - 1);
+      }
+
+      function validateCurrentSection() {
+        const section = document.querySelector(`section[data-step="${currentStep}"]`);
+        const errorBox = section.querySelector(".error-box");
+        let valid = true;
+
+        errorBox.style.display = "none";
+        errorBox.textContent = "";
+
+        // clear old field errors
+        section.querySelectorAll(".field-error").forEach(el =>
+          el.classList.remove("field-error")
+        );
+
+        // validate inputs
+        const requiredFields = section.querySelectorAll(
+          "input[required], textarea[required], select[required]"
+        );
+
+        requiredFields.forEach(field => {
+          if (!field.value.trim()) {
+            field.classList.add("field-error");
+            valid = false;
+          }
+        });
+
+        // validate radio groups
+        section.querySelectorAll(".radio-group").forEach(group => {
+          const name = group.querySelector("input")?.name;
+          if (!name) return;
+
+          if (!section.querySelector(`input[name="${name}"]:checked`)) {
+            group.querySelectorAll("label").forEach(l =>
+              l.classList.add("field-error")
+            );
+            valid = false;
+          }
+        });
+
+        if (!valid) {
+          errorBox.textContent = "Please complete all required fields before continuing.";
+          errorBox.style.display = "block";
+        }
+
+        return valid;
+      }
+
+      /* ---------- Storage ---------- */
+      function saveFormData() {
+        if (localStorage.getItem(COMPLETED_KEY) === "true") return;
+
+        const data = {};
+        new FormData(form).forEach((v, k) => (data[k] = v));
+        data._step = currentStep;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      }
+
+
+      function loadFormData() {
+        const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+
+        Object.entries(saved).forEach(([k, v]) => {
+          const el = form.querySelector(`[name="${k}"]`);
+          if (!el) return;
+
+          if (el.type === "radio") {
+            form.querySelector(`[name="${k}"][value="${v}"]`)?.click();
+          } else {
+            el.value = v;
+          }
+        });
+
+        if (saved._step) showStep(saved._step);
+      }
+
+      form.addEventListener("input", saveFormData);
+
+      /* ---------- Submit ---------- */
+      form.addEventListener("submit", e => {
+        e.preventDefault();
+
+        const params = new URLSearchParams();
+        localStorage.removeItem("cadetFormData");
+        formConfig.sections.forEach(section => {
+          section.questions.forEach(q => {
+            const val = form[q.name]?.value;
+            if (val) params.append(`entry.${q.googleId}`, val);
+          });
+        });
+
+        fetch(`${formConfig.googleFormUrl}?${params}`, {
+      	  method: "GET",
+      	  mode: "no-cors"
+      	}).then(() => {
+      	  document.getElementById("confirmationMessage").textContent =
+      	    getAttend() === "Yes"
+      	      ? formConfig.confirmationMessages.attendYes
+      	      : formConfig.confirmationMessages.attendNo;
+
+      	  localStorage.setItem(COMPLETED_KEY, "true");
+      	  localStorage.removeItem(STORAGE_KEY);
+
+      	  form.reset();
+      	  showStep(4);
+      	});
+
       });
-      break;
-  }
-
-  if (el.tagName !== "DIV") {
-    el.name = q.name;
-    if (q.required) el.required = true;
-  }
-
-  wrap.appendChild(el);
-  return wrap;
-}
-
-/* ---------- Navigation ---------- */
-function showStep(step) {
-  document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
-  document.querySelector(`section[data-step="${step}"]`)?.classList.add("active");
-  currentStep = step;
-  saveFormData();
-}
-
-function getAttend() {
-  return form.querySelector('input[name="attend"]:checked')?.value;
-}
-
-function nextStep() {
-  if (!validateCurrentSection()) return;
-
-  // Step 1 logic
-  if (currentStep === 1) {
-    if (getAttend() === "No") {
-      showStep(2);
-    } else {
-      showStep(3); // ✅ SKIP section 2
-    }
-    return;
-  }
-
-  showStep(currentStep + 1);
-}
-
-
-
-function prevStep() {
-  // Coming back from step 3
-  if (currentStep === 3 && getAttend() === "Yes") {
-    showStep(1); // skip section 2 on the way back
-    return;
-  }
-
-  showStep(currentStep - 1);
-}
-
-function validateCurrentSection() {
-  const section = document.querySelector(`section[data-step="${currentStep}"]`);
-  const errorBox = section.querySelector(".error-box");
-  let valid = true;
-
-  errorBox.style.display = "none";
-  errorBox.textContent = "";
-
-  // clear old field errors
-  section.querySelectorAll(".field-error").forEach(el =>
-    el.classList.remove("field-error")
-  );
-
-  // validate inputs
-  const requiredFields = section.querySelectorAll(
-    "input[required], textarea[required], select[required]"
-  );
-
-  requiredFields.forEach(field => {
-    if (!field.value.trim()) {
-      field.classList.add("field-error");
-      valid = false;
-    }
-  });
-
-  // validate radio groups
-  section.querySelectorAll(".radio-group").forEach(group => {
-    const name = group.querySelector("input")?.name;
-    if (!name) return;
-
-    if (!section.querySelector(`input[name="${name}"]:checked`)) {
-      group.querySelectorAll("label").forEach(l =>
-        l.classList.add("field-error")
-      );
-      valid = false;
-    }
-  });
-
-  if (!valid) {
-    errorBox.textContent = "Please complete all required fields before continuing.";
-    errorBox.style.display = "block";
-  }
-
-  return valid;
-}
-
-/* ---------- Storage ---------- */
-function saveFormData() {
-  if (localStorage.getItem(COMPLETED_KEY) === "true") return;
-
-  const data = {};
-  new FormData(form).forEach((v, k) => (data[k] = v));
-  data._step = currentStep;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-}
-
-
-function loadFormData() {
-  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-
-  Object.entries(saved).forEach(([k, v]) => {
-    const el = form.querySelector(`[name="${k}"]`);
-    if (!el) return;
-
-    if (el.type === "radio") {
-      form.querySelector(`[name="${k}"][value="${v}"]`)?.click();
-    } else {
-      el.value = v;
-    }
-  });
-
-  if (saved._step) showStep(saved._step);
-}
-
-form.addEventListener("input", saveFormData);
-
-/* ---------- Submit ---------- */
-form.addEventListener("submit", e => {
-  e.preventDefault();
-
-  const params = new URLSearchParams();
-  localStorage.removeItem("cadetFormData");
-  formConfig.sections.forEach(section => {
-    section.questions.forEach(q => {
-      const val = form[q.name]?.value;
-      if (val) params.append(`entry.${q.googleId}`, val);
-    });
-  });
-
-  fetch(`${formConfig.googleFormUrl}?${params}`, {
-	  method: "GET",
-	  mode: "no-cors"
-	}).then(() => {
-	  document.getElementById("confirmationMessage").textContent =
-	    getAttend() === "Yes"
-	      ? formConfig.confirmationMessages.attendYes
-	      : formConfig.confirmationMessages.attendNo;
-
-	  localStorage.setItem(COMPLETED_KEY, "true");
-	  localStorage.removeItem(STORAGE_KEY);
-
-	  form.reset();
-	  showStep(4);
-	});
-
-});
-
     </script>
   </body>
 </html>

@@ -11968,3 +11968,49 @@ a.no-border {
 .blue-line1 { height: 4px; background:#001489; border: none; }
 .hidden-section { display:none; }
 .login-links { margin-top:12px; }
+
+
+/* ===== Home Page Only Styles ===== */
+
+@media (min-width: 1025px) {
+  .home-page .learn-more-heading {
+    display: none;
+  }
+
+  .home-page .donate-button-container {
+    margin-top: 110px;
+    margin-bottom: 50px;
+  }
+}
+
+.home-page #slideshow-container {
+  aspect-ratio: 1903/520;
+  width: 100%;
+  position: relative;
+}
+
+.home-page .glide__slides {
+  transform: translate3d(0,0,0) !important;
+  width: 100% !important;
+  height: 100%;
+}
+
+.home-page .glide__slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  order: 2;
+  opacity: 0;
+  transition: opacity 1350ms ease-in-out;
+}
+
+.home-page .glide__slide.glide__slide--active {
+  position: relative;
+  order: 1;
+  opacity: 1;
+  z-index: 1;
+}
+
+.home-page #unit-name { min-height: 2rem; }
+.home-page #main-menu li { min-height: 2rem; }
+.home-page #footer { min-height: 200px; }
