@@ -14,10 +14,11 @@ MINOR (3)
 - New features or noticeable improvements
 - No breaking changes
 - Existing functionality continues to work
+- Closes a Issue
 
 PATCH (2)
 - Small fixes and minor improvements
 - Bug fixes, performance tweaks, tiny adjustments
 - No new features, no breaking changes
 */
-window.ASSET_VERSION = "2.0.1";
+window.ASSET_VERSION = "2.1.0";

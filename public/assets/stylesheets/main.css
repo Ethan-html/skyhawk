@@ -6083,6 +6083,7 @@ button[type="submit"].tertiary:hover {
   font-weight: 700;
   text-transform: uppercase;
   clear: both;
+  text-align: center;
 }
 .logo.w--current {
   margin-top: 0.5em;
@@ -12075,4 +12076,19 @@ a.no-border {
     align-items: center;
     justify-content: center;
   }
+}
+
+
+
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
