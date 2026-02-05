@@ -4,10 +4,8 @@
   const STORAGE_KEY = "pigVideoPlayed";
   let keys = [];
 
-  console.log("Devon script loaded");
 
   if (localStorage.getItem(STORAGE_KEY) === "true") {
-    console.log("Devon video already played — blocked");
     return;
   }
 
@@ -16,7 +14,6 @@
     keys = keys.slice(-SECRET.length);
 
     if (keys.join("") === SECRET) {
-      console.log("Devon code detected");
       playVideoOnce();
     }
   });
@@ -46,7 +43,7 @@ video.autoplay = true;
 video.playsInline = true;
 video.style.width = "100%";
 video.style.height = "100%";
-video.style.objectFit = "fill"; // 🔥 stretch to fit screen
+video.style.objectFit = "fill";
 video.style.display = "block";
 video.style.background = "black";
 
