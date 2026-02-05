@@ -8,7 +8,8 @@
     "/assets/easter/bus.js",
     "/assets/easter/base64.js",
     "/assets/easter/cat.js",
-    "/assets/easter/open.js"
+    "/assets/easter/open.js",
+    "/assets/easter/pig.js"
   ];
 
   function loadScript(src) {

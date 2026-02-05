@@ -93,7 +93,7 @@ export function renderPage(pageData) {
   const sideTitle = document.getElementById("sideNavTitleLink");
   const pageTitleEl = document.getElementById("pageTitle");
   const pageContentEl = document.getElementById("pageContent");
-
+  document.title = active.title;
   sideTitle.textContent = pageData.title;
   sideTitle.href = `/page?page=${pageData.id}`;
   sideList.innerHTML = "";

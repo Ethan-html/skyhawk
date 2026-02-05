@@ -44,7 +44,7 @@ export function initHeaderFooter(db) {
   // --------------------
   const renderUnit = (unit) => {
     if (!unit) return;
-    document.title = unit.name;
+    //document.title = unit.name;
     const el = document.getElementById("unit-name");
     if (el) el.textContent = `${unit.name} (${unit.designation})`;
   };
