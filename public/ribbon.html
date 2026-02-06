@@ -1,1 +1,427 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1"> <title>Awards Builder</title> <style> body { font-family: Arial, Helvetica, sans-serif; background: #f4f7fb; margin: 0; padding: 20px; } html, body { max-width: 100%; overflow-x: hidden; } form { max-width: 1400px; margin: auto; } .columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 20px; align-items: start; /* NEW */ padding: 0 12px; box-sizing: border-box; } .award-table { width: 100%; table-layout: fixed; border-collapse: collapse; background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-radius: 10px; overflow: hidden; } .award-table td { padding: 10px 12px; vertical-align: middle; font-size: 14px; } .award-table td:last-child { width: 110px; text-align: center; } .section-header td { background: linear-gradient(90deg, #0078d4, #00b4ff); color: white; font-weight: bold; font-size: 16px; text-align: center; } .award-row:nth-child(even) td { background: #f2f6fa; } .award-row:hover td { background: #e8f4ff; } img { display: block; margin-top: 6px; border-radius: 4px; } select { padding: 4px; border-radius: 6px; border: 1px solid #cbd5e1; max-width: 220px; } .actions { text-align: center; margin-top: 30px; } .actions input { background: linear-gradient(90deg, #0078d4, #00b4ff); color: white; border: none; padding: 12px 26px; font-size: 16px; border-radius: 8px; cursor: pointer; margin: 0 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); } .actions input[type="reset"] { background: linear-gradient(90deg, #6b7280, #9ca3af); } select { width: 100%; max-width: 220px; } td { word-wrap: break-word; } .section-header td { padding: 12px; letter-spacing: 0.5px; } @media (max-width: 600px) { body { padding: 12px; } .columns { grid-template-columns: 1fr; /* stack tables */ padding: 0; } .award-table td { font-size: 13px; padding: 8px; } select { max-width: 100%; } } </style> <script> function popwindow(url) { const w = window.open( url, 'popup', 'height=400,width=600,left=100,top=100,resizable=yes,scrollbars=yes' ); if (w) w.focus(); } </script> </head> <body> <form method="post" action="https://mcchord.org/rack_builder/check_cdt2.asp"> <br> <div class="columns"> <table class="award-table"> <tbody> <tr class="section-header"> <td colspan="2">Air Force Awards</td> </tr> <tr class="award-row"> <td> <span class="award-title">Air Force Organizational Excellence Award</span> <br> <i>(Earned between Oct 2012 and Aug 2016)</i> <br> <img src="https://mcchord.org/images/ribbons/s/afoea.png" width="100" height="30"> </td> <td> <input type="checkbox" value="47001" name="awards">Select </td> </tr> <tr class="section-header"> <td colspan="2">Civil Air Patrol Decorations</td> </tr> <tr class="award-row"> <td> <span class="award-title">Silver Medal of Valor</span> <br> <img src="https://mcchord.org/images/ribbons/s/silver01.png" width="100" height="30"> </td> <td> <select name="awards"> <option value="0">- Select -</option> <option value="38200">Basic Award</option> <option value="38210">2nd Award</option> <option value="38220">3rd Award</option> </select> </td> </tr> <tr class="award-row"> <td> <span class="award-title">Bronze Medal of Valor</span> <br> <img src="https://mcchord.org/images/ribbons/s/bronze01.png" width="100" height="30"> </td> <td> <select name="awards"> <option value="0">- Select -</option> <option value="10500">Basic Award</option> <option value="10600">2nd Award</option> <option value="10700">3rd Award</option> </select> </td> </tr> <tr class="award-row"> <td> <span class="award-title">Distinguished Service Medal</span> <br> <img src="https://mcchord.org/images/ribbons/s/distin01.png" width="100" height="30"> </td> <td> <select name="awards"> <option value="0">- Select -</option> <option value="17700">Basic Award</option> <option value="17800">2nd Award</option> <option value="17900">3rd Award</option> <option value="18000">4th Award</option> <option value="18100">5th Award</option> <option value="18200">6th Award</option> <option value="18300">7th Award</option> <option value="18400">8th Award</option> <option value="18500">9th Award</option> <option value="18510">10th Award</option> <option value="18600">11th Award</option> <option value="18700">12th Award</option> <option value="18800">13th Award</option> <option value="18810">14th Award</option> <option value="18820">15th Award</option> <option value="18900">16th Award</option> <option value="19000">17th Award</option> <option value="19010">18th Award</option> <option value="19020">19th Award</option> <option value="19030">20th Award</option> <option value="19100">21st Award</option> </select> </td> </tr> <tr class="award-row"> <td> <span class="award-title">Exceptional Service Award</span> <br> <img src="https://mcchord.org/images/ribbons/s/except01.png" width="100" height="30"> </td> <td> <select name="awards"> <option value="0">- Select -</option> <option value="21200">Basic Award</option> <option value="21300">2nd Award</option> <option value="21400">3rd Award</option> <option value="21500">4th Award</option> <option value="21600">5th Award</option> <option value="21700">6th Award</option> <option value="21800">7th Award</option> <option value="21900">8th Award</option> <option value="22000">9th Award</option> <option value="22010">10th Award</option> <option value="22100">11th Award</option> <option value="22200">12th Award</option> <option value="22300">13th Award</option> <option value="22310">14th Award</option> <option value="22320">15th Award</option> <option value="22400">16th Award</option> <option value="22500">17th Award</option> <option value="22510">18th Award</option> <option value="22520">19th Award</option> <option value="22530">20th Award</option> <option value="22600">21st Award</option> </select> </td> </tr> <tr class="award-row"> <td> <span class="award-title">Meritorious Service Award</span> <br> <img src="https://mcchord.org/images/ribbons/s/meriti01.png" width="100" height="30"> </td> <td> <select name="awards"> <option value="0">- Select -</option> <option value="28400">Basic Award</option> <option value="28500">2nd Award</option> <option value="28600">3rd Award</option> <option value="28700">4th Award</option> <option value="28800">5th Award</option> <option value="28900">6th Award</option> <option value="29000">7th Award</option> <option value="29100">8th Award</option> <option value="29200">9th Award</option> <option value="29210">10th Award</option> <option value="29300">11th Award</option> <option value="29400">12th Award</option> <option value="29500">13th Award</option> <option value="29510">14th Award</option> <option value="29520">15th Award</option> <option value="29600">16th Award</option> <option value="29700">17th Award</option> <option value="29710">18th Award</option> <option value="29720">19th Award</option> <option value="29730">20th Award</option> <option value="29800">21st Award</option> </select> </td> </tr> <tr class="award-row"> <td> <span class="award-title">Commander’s Commendation Award</span> * <br> <img src="https://mcchord.org/images/ribbons/s/cmdrco01.png" width="100" height="30"> </td> <td> <select name="awards"> <option value="0">- Select -</option> <option value="13700">Basic Award</option> <option value="42001">Basic Award (National Cmdr)</option> <option value="46101">Basic Award (Region Cmdr)</option> <option value="13800">2nd Award</option> <option value="42002">2nd Award (National Cmdr)</option> <option value="46102">2nd Award (Region Cmdr)</option> <option value="46202">2nd Award (Region+Natl)</option> <option value="13900">3rd Award</option> <option value="42003">3rd Award (National Cmdr)</option> <option value="46103">3rd Award (Region Cmdr)</option> <option value="46203">3rd Award (Region+Natl)</option> <option value="14000">4th Award</option> <option value="42004">4th Award (National Cmdr)</option> <option value="46104">4th Award (Region Cmdr)</option> <option value="46204">4th Award (Region+Natl)</option> <option value="14100">5th Award</option> <option value="42005">5th Award (National Cmdr)</option> <option value="46105">5th Award (Region Cmdr)</option> <option value="46205">5th Award (Region+Natl)</option> <option value="14200">6th Award</option> <option value="42006">6th Award (National Cmdr)</option> <option value="46106">6th Award (Region Cmdr)</option> <option value="46206">6th Award (Region+Natl)</option> <option value="14300">7th Award</option> <option value="42007">7th Award (National Cmdr)</option> <option value="46107">7th Award (Region Cmdr)</option> <option value="46207">7th Award (Region+Natl)</option> <option value="14400">8th Award</option> <option value="42008">8th Award (National Cmdr)</option> <option value="46108">8th Award (Region Cmdr)</option> <option value="46208">8th Award (Region+Natl)</option> <option value="14500">9th Award</option> <option value="42009">9th Award (National Cmdr)</option> <option value="46109">9th Award (Region Cmdr)</option> <option value="46209">9th Award (Region+Natl)</option> <option value="14510">10th Award</option> <option value="42010">10th Award (National Cmdr)</option> <option value="46110">10th Award (Region Cmdr)</option> <option value="46210">10th Award (Region+Natl)</option> <option value="14600">11th Award</option> <option value="42011">11th Award (National Cmdr)</option> <option value="46111">11th Award (Region Cmdr)</option> <option value="46211">11th Award (Region+Natl)</option> <option value="14700">12th Award</option> <option value="42012">12th Award (National Cmdr)</option> <option value="46112">12th Award (Region Cmdr)</option> <option value="46212">12th Award (Region+Natl)</option> <option value="14800">13th Award</option> <option value="42013">13th Award (National Cmdr)</option> <option value="46113">13th Award (Region Cmdr)</option> <option value="46213">13th Award (Region+Natl)</option> <option value="14810">14th Award</option> <option value="42014">14th Award (National Cmdr)</option> <option value="46114">14th Award (Region Cmdr)</option> <option value="46214">14th Award (Region+Natl)</option> <option value="14820">15th Award</option> <option value="42015">15th Award (National Cmdr)</option> <option value="46115">15th Award (Region Cmdr)</option> <option value="46215">15th Award (Region+Natl)</option> <option value="14900">16th Award</option> <option value="42016">16th Award (National Cmdr)</option> <option value="46116">16th Award (Region Cmdr)</option> <option value="46216">16th Award (Region+Natl)</option> <option value="15000">17th Award</option> <option value="42017">17th Award (National Cmdr)</option> <option value="46117">17th Award (Region Cmdr)</option> <option value="46217">17th Award (Region+Natl)</option> <option value="15010">18th Award</option> <option value="42018">18th Award (National Cmdr)</option> <option value="46118">18th Award (Region Cmdr)</option> <option value="46218">18th Award (Region+Natl)</option> <option value="15020">19th Award</option> <option value="42019">19th Award (National Cmdr)</option> <option value="46119">19th Award (Region Cmdr)</option> <option value="46219">19th Award (Region+Natl)</option> <option value="15030">20th Award</option> <option value="42020">20th Award (National Cmdr)</option> <option value="46120">20th Award (Region Cmdr)</option> <option value="46220">20th Award (Region+Natl)</option> <option value="15100">21st Award</option> <option value="42021">21st Award (National Cmdr)</option> <option value="46121">21st Award (Region Cmdr)</option> <option value="46221">21st Award (Region+Natl)</option> </select> </td> </tr> <tr class="award-row"> <td> <span class="award-title">CAP Achievement Award</span> <br> <img src="https://mcchord.org/images/ribbons/s/AA01.png" width="100" height="30"> </td> <td> <select name="awards"> <option value="0">- Select -</option> <option value="45010">Basic Award</option> <option value="45020">2nd Award</option> <option value="45030">3rd Award</option> <option value="45040">4th Award</option> <option value="45050">5th Award</option> <option value="45060">6th Award</option> <option value="45070">7th Award</option> <option value="45080">8th Award</option> <option value="45090">9th Award</option> <option value="45100">10th Award</option> <option value="45110">11th Award</option> <option value="45120">12th Award</option> <option value="45130">13th Award</option> <option value="45140">14th Award</option> <option value="45150">15th Award</option> <option value="45160">16th Award</option> <option value="45170">17th Award</option> <option value="45180">18th Award</option> <option value="45190">19th Award</option> <option value="45200">20th Award</option> <option value="45210">21st Award</option> </select> </td> </tr> <tr class="award-row"> <td> <span class="award-title">Lifesaving Award</span> <br> <img src="https://mcchord.org/images/ribbons/s/lifesa01.png" width="100" height="30"> </td> <td> <select name="awards"> <option value="0">- Select -</option> <option value="27901">Basic Award</option> <option value="28001">Basic with Star</option> <option value="27902">2nd Award</option> <option value="28002">2nd with Star</option> <option value="27903">3rd Award</option> <option value="28003">3rd with Star</option> <option value="27904">4th Award</option> <option value="28004">4th with Star</option> <option value="27905">5th Award</option> <option value="28005">5th with Star</option> <option value="27906">6th Award</option> <option value="28006">6th with Star</option> <option value="27907">7th Award</option> <option value="28007">7th with Star</option> <option value="27908">8th Award</option> <option value="28008">8th with Star</option> <option value="27909">9th Award</option> <option value="28009">9th with Star</option> <option value="27910">10th Award</option> <option value="28010">10th with Star</option> <option value="27911">11th Award</option> <option value="28011">11th with Star</option> <option value="27912">12th Award</option> <option value="28012">12th with Star</option> <option value="27913">13th Award</option> <option value="28013">13th with Star</option> <option value="27914">14th Award</option> <option value="28014">14th with Star</option> <option value="27915">15th Award</option> <option value="28015">15th with Star</option> <option value="27916">16th Award</option> <option value="28016">16th with Star</option> <option value="27917">17th Award</option> <option value="28017">17th with Star</option> <option value="27918">18th Award</option> <option value="28018">18th with Star</option> <option value="27919">19th Award</option> <option value="28019">19th with Star</option> <option value="27920">20th Award</option> <option value="28020">20th with Star</option> <option value="27921">21st Award</option> <option value="28021">21st with Star</option> </select> </td> </tr> <tr class="award-row"> <td> <span class="award-title">National Commander’s Unit Citation</span> <br> <img src="https://mcchord.org/images/ribbons/s/unitci-nat01.png" width="100" height="30"> </td> <td> <select name="awards"> <option value="0">- Select -</option> <option value="41010">Basic Award</option> <option value="41020">2nd Award</option> <option value="41030">3rd Award</option> <option value="41040">4th Award</option> <option value="41050">5th Award</option> <option value="41060">6th Award</option> <option value="41070">7th Award</option> <option value="41080">8th Award</option> <option value="41090">9th Award</option> <option value="41100">10th Award</option> <option value="41110">11th Award</option> <option value="41120">12th Award</option> <option value="41130">13th Award</option> <option value="41140">14th Award</option> <option value="41150">15th Award</option> <option value="41160">16th Award</option> <option value="41170">17th Award</option> <option value="41180">18th Award</option> <option value="41190">19th Award</option> <option value="41200">20th Award</option> <option value="41210">21st Award</option> </select> </td> </tr> <tr class="award-row"> <td> <span class="award-title">Unit Citation Award</span> <br> <img src="https://mcchord.org/images/ribbons/s/unitci01.png" width="100" height="30"> </td> <td> <select name="awards"> <option value="0">- Select -</option> <option value="38500">Basic Award</option> <option value="38600">2nd Award</option> <option value="38700">3rd Award</option> <option value="38800">4th Award</option> <option value="38900">5th Award</option> <option value="39000">6th Award</option> <option value="39100">7th Award</option> <option value="39200">8th Award</option> <option value="39300">9th Award</option> <option value="39310">10th Award</option> <option value="39400">11th Award</option> <option value="39500">12th Award</option> <option value="39600">13th Award</option> <option value="39610">14th Award</option> <option value="39620">15th Award</option> <option value="39700">16th Award</option> <option value="39800">17th Award</option> <option value="39810">18th Award</option> <option value="39820">19th Award</option> <option value="39830">20th Award</option> <option value="39900">21st Award</option> </select> </td> </tr> </tbody> </table> <table class="award-table"> <tbody> <tr class="section-header"> <td colspan="2">Cadet Program Awards/Achievements</td> </tr> <tr class="award-row"> <td> Gen Carl A. Spaatz Award <br> <img src="https://mcchord.org/images/ribbons/s/spaatz.png" width="100" height="30"> </td> <td> <label> <input type="checkbox" value="38300" name="awards"> Select </label> </td> </tr> <tr class="award-row"> <td> Ira C. Eaker Award <br> <img src="https://mcchord.org/images/ribbons/s/eaker.png" width="100" height="30"> </td> <td> <input type="checkbox" value="19300" name="awards">Select </td> </tr> <tr class="award-row"> <td> Amelia Earhart Award <br> <img src="https://mcchord.org/images/ribbons/s/earhar.png" width="100" height="30"> </td> <td> <input type="checkbox" value="19500" name="awards">Select </td> </tr> <tr class="award-row"> <td> Gen Billy Mitchell Award <br> <img src="https://mcchord.org/images/ribbons/s/mitchel.png" width="100" height="30"> </td> <td> <input type="checkbox" value="29900" name="awards">Basic Award <br> <input type="checkbox" value="30000" name="awards">COS Star <br> </td> </tr> <tr class="award-row"> <td> Neil Armstrong Achievement <br> <img src="https://mcchord.org/images/ribbons/s/armstr.png" width="100" height="30"> </td> <td> <input type="checkbox" value="10300" name="awards">Basic Award <br> <input type="checkbox" value="50107" name="awards">Honor Star </td> </tr> <tr class="award-row"> <td> Dr. Robert H. Goddard Achievement <br> <img src="https://mcchord.org/images/ribbons/s/goddar.png" width="100" height="30"> </td> <td> <input type="checkbox" value="25200" name="awards">Basic Award <br> <input type="checkbox" value="25300" name="awards">Rocketry or Honor <br> <input type="checkbox" value="50106" name="awards">Rocketry and Honor </td> </tr> <tr class="award-row"> <td> Gen Jimmy F. Doolittle Achievement <br> <img src="https://mcchord.org/images/ribbons/s/doolit.png" width="100" height="30"> </td> <td> <input type="checkbox" value="19200" name="awards">Basic Award <br> <input type="checkbox" value="50105" name="awards">Honor Star </td> </tr> <tr class="award-row"> <td> Charles A. Lindbergh Achievement <br> <img src="https://mcchord.org/images/ribbons/s/lindbe.png" width="100" height="30"> </td> <td> <input type="checkbox" value="28100" name="awards">Basic Award <br> <input type="checkbox" value="50104" name="awards">Honor Star </td> </tr> <tr class="award-row"> <td> Capt Eddie Rickenbacker Achievement <br> <img src="https://mcchord.org/images/ribbons/s/ricken.png" width="100" height="30"> </td> <td> <input type="checkbox" value="35100" name="awards">Basic Award <br> <input type="checkbox" value="50103" name="awards">Honor Star </td> </tr> <tr class="award-row"> <td> Wright Brothers Award <br> <img src="https://mcchord.org/images/ribbons/s/wright.png" width="100" height="30"> </td> <td> <input type="checkbox" value="40300" name="awards">Select </td> </tr> <tr class="award-row"> <td> Mary Feik Achievement <br> <img src="https://mcchord.org/images/ribbons/s/feik.png" width="100" height="30"> </td> <td> <input type="checkbox" value="22800" name="awards">Basic Award <br> <input type="checkbox" value="50102" name="awards">Honor Star </td> </tr> <tr class="award-row"> <td> Gen Hap Arnold Achievement <br> <img src="https://mcchord.org/images/ribbons/s/arnold.png" width="100" height="30"> </td> <td> <input type="checkbox" value="10400" name="awards">Basic Award <br> <input type="checkbox" value="50101" name="awards">Honor Star </td> </tr> <tr class="award-row"> <td> Gen J.F. Curry Achievement <br> <img src="https://mcchord.org/images/ribbons/s/curry.png" width="100" height="30"> </td> <td> <input type="checkbox" value="17400" name="awards">Basic Award <br> <input type="checkbox" value="50100" name="awards">Honor Star </td> </tr> </tbody> </table> <table class="award-table"> <tbody> <tr class="section-header"> <td colspan="2">Service Awards</td> </tr> <tr class="award-row"> <td> AFA Squadron Cadet of the Year <br> <img src="https://mcchord.org/images/ribbons/s/afa.png" width="100" height="30"> </td> <td> <input type="checkbox" value="10100" name="awards">Select </td> </tr> <tr class="award-row"> <td> AFSA Squadron NCO of the Year <br> <img src="https://mcchord.org/images/ribbons/s/afsa.png" width="100" height="30"> </td> <td> <input type="checkbox" value="10200" name="awards">Select </td> </tr> <tr class="award-row"> <td> VFW Cadet Officer Award <br> <img src="https://mcchord.org/images/ribbons/s/vfwo.png" width="100" height="30"> </td> <td> <input type="checkbox" value="43001" name="awards">Select </td> </tr> <tr class="award-row"> <td> VFW Cadet NCO Award <br> <img src="https://mcchord.org/images/ribbons/s/vfwnco.png" width="100" height="30"> </td> <td> <input type="checkbox" value="44001" name="awards">Select </td> </tr> <tr class="award-row"> <td> CAP Crisis Service Ribbon <br> <i>(Earned between 1 Mar 2020 and 31 Oct 2022)</i> <br> <img src="https://mcchord.org/images/ribbons/s/crisis.png" width="100" height="30"> </td> <td> <input type="checkbox" value="50201" name="awards">Select </td> </tr> <tr class="award-row"> <td> Red Service Ribbon <br> <img src="https://mcchord.org/images/ribbons/s/redser-02yr.png" width="100" height="30"> </td> <td> <select name="awards"> <option value="0">- Select -</option> <option value="33700">2 Years</option> <option value="33800">5 Years</option> </select> </td> </tr> </tr> <tr class="section-header"> <td colspan="2">Activity and Participation Awards</td> </tr> <tr class="award-row"> <td> Search “Find” Ribbon <br> <img src="https://mcchord.org/images/ribbons/s/find01.png" width="100" height="30"> </td> <td> <select name="awards"> <option value="0">- Select -</option> <option value="22900">Basic Award</option> <option value="24400">Basic w/Prop</option> <option value="23000">2nd Award</option> <option value="24500">2nd w/Prop</option> <option value="23100">3rd Award</option> <option value="24600">3rd w/Prop</option> <option value="23200">4th Award</option> <option value="24601">4th w/Prop</option> <option value="23300">5th Award</option> <option value="24602">5th w/Prop</option> <option value="23400">6th Award</option> <option value="24700">6th w/Prop</option> <option value="23500">7th Award</option> <option value="24800">7th w/Prop</option> <option value="23600">8th Award</option> <option value="24801">8th w/Prop</option> <option value="23700">9th Award</option> <option value="24802">9th w/Prop</option> <option value="23710">10th Award</option> <option value="24803">10th w/Prop</option> <option value="23800">11th Award</option> <option value="24899">11th w/Prop</option> <option value="23900">12th Award</option> <option value="24900">12th w/Prop</option> <option value="24000">13th Award</option> <option value="24901">13th w/Prop</option> <option value="24010">14th Award</option> <option value="24902">14th w/Prop</option> <option value="24020">15th Award</option> <option value="24903">15th w/Prop</option> <option value="24100">16th Award</option> <option value="24904">16th w/Prop</option> <option value="24200">17th Award</option> <option value="24905">17th w/Prop</option> <option value="24210">18th Award</option> <option value="24906">18th w/Prop</option> <option value="24220">19th Award</option> <option value="24907">19th w/Prop</option> <option value="24230">20th Award</option> <option value="24908">20th w/Prop</option> <option value="24300">21st Award</option> <option value="24909">21st w/Prop</option> <option value="24910">22nd w/Prop</option> <option value="24911">23rd w/Prop</option> <option value="24912">24th w/Prop</option> <option value="24913">25th w/Prop</option> <option value="24914">26th w/Prop</option> <option value="24915">27th w/Prop</option> <option value="24916">28th w/Prop</option> <option value="24917">29th w/Prop</option> <option value="24919">30th w/Prop</option> <option value="24920">31st w/Prop</option> <option value="24921">32nd w/Prop</option> </select> </td> </tr> <tr class="award-row"> <td> Air Search and Rescue Ribbon <br> <img src="https://mcchord.org/images/ribbons/s/sar01.png" width="100" height="30"> </td> <td> <select name="awards"> <option value="0">- Select -</option> <option value="35200">10 Sorties</option> <option value="36700">10 Sorties (Aircrew)</option> <option value="35300">20 Sorties</option> <option value="36800">20 Sorties (Aircrew)</option> <option value="35400">30 Sorties</option> <option value="36900">30 Sorties (Aircrew)</option> <option value="35500">40 Sorties</option> <option value="36901">40 Sorties (Aircrew)</option> <option value="35600">50 Sorties</option> <option value="36902">50 Sorties (Aircrew)</option> <option value="35700">60 Sorties</option> <option value="37000">60 Sorties (Aircrew)</option> <option value="35800">70 Sorties</option> <option value="37100">70 Sorties (Aircrew)</option> <option value="35900">80 Sorties</option> <option value="37101">80 Sorties (Aircrew)</option> <option value="36000">90 Sorties</option> <option value="37102">90 Sorties (Aircrew)</option> <option value="36010">100 Sorties</option> <option value="37103">100 Sorties (Aircrew)</option> <option value="36100">110 Sorties</option> <option value="37200">110 Sorties (Aircrew)</option> <option value="36200">120 Sorties</option> <option value="37201">120 Sorties (Aircrew)</option> <option value="36300">130 Sorties</option> <option value="37202">130 Sorties (Aircrew)</option> <option value="36310">140 Sorties</option> <option value="37203">140 Sorties (Aircrew)</option> <option value="36320">150 Sorties</option> <option value="37204">150 Sorties (Aircrew)</option> <option value="36400">160 Sorties</option> <option value="37205">160 Sorties (Aircrew)</option> <option value="36500">170 Sorties</option> <option value="37206">170 Sorties (Aircrew)</option> <option value="36510">180 Sorties</option> <option value="37207">180 Sorties (Aircrew)</option> <option value="36520">190 Sorties</option> <option value="37208">190 Sorties (Aircrew)</option> <option value="36530">200 Sorties</option> <option value="37209">200 Sorties (Aircrew)</option> <option value="36600">210 Sorties</option> <option value="37210">210 Sorties (Aircrew)</option> <option value="37211">220 Sorties (Aircrew)</option> <option value="37212">230 Sorties (Aircrew)</option> <option value="37213">240 Sorties (Aircrew)</option> <option value="37214">250 Sorties (Aircrew)</option> <option value="37215">260 Sorties (Aircrew)</option> <option value="37216">270 Sorties (Aircrew)</option> <option value="37217">280 Sorties (Aircrew)</option> <option value="37218">290 Sorties (Aircrew)</option> <option value="37220">300 Sorties (Aircrew)</option> <option value="37221">310 Sorties (Aircrew)</option> <option value="37222">320 Sorties (Aircrew)</option> </select> </td> </tr> <tr class="award-row"> <td> Disaster Relief Ribbon <br> <img src="https://mcchord.org/images/ribbons/s/disast01.png" width="100" height="30"> </td> <td> <select name="awards"> <option value="0">- Select -</option> <option value="17501">Basic Award</option> <option value="17601">Basic w/V-Device</option> <option value="17502">2nd Award</option> <option value="17602">2nd with V-Device</option> <option value="17503">3rd Award</option> <option value="17603">3rd with V-Device</option> <option value="17504">4th Award</option> <option value="17604">4th with V-Device</option> <option value="17505">5th Award</option> <option value="17605">5th with V-Device</option> <option value="17506">6th Award</option> <option value="17606">6th with V-Device</option> <option value="17507">7th Award</option> <option value="17607">7th with V-Device</option> <option value="17508">8th Award</option> <option value="17608">8th with V-Device</option> <option value="17509">9th Award</option> <option value="17609">9th with V-Device</option> <option value="17510">10th Award</option> <option value="17610">10th with V-Device</option> <option value="17511">11th Award</option> <option value="17611">11th with V-Device</option> <option value="17512">12th Award</option> <option value="17612">12th with V-Device</option> <option value="17513">13th Award</option> <option value="17613">13th with V-Device</option> <option value="17514">14th Award</option> <option value="17614">14th with V-Device</option> <option value="17515">15th Award</option> <option value="17615">15th with V-Device</option> <option value="17516">16th Award</option> <option value="17616">16th with V-Device</option> <option value="17517">17th Award</option> <option value="17617">17th with V-Device</option> <option value="17518">18th Award</option> <option value="17618">18th with V-Device</option> <option value="17519">19th Award</option> <option value="17619">19th with V-Device</option> <option value="17520">20th Award</option> <option value="17620">20th with V-Device</option> <option value="17521">21st Award</option> <option value="17621">21st with V-Device</option> </select> </td> </tr> <tr class="award-row"> <td> Homeland Security Ribbon <br> <img src="https://mcchord.org/images/ribbons/s/homeland01.png" width="100" height="30"> </td> <td> <select name="awards"> <option value="0">- Select -</option> <option value="46001">10 Sorties</option> <option value="46002">20 Sorties</option> <option value="46003">30 Sorties</option> <option value="46004">40 Sorties</option> <option value="46005">50 Sorties</option> <option value="46006">60 Sorties</option> <option value="46007">70 Sorties</option> <option value="46008">80 Sorties</option> <option value="46009">90 Sorties</option> <option value="46010">100 Sorties</option> <option value="46011">110 Sorties</option> <option value="46012">120 Sorties</option> <option value="46013">130 Sorties</option> <option value="46014">140 Sorties</option> <option value="46015">150 Sorties</option> <option value="46016">160 Sorties</option> <option value="46017">170 Sorties</option> <option value="46018">180 Sorties</option> <option value="46019">190 Sorties</option> <option value="46020">200 Sorties</option> <option value="46021">210 Sorites</option> </select> </td> </tr> <tr class="award-row"> <td> Community Service Ribbon <br> <img src="https://mcchord.org/images/ribbons/s/commun01.png" width="100" height="30"> </td> <td> <select name="awards"> <option value="0">- Select -</option> <option value="15701">60 Hours</option> <option value="15702">120 Hours</option> <option value="15703">180 Hours</option> <option value="15704">240 Hours</option> <option value="15705">300 Hours</option> <option value="15706">360 Hours</option> <option value="15707">420 Hours</option> <option value="15708">480 Hours</option> <option value="15709">540 Hours</option> <option value="15710">600 Hours</option> <option value="15711">660 Hours</option> <option value="15712">720 Hours</option> <option value="15713">780 Hours</option> <option value="15714">840 Hours</option> <option value="15715">900 Hours</option> <option value="15716">960 Hours</option> <option value="15717">1020 Hours</option> <option value="15718">1080 Hours</option> <option value="15719">1140 Hours</option> <option value="15720">1200 Hours</option> <option value="15721">1260 Hours</option> </select> </td> </tr> <tr class="award-row"> <td> International Air Cadet Exchange <br> <img src="https://mcchord.org/images/ribbons/s/iace01.png" width="100" height="30"> </td> <td> <input type="checkbox" value="25400" name="awards">Select </td> </tr> <tr class="award-row"> <td> National Cadet Competition Ribbon <br> <img src="https://mcchord.org/images/ribbons/s/ncc.png" width="100" height="30"> </td> <td> <select name="awards"> <option value="0">- Select -</option> <option value="30200">Basic Award</option> <option value="30300">Bronze Star</option> <option value="30600">Silver Star</option> <option value="30400">B-B Stars</option> <option value="30700">S-B Stars</option> <option value="30900">S-S Stars</option> <option value="30500">B-B-B Stars</option> <option value="30800">S-B-B Stars</option> <option value="31000">S-S-B Stars</option> <option value="31100">S-S-S Stars</option> <option value="31110">B-B-B-B Stars</option> <option value="31120">S-B-B-B Stars</option> <option value="31130">S-S-B-B Stars</option> <option value="31140">S-S-S-B Stars</option> <option value="31150">S-S-S-S Stars</option> </select> </td> </tr> <tr class="award-row"> <td> National Color Guard Competition Ribbon <br> <img src="https://mcchord.org/images/ribbons/s/ncgc01.png" width="100" height="30"> </td> <td> <select name="awards"> <option value="0">- Select -</option> <option value="31200">Basic Award</option> <option value="31300">Bronze Star</option> <option value="31600">Silver Star</option> <option value="31400">B-B Stars</option> <option value="31700">S-B Stars</option> <option value="31900">S-S Stars</option> <option value="31500">B-B-B Stars</option> <option value="31800">S-B-B Stars</option> <option value="32000">S-S-B Stars</option> <option value="32100">S-S-S Stars</option> <option value="32110">B-B-B-B Stars</option> <option value="32120">S-B-B-B Stars</option> <option value="32130">S-S-B-B Stars</option> <option value="32140">S-S-S-B Stars</option> <option value="32150">S-S-S-S Stars</option> </select> </td> </tr> <tr class="award-row"> <td> Cadet Advisory Council Ribbon <br> <img src="https://mcchord.org/images/ribbons/s/cac.png" width="100" height="30"> </td> <td> <select name="awards"> <option value="0">- Select -</option> <option value="10800">Basic Award</option> <option value="10900">Bronze Star</option> <option value="11100">Silver Star</option> <option value="11000">Gold Star</option> </select> </td> </tr> <tr class="award-row"> <td> Cadet Special Activity Ribbon <br> <img src="https://mcchord.org/images/ribbons/s/ncsa01.png" width="100" height="30"> </td> <td> <select name="awards"> <option value="0">- Select -</option> <option value="32200">Basic Award</option> <option value="32300">2nd Award</option> <option value="32400">3rd Award</option> <option value="32500">4th Award</option> <option value="32600">5th Award</option> <option value="32700">6th Award</option> <option value="32800">7th Award</option> <option value="32900">8th Award</option> <option value="33000">9th Award</option> <option value="33010">10th Award</option> <option value="33100">11th Award</option> <option value="33200">12th Award</option> <option value="33300">13th Award</option> <option value="33310">14th Award</option> <option value="33320">15th Award</option> <option value="33400">16th Award</option> <option value="33500">17th Award</option> <option value="33510">18th Award</option> <option value="33520">19th Award</option> <option value="33530">20th Award</option> <option value="33600">21st Award</option> </select> </td> </tr> <tr class="award-row"> <td> Encampment Ribbon <br> <img src="https://mcchord.org/images/ribbons/s/encamp01.png" width="100" height="30"> </td> <td> <select name="awards"> <option value="0">- Select -</option> <option value="19700">Basic Award</option> <option value="19800">2nd Award</option> <option value="19900">3rd Award</option> <option value="20000">4th Award</option> <option value="20100">5th Award</option> <option value="20200">6th Award</option> <option value="20300">7th Award</option> <option value="20400">8th Award</option> <option value="20500">9th Award</option> <option value="20510">10th Award</option> <option value="20600">11th Award</option> <option value="20700">12th Award</option> <option value="20800">13th Award</option> <option value="20810">14th Award</option> <option value="20820">15th Award</option> <option value="20900">16th Award</option> <option value="21000">17th Award</option> <option value="21010">18th Award</option> <option value="21020">19th Award</option> <option value="21030">20th Award</option> <option value="21100">21st Award</option> </select> </td> </tr> <tr class="award-row"> <td> Cadet Recruiter Ribbon <br> <img src="https://mcchord.org/images/ribbons/s/cadrec01.png" width="100" height="30"> </td> <td> <select name="awards"> <option value="0">- Select -</option> <option value="12800">2 members</option> <option value="12900">4 members</option> <option value="13000">6 members</option> <option value="13100">8 members</option> <option value="13200">10 members</option> <option value="13300">12 members</option> <option value="13400">22 members</option> <option value="13500">32 members</option> <option value="13600">42 members</option> </select> </td></tr> </tbody> </table> <div class="actions"> <input type="submit" value="Generate Graphic"> <input type="reset" value="Reset Form"> </div> </div> <br><br> * Commander’s Commendation Award may be presented by a Wing, Region or National Commander:<br> <ul><li> Members who earn the award as authorized by the Wing Commander will be awarded the basic ribbon. </li><li> A bronze star is added to the ribbon when the award is authorized by the Region Commander. </li><li> A silver star is added to the ribbon when the award is authorized by the National Commander. </li></ul> <br> </form></body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Awards Builder</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f7fb;
+      margin: 0;
+      padding: 20px;
+    }
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+    form {
+      max-width: 1400px;
+      margin: auto;
+    }
+    .columns {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+      gap: 20px;
+      align-items: start;
+      padding: 0 12px;
+      box-sizing: border-box;
+    }
+    .award-table {
+      width: 100%;
+      table-layout: fixed;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .award-table td {
+      padding: 10px 12px;
+      vertical-align: middle;
+      font-size: 14px;
+    }
+    .award-table td:last-child {
+      width: 110px;
+      text-align: center;
+    }
+    .section-header td {
+      background: linear-gradient(90deg, #0078d4, #00b4ff);
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      text-align: center;
+      padding: 12px;
+      letter-spacing: 0.5px;
+    }
+    .award-row:nth-child(even) td {
+      background: #f2f6fa;
+    }
+    .award-row:hover td {
+      background: #e8f4ff;
+    }
+    .award-table img {
+      display: block;
+      margin-top: 6px;
+      border-radius: 4px;
+    }
+    .award-table select {
+      width: 100%;
+      max-width: 220px;
+      padding: 4px;
+      border-radius: 6px;
+      border: 1px solid #cbd5e1;
+    }
+    .award-table td {
+      word-wrap: break-word;
+    }
+    .actions {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .actions input {
+      background: linear-gradient(90deg, #0078d4, #00b4ff);
+      color: white;
+      border: none;
+      padding: 12px 26px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      margin: 0 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+    .actions input[type="reset"] {
+      background: linear-gradient(90deg, #6b7280, #9ca3af);
+    }
+    .award-cell-checkboxes label {
+      display: block;
+      text-align: left;
+      margin: 2px 0;
+    }
+    .footnote {
+      margin-top: 20px;
+      padding: 0 12px;
+      font-size: 14px;
+    }
+    .footnote ul {
+      margin: 8px 0 0 1em;
+    }
+    @media (max-width: 600px) {
+      body { padding: 12px; }
+      .columns {
+        grid-template-columns: 1fr;
+        padding: 0;
+      }
+      .award-table td {
+        font-size: 13px;
+        padding: 8px;
+      }
+      .award-table select { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <form id="ribbon-form" method="post" action="https://mcchord.org/rack_builder/check_cdt2.asp">
+    <div class="columns" id="columns"></div>
+    <div class="actions">
+      <input type="submit" value="Generate Graphic">
+      <input type="reset" value="Reset Form">
+    </div>
+    <div class="footnote">
+      * Commander's Commendation Award may be presented by a Wing, Region or National Commander:
+      <ul>
+        <li>Members who earn the award as authorized by the Wing Commander will be awarded the basic ribbon.</li>
+        <li>A bronze star is added to the ribbon when the award is authorized by the Region Commander.</li>
+        <li>A silver star is added to the ribbon when the award is authorized by the National Commander.</li>
+      </ul>
+    </div>
+  </form>
+
+  <script>
+    const IMG_BASE = 'https://mcchord.org/images/ribbons/s/';
+
+    function popwindow(url) {
+      const w = window.open(url, 'popup', 'height=400,width=600,left=100,top=100,resizable=yes,scrollbars=yes');
+      if (w) w.focus();
+    }
+
+    function opt(v, label) {
+      return { value: String(v), label: label || String(v) };
+    }
+
+    const AWARDS_CONFIG = [
+      {
+        tables: [
+          {
+            title: 'Air Force Awards',
+            awards: [
+              { title: 'Air Force Organizational Excellence Award', note: '(Earned between Oct 2012 and Aug 2016)', img: 'afoea.png', type: 'checkbox', value: '47001', label: 'Select' }
+            ]
+          },
+          {
+            title: 'Civil Air Patrol Decorations',
+            awards: [
+              { title: 'Silver Medal of Valor', img: 'silver01.png', type: 'select', options: [opt(0, '- Select -'), opt(38200, 'Basic Award'), opt(38210, '2nd Award'), opt(38220, '3rd Award')] },
+              { title: 'Bronze Medal of Valor', img: 'bronze01.png', type: 'select', options: [opt(0, '- Select -'), opt(10500, 'Basic Award'), opt(10600, '2nd Award'), opt(10700, '3rd Award')] },
+              { title: 'Distinguished Service Medal', img: 'distin01.png', type: 'select', options: [opt(0, '- Select -'), opt(17700, 'Basic Award'), opt(17800, '2nd Award'), opt(17900, '3rd Award'), opt(18000, '4th Award'), opt(18100, '5th Award'), opt(18200, '6th Award'), opt(18300, '7th Award'), opt(18400, '8th Award'), opt(18500, '9th Award'), opt(18510, '10th Award'), opt(18600, '11th Award'), opt(18700, '12th Award'), opt(18800, '13th Award'), opt(18810, '14th Award'), opt(18820, '15th Award'), opt(18900, '16th Award'), opt(19000, '17th Award'), opt(19010, '18th Award'), opt(19020, '19th Award'), opt(19030, '20th Award'), opt(19100, '21st Award')] },
+              { title: 'Exceptional Service Award', img: 'except01.png', type: 'select', options: [opt(0, '- Select -'), opt(21200, 'Basic Award'), opt(21300, '2nd Award'), opt(21400, '3rd Award'), opt(21500, '4th Award'), opt(21600, '5th Award'), opt(21700, '6th Award'), opt(21800, '7th Award'), opt(21900, '8th Award'), opt(22000, '9th Award'), opt(22010, '10th Award'), opt(22100, '11th Award'), opt(22200, '12th Award'), opt(22300, '13th Award'), opt(22310, '14th Award'), opt(22320, '15th Award'), opt(22400, '16th Award'), opt(22500, '17th Award'), opt(22510, '18th Award'), opt(22520, '19th Award'), opt(22530, '20th Award'), opt(22600, '21st Award')] },
+              { title: 'Meritorious Service Award', img: 'meriti01.png', type: 'select', options: [opt(0, '- Select -'), opt(28400, 'Basic Award'), opt(28500, '2nd Award'), opt(28600, '3rd Award'), opt(28700, '4th Award'), opt(28800, '5th Award'), opt(28900, '6th Award'), opt(29000, '7th Award'), opt(29100, '8th Award'), opt(29200, '9th Award'), opt(29210, '10th Award'), opt(29300, '11th Award'), opt(29400, '12th Award'), opt(29500, '13th Award'), opt(29510, '14th Award'), opt(29520, '15th Award'), opt(29600, '16th Award'), opt(29700, '17th Award'), opt(29710, '18th Award'), opt(29720, '19th Award'), opt(29730, '20th Award'), opt(29800, '21st Award')] },
+              { title: "Commander's Commendation Award *", img: 'cmdrco01.png', type: 'select', options: buildCommendationOptions() },
+              { title: 'CAP Achievement Award', img: 'AA01.png', type: 'select', options: [opt(0, '- Select -'), opt(45010, 'Basic Award'), opt(45020, '2nd Award'), opt(45030, '3rd Award'), opt(45040, '4th Award'), opt(45050, '5th Award'), opt(45060, '6th Award'), opt(45070, '7th Award'), opt(45080, '8th Award'), opt(45090, '9th Award'), opt(45100, '10th Award'), opt(45110, '11th Award'), opt(45120, '12th Award'), opt(45130, '13th Award'), opt(45140, '14th Award'), opt(45150, '15th Award'), opt(45160, '16th Award'), opt(45170, '17th Award'), opt(45180, '18th Award'), opt(45190, '19th Award'), opt(45200, '20th Award'), opt(45210, '21st Award')] },
+              { title: 'Lifesaving Award', img: 'lifesa01.png', type: 'select', options: buildLifesavingOptions() },
+              { title: "National Commander's Unit Citation", img: 'unitci-nat01.png', type: 'select', options: [opt(0, '- Select -'), opt(41010, 'Basic Award'), opt(41020, '2nd Award'), opt(41030, '3rd Award'), opt(41040, '4th Award'), opt(41050, '5th Award'), opt(41060, '6th Award'), opt(41070, '7th Award'), opt(41080, '8th Award'), opt(41090, '9th Award'), opt(41100, '10th Award'), opt(41110, '11th Award'), opt(41120, '12th Award'), opt(41130, '13th Award'), opt(41140, '14th Award'), opt(41150, '15th Award'), opt(41160, '16th Award'), opt(41170, '17th Award'), opt(41180, '18th Award'), opt(41190, '19th Award'), opt(41200, '20th Award'), opt(41210, '21st Award')] },
+              { title: 'Unit Citation Award', img: 'unitci01.png', type: 'select', options: [opt(0, '- Select -'), opt(38500, 'Basic Award'), opt(38600, '2nd Award'), opt(38700, '3rd Award'), opt(38800, '4th Award'), opt(38900, '5th Award'), opt(39000, '6th Award'), opt(39100, '7th Award'), opt(39200, '8th Award'), opt(39300, '9th Award'), opt(39310, '10th Award'), opt(39400, '11th Award'), opt(39500, '12th Award'), opt(39600, '13th Award'), opt(39610, '14th Award'), opt(39620, '15th Award'), opt(39700, '16th Award'), opt(39800, '17th Award'), opt(39810, '18th Award'), opt(39820, '19th Award'), opt(39830, '20th Award'), opt(39900, '21st Award')] }
+            ]
+          }
+        ]
+      },
+      {
+        tables: [
+          {
+            title: 'Cadet Program Awards/Achievements',
+            awards: [
+              { title: 'Gen Carl A. Spaatz Award', img: 'spaatz.png', type: 'checkbox', value: '38300', label: 'Select' },
+              { title: 'Ira C. Eaker Award', img: 'eaker.png', type: 'checkbox', value: '19300', label: 'Select' },
+              { title: 'Amelia Earhart Award', img: 'earhar.png', type: 'checkbox', value: '19500', label: 'Select' },
+              { title: 'Gen Billy Mitchell Award', img: 'mitchel.png', type: 'checkboxes', choices: [opt(29900, 'Basic Award'), opt(30000, 'COS Star')] },
+              { title: 'Neil Armstrong Achievement', img: 'armstr.png', type: 'checkboxes', choices: [opt(10300, 'Basic Award'), opt(50107, 'Honor Star')] },
+              { title: 'Dr. Robert H. Goddard Achievement', img: 'goddar.png', type: 'checkboxes', choices: [opt(25200, 'Basic Award'), opt(25300, 'Rocketry or Honor'), opt(50106, 'Rocketry and Honor')] },
+              { title: 'Gen Jimmy F. Doolittle Achievement', img: 'doolit.png', type: 'checkboxes', choices: [opt(19200, 'Basic Award'), opt(50105, 'Honor Star')] },
+              { title: 'Charles A. Lindbergh Achievement', img: 'lindbe.png', type: 'checkboxes', choices: [opt(28100, 'Basic Award'), opt(50104, 'Honor Star')] },
+              { title: 'Capt Eddie Rickenbacker Achievement', img: 'ricken.png', type: 'checkboxes', choices: [opt(35100, 'Basic Award'), opt(50103, 'Honor Star')] },
+              { title: 'Wright Brothers Award', img: 'wright.png', type: 'checkbox', value: '40300', label: 'Select' },
+              { title: 'Mary Feik Achievement', img: 'feik.png', type: 'checkboxes', choices: [opt(22800, 'Basic Award'), opt(50102, 'Honor Star')] },
+              { title: 'Gen Hap Arnold Achievement', img: 'arnold.png', type: 'checkboxes', choices: [opt(10400, 'Basic Award'), opt(50101, 'Honor Star')] },
+              { title: 'Gen J.F. Curry Achievement', img: 'curry.png', type: 'checkboxes', choices: [opt(17400, 'Basic Award'), opt(50100, 'Honor Star')] }
+            ]
+          }
+        ]
+      },
+      {
+        tables: [
+          {
+            title: 'Service Awards',
+            awards: [
+              { title: 'AFA Squadron Cadet of the Year', img: 'afa.png', type: 'checkbox', value: '10100', label: 'Select' },
+              { title: 'AFSA Squadron NCO of the Year', img: 'afsa.png', type: 'checkbox', value: '10200', label: 'Select' },
+              { title: 'VFW Cadet Officer Award', img: 'vfwo.png', type: 'checkbox', value: '43001', label: 'Select' },
+              { title: 'VFW Cadet NCO Award', img: 'vfwnco.png', type: 'checkbox', value: '44001', label: 'Select' },
+              { title: 'CAP Crisis Service Ribbon', note: '(Earned between 1 Mar 2020 and 31 Oct 2022)', img: 'crisis.png', type: 'checkbox', value: '50201', label: 'Select' },
+              { title: 'Red Service Ribbon', img: 'redser-02yr.png', type: 'select', options: [opt(0, '- Select -'), opt(33700, '2 Years'), opt(33800, '5 Years')] }
+            ]
+          },
+          {
+            title: 'Activity and Participation Awards',
+            awards: [
+              { title: 'Search "Find" Ribbon', img: 'find01.png', type: 'select', options: buildFindOptions() },
+              { title: 'Air Search and Rescue Ribbon', img: 'sar01.png', type: 'select', options: buildSarOptions() },
+              { title: 'Disaster Relief Ribbon', img: 'disast01.png', type: 'select', options: buildDisasterOptions() },
+              { title: 'Homeland Security Ribbon', img: 'homeland01.png', type: 'select', options: buildHomelandOptions() },
+              { title: 'Community Service Ribbon', img: 'commun01.png', type: 'select', options: buildCommunityOptions() },
+              { title: 'International Air Cadet Exchange', img: 'iace01.png', type: 'checkbox', value: '25400', label: 'Select' },
+              { title: 'National Cadet Competition Ribbon', img: 'ncc.png', type: 'select', options: [opt(0, '- Select -'), opt(30200, 'Basic Award'), opt(30300, 'Bronze Star'), opt(30600, 'Silver Star'), opt(30400, 'B-B Stars'), opt(30700, 'S-B Stars'), opt(30900, 'S-S Stars'), opt(30500, 'B-B-B Stars'), opt(30800, 'S-B-B Stars'), opt(31000, 'S-S-B Stars'), opt(31100, 'S-S-S Stars'), opt(31110, 'B-B-B-B Stars'), opt(31120, 'S-B-B-B Stars'), opt(31130, 'S-S-B-B Stars'), opt(31140, 'S-S-S-B Stars'), opt(31150, 'S-S-S-S Stars')] },
+              { title: 'National Color Guard Competition Ribbon', img: 'ncgc01.png', type: 'select', options: [opt(0, '- Select -'), opt(31200, 'Basic Award'), opt(31300, 'Bronze Star'), opt(31600, 'Silver Star'), opt(31400, 'B-B Stars'), opt(31700, 'S-B Stars'), opt(31900, 'S-S Stars'), opt(31500, 'B-B-B Stars'), opt(31800, 'S-B-B Stars'), opt(32000, 'S-S-B Stars'), opt(32100, 'S-S-S Stars'), opt(32110, 'B-B-B-B Stars'), opt(32120, 'S-B-B-B Stars'), opt(32130, 'S-S-B-B Stars'), opt(32140, 'S-S-S-B Stars'), opt(32150, 'S-S-S-S Stars')] },
+              { title: 'Cadet Advisory Council Ribbon', img: 'cac.png', type: 'select', options: [opt(0, '- Select -'), opt(10800, 'Basic Award'), opt(10900, 'Bronze Star'), opt(11100, 'Silver Star'), opt(11000, 'Gold Star')] },
+              { title: 'Cadet Special Activity Ribbon', img: 'ncsa01.png', type: 'select', options: [opt(0, '- Select -'), opt(32200, 'Basic Award'), opt(32300, '2nd Award'), opt(32400, '3rd Award'), opt(32500, '4th Award'), opt(32600, '5th Award'), opt(32700, '6th Award'), opt(32800, '7th Award'), opt(32900, '8th Award'), opt(33000, '9th Award'), opt(33010, '10th Award'), opt(33100, '11th Award'), opt(33200, '12th Award'), opt(33300, '13th Award'), opt(33310, '14th Award'), opt(33320, '15th Award'), opt(33400, '16th Award'), opt(33500, '17th Award'), opt(33510, '18th Award'), opt(33520, '19th Award'), opt(33530, '20th Award'), opt(33600, '21st Award')] },
+              { title: 'Encampment Ribbon', img: 'encamp01.png', type: 'select', options: [opt(0, '- Select -'), opt(19700, 'Basic Award'), opt(19800, '2nd Award'), opt(19900, '3rd Award'), opt(20000, '4th Award'), opt(20100, '5th Award'), opt(20200, '6th Award'), opt(20300, '7th Award'), opt(20400, '8th Award'), opt(20500, '9th Award'), opt(20510, '10th Award'), opt(20600, '11th Award'), opt(20700, '12th Award'), opt(20800, '13th Award'), opt(20810, '14th Award'), opt(20820, '15th Award'), opt(20900, '16th Award'), opt(21000, '17th Award'), opt(21010, '18th Award'), opt(21020, '19th Award'), opt(21030, '20th Award'), opt(21100, '21st Award')] },
+              { title: 'Cadet Recruiter Ribbon', img: 'cadrec01.png', type: 'select', options: [opt(0, '- Select -'), opt(12800, '2 members'), opt(12900, '4 members'), opt(13000, '6 members'), opt(13100, '8 members'), opt(13200, '10 members'), opt(13300, '12 members'), opt(13400, '22 members'), opt(13500, '32 members'), opt(13600, '42 members')] }
+            ]
+          }
+        ]
+      }
+    ];
+
+    function buildCommendationOptions() {
+      const opts = [opt(0, '- Select -')];
+      const bases = [13700, 13800, 13900, 14000, 14100, 14200, 14300, 14400, 14500, 14510, 14600, 14700, 14800, 14810, 14820, 14900, 15000, 15010, 15020, 15030, 15100];
+      const labels = ['Basic Award', '2nd Award', '3rd Award', '4th Award', '5th Award', '6th Award', '7th Award', '8th Award', '9th Award', '10th Award', '11th Award', '12th Award', '13th Award', '14th Award', '15th Award', '16th Award', '17th Award', '18th Award', '19th Award', '20th Award', '21st Award'];
+      const natl = [42001, 42002, 42003, 42004, 42005, 42006, 42007, 42008, 42009, 42010, 42011, 42012, 42013, 42014, 42015, 42016, 42017, 42018, 42019, 42020, 42021];
+      const region = [46101, 46102, 46103, 46104, 46105, 46106, 46107, 46108, 46109, 46110, 46111, 46112, 46113, 46114, 46115, 46116, 46117, 46118, 46119, 46120, 46121];
+      const both = [46202, 46203, 46204, 46205, 46206, 46207, 46208, 46209, 46210, 46211, 46212, 46213, 46214, 46215, 46216, 46217, 46218, 46219, 46220, 46221];
+      for (let i = 0; i < bases.length; i++) {
+        opts.push(opt(bases[i], labels[i]));
+        if (i > 0) opts.push(opt(natl[i], labels[i] + ' (National Cmdr)'));
+        opts.push(opt(region[i], labels[i] + ' (Region Cmdr)'));
+        if (i > 0) opts.push(opt(both[i], labels[i] + ' (Region+Natl)'));
+      }
+      return opts;
+    }
+
+    function buildLifesavingOptions() {
+      const opts = [opt(0, '- Select -')];
+      for (let i = 1; i <= 21; i++) {
+        const b = 27900 + i;
+        const s = 28000 + i;
+        opts.push(opt(b, i === 1 ? 'Basic Award' : `${i}th Award`));
+        opts.push(opt(s, i === 1 ? 'Basic with Star' : `${i}th with Star`));
+      }
+      return opts;
+    }
+
+    function ord(n) {
+      if (n === 1) return 'Basic';
+      if (n === 2) return '2nd';
+      if (n === 3) return '3rd';
+      const m = n % 10, s = (n % 100 === 11 || n % 100 === 12 || n % 100 === 13) ? 'th' : (m === 1 ? 'st' : m === 2 ? 'nd' : m === 3 ? 'rd' : 'th');
+      return n + s;
+    }
+    function buildFindOptions() {
+      const opts = [opt(0, '- Select -')];
+      const bases = [22900, 23000, 23100, 23200, 23300, 23400, 23500, 23600, 23700, 23710, 23800, 23900, 24000, 24010, 24020, 24100, 24200, 24210, 24220, 24230, 24300];
+      const props = [24400, 24500, 24600, 24601, 24602, 24700, 24800, 24801, 24802, 24803, 24899, 24900, 24901, 24902, 24903, 24904, 24905, 24906, 24907, 24908, 24909, 24910, 24911, 24912, 24913, 24914, 24915, 24916, 24917, 24919, 24920, 24921];
+      for (let i = 0; i < 21; i++) opts.push(opt(bases[i], ord(i + 1) + ' Award'));
+      for (let i = 0; i < props.length; i++) opts.push(opt(props[i], ord(i + 1) + ' w/Prop'));
+      return opts;
+    }
+
+    function buildSarOptions() {
+      const sorties = [35200, 35300, 35400, 35500, 35600, 35700, 35800, 35900, 36000, 36010, 36100, 36200, 36300, 36310, 36320, 36400, 36500, 36510, 36520, 36530, 36600];
+      const aircrew = [36700, 36800, 36900, 36901, 36902, 37000, 37100, 37101, 37102, 37103, 37200, 37201, 37202, 37203, 37204, 37205, 37206, 37207, 37208, 37209, 37210, 37211, 37212, 37213, 37214, 37215, 37216, 37217, 37218, 37220, 37221, 37222];
+      const sortieNums = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210];
+      const aircrewNums = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 160, 170, 180, 190, 200, 210, 220, 230, 240, 250, 260, 270, 280, 290, 300, 310, 320];
+      const opts = [opt(0, '- Select -')];
+      sorties.forEach((v, i) => opts.push(opt(v, sortieNums[i] + ' Sorties')));
+      aircrew.forEach((v, i) => opts.push(opt(v, aircrewNums[i] + ' Sorties (Aircrew)')));
+      return opts;
+    }
+
+    function buildDisasterOptions() {
+      const opts = [opt(0, '- Select -')];
+      for (let i = 1; i <= 21; i++) {
+        const label = i === 1 ? 'Basic Award' : i === 2 ? '2nd Award' : i === 3 ? '3rd Award' : i + 'th Award';
+        const vLabel = i === 1 ? 'Basic w/V-Device' : i === 2 ? '2nd with V-Device' : i === 3 ? '3rd with V-Device' : i + 'th with V-Device';
+        opts.push(opt(17500 + i, label));
+        opts.push(opt(17600 + i, vLabel));
+      }
+      return opts;
+    }
+
+    function buildHomelandOptions() {
+      const opts = [opt(0, '- Select -')];
+      for (let i = 1; i <= 21; i++) {
+        opts.push(opt(46000 + i, (10 * i) + ' Sorties'));
+      }
+      opts[opts.length - 1].label = '210 Sorites';
+      return opts;
+    }
+
+    function buildCommunityOptions() {
+      const opts = [opt(0, '- Select -')];
+      for (let i = 1; i <= 21; i++) {
+        opts.push(opt(15700 + i, (60 * i) + ' Hours'));
+      }
+      return opts;
+    }
+
+    function el(tag, attrs, children) {
+      const e = document.createElement(tag);
+      if (attrs) {
+        if (attrs.className) e.className = attrs.className;
+        if (attrs.colSpan) e.colSpan = attrs.colSpan;
+        if (attrs.type) e.type = attrs.type;
+        if (attrs.value !== undefined) e.value = attrs.value;
+        if (attrs.name) e.name = attrs.name;
+        if (attrs.src) e.src = attrs.src;
+        if (attrs.width) e.width = attrs.width;
+        if (attrs.height) e.height = attrs.height;
+        if (attrs.for) e.htmlFor = attrs.for;
+      }
+      if (children) {
+        const list = Array.isArray(children) ? children : [children];
+        list.forEach(c => {
+          if (typeof c === 'string') e.appendChild(document.createTextNode(c));
+          else if (c) e.appendChild(c);
+        });
+      }
+      return e;
+    }
+
+    function buildAwardCell(award) {
+      const frag = document.createDocumentFragment();
+      const title = el('span', { className: 'award-title' });
+      title.textContent = award.title;
+      frag.appendChild(title);
+      if (award.note) {
+        frag.appendChild(el('br'));
+        const i = document.createElement('i');
+        i.textContent = award.note;
+        frag.appendChild(i);
+      }
+      frag.appendChild(el('br'));
+      frag.appendChild(el('img', { src: IMG_BASE + award.img, width: 100, height: 30 }));
+      return frag;
+    }
+
+    function buildControl(award) {
+      const name = 'awards';
+      if (award.type === 'checkbox') {
+        const label = document.createElement('label');
+        const cb = el('input', { type: 'checkbox', value: award.value, name });
+        label.appendChild(cb);
+        label.appendChild(document.createTextNode(' ' + (award.label || 'Select')));
+        return label;
+      }
+      if (award.type === 'checkboxes') {
+        const div = el('div', { className: 'award-cell-checkboxes' });
+        award.choices.forEach(c => {
+          const label = document.createElement('label');
+          const cb = el('input', { type: 'checkbox', value: c.value, name });
+          label.appendChild(cb);
+          label.appendChild(document.createTextNode(' ' + c.label));
+          div.appendChild(label);
+        });
+        return div;
+      }
+      if (award.type === 'select') {
+        const sel = el('select', { name });
+        award.options.forEach(o => {
+          const optEl = document.createElement('option');
+          optEl.value = o.value;
+          optEl.textContent = o.label;
+          sel.appendChild(optEl);
+        });
+        return sel;
+      }
+      return null;
+    }
+
+    function buildTable(tablesGroup) {
+      const table = el('table', { className: 'award-table' });
+      const tbody = document.createElement('tbody');
+      tablesGroup.tables.forEach(t => {
+        const headerRow = document.createElement('tr');
+        headerRow.className = 'section-header';
+        const headerCell = document.createElement('td');
+        headerCell.colSpan = 2;
+        headerCell.textContent = t.title;
+        headerRow.appendChild(headerCell);
+        tbody.appendChild(headerRow);
+        t.awards.forEach(award => {
+          const row = document.createElement('tr');
+          row.className = 'award-row';
+          const cell1 = document.createElement('td');
+          cell1.appendChild(buildAwardCell(award));
+          const cell2 = document.createElement('td');
+          cell2.appendChild(buildControl(award));
+          row.appendChild(cell1);
+          row.appendChild(cell2);
+          tbody.appendChild(row);
+        });
+      });
+      table.appendChild(tbody);
+      return table;
+    }
+
+    function render() {
+      const columns = document.getElementById('columns');
+      columns.innerHTML = '';
+      AWARDS_CONFIG.forEach(group => {
+        const table = buildTable(group);
+        columns.appendChild(table);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', render);
+  </script>
+</body>
+</html>
