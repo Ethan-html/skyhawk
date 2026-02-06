@@ -137,6 +137,54 @@
     </div>
   </form>
 
+  <!-- Bottom-right formal credit badge -->
+<div id="mcchord-credit">
+  <span>© mcchord.org — Redesigned by C/Larson</span>
+  <button id="mcchord-close">&times;</button>
+</div>
+
+<style>
+  #mcchord-credit {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 5px;
+    font-family: Arial, sans-serif;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  }
+
+  #mcchord-credit button {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    padding: 0;
+  }
+
+  #mcchord-credit button:hover {
+    color: #ff5555;
+  }
+</style>
+
+<script>
+  document.getElementById('mcchord-close').addEventListener('click', () => {
+    document.getElementById('mcchord-credit').style.display = 'none';
+  });
+</script>
+
+
+
   <script>
     const IMG_BASE = 'https://mcchord.org/images/ribbons/s/';
 
