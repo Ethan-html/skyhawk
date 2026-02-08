@@ -33,6 +33,18 @@
     <link rel="icon" href="/media/website/skyhawks_logo_CAP_transparent.png">
     <link rel="shortcut icon" href="/media/website/skyhawks_logo_CAP_transparent.png" type="image/png">
 
+    <!-- Preconnect for faster loads -->
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://www.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://securetoken.googleapis.com" crossorigin>
+
+    <!-- Optional: DNS Prefetch as fallback -->
+    <link rel="dns-prefetch" href="https://www.gstatic.com">
+    <link rel="dns-prefetch" href="https://firestore.googleapis.com">
+    <link rel="dns-prefetch" href="https://www.googleapis.com">
+    <link rel="dns-prefetch" href="https://securetoken.googleapis.com">
+
 
       <script src="/assets/js/config.js"></script>
       <script type="module">import("/assets/js/init.js"+(window.ASSET_VERSION?"?v="+window.ASSET_VERSION:"")).then(m=>m.initPage());</script>
