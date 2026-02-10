@@ -20,6 +20,33 @@ import { initHeaderFooter } from "/assets/js/header-footer.js";
       return parts[0] === name ? decodeURIComponent(parts[1]) : r
     }, "");
   }
+
+// ==============================
+// Login Rate Limiting
+// ==============================
+const MAX_ATTEMPTS = 5;              // attempts before lock
+const LOCK_TIME_MS = 3 * 60 * 1000; // 3 minutes
+
+
+function getLoginState() {
+  return JSON.parse(sessionStorage.getItem("loginRateLimit") || "{}");
+}
+
+function setLoginState(state) {
+  sessionStorage.setItem("loginRateLimit", JSON.stringify(state));
+}
+
+function clearLoginState() {
+  sessionStorage.removeItem("loginRateLimit");
+}
+function formatTime(ms) {
+  const totalSeconds = Math.ceil(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return `${minutes}m ${seconds}s`;
+}
+
+
 export async function initLogin(db) {
   const auth = getAuth();
 
@@ -45,7 +72,20 @@ export async function initLogin(db) {
   // ================= LOGIN =================
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+    const state = getLoginState();
+    if (state.lockUntil && Date.now() >= state.lockUntil) {
+      clearLoginState();
+      state = {};
+    }
 
+    if (state.lockUntil && Date.now() < state.lockUntil) {
+      const timeLeft = state.lockUntil - Date.now();
+      errorMsg.style.display = "block";
+      errorMsg.style.color = "red";
+      errorMsg.textContent = `Too many failed attempts. Try again in ${formatTime(timeLeft)}.`;
+      return;
+
+    }
     const email = document.getElementById("username").value.trim();
     const password = document.getElementById("password").value;
 
@@ -55,6 +95,7 @@ export async function initLogin(db) {
 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      clearLoginState(); // reset failures on success
       const user = userCredential.user;
 
       const { creationTime, lastSignInTime } = user.metadata;
@@ -73,15 +114,40 @@ export async function initLogin(db) {
       setTimeout(() => window.location.href = "/member", 800);
 
     } catch (err) {
+      errorMsg.style.display = "block";
       errorMsg.style.color = "red";
 
-      switch (err.code) {
-        case "auth/user-not-found": errorMsg.textContent = "No account found for this email."; break;
-        case "auth/wrong-password": errorMsg.textContent = "Incorrect password."; break;
-        case "auth/invalid-email": errorMsg.textContent = "Invalid email address."; break;
-        default: errorMsg.textContent = "Login failed. Please try again.";
+      // ---------------------------
+      // Update rate limit state
+      // ---------------------------
+      const state = getLoginState();
+      state.failCount = (state.failCount || 0) + 1;
+      state.lastFail = Date.now();
+
+      let rateMessage = "";
+
+      // Lock triggered
+      if (state.failCount >= MAX_ATTEMPTS) {
+        state.failCount = 0;
+        state.lockUntil = Date.now() + LOCK_TIME_MS;
+        rateMessage = ` Too many failed attempts. Login locked for ${formatTime(LOCK_TIME_MS)}.`;
+      } 
+      // Show countdown ONLY when 3 or fewer attempts left
+      else {
+        const remaining = MAX_ATTEMPTS - state.failCount;
+        if (remaining <= 3) {
+          rateMessage = ` ${remaining} attempt${remaining === 1 ? "" : "s"} remaining.`;
+        }
       }
+
+      setLoginState(state);
+
+      // ---------------------------
+      // Combine messages
+      // ---------------------------
+      errorMsg.textContent = "Login failed." + rateMessage;
     }
+
   });
 
   // ================= PASSWORD RESET UI =================
