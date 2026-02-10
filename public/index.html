@@ -3,7 +3,7 @@
   <head>
     <title>Skyhawk Squadron</title>
     <link rel="icon" type="image/png" href="/media/website/skyhawks_logo_CAP_transparent.ico">
-    <meta name="description" content="Skyhawk Composite Squadron 47 builds youth leadership through Civil Air Patrol cadet programs, service, and aerospace education in Delano, MN.">
+    <meta name="description" content="Skyhawk Composite Squadron builds youth leadership through Civil Air Patrol cadet programs, service, and aerospace education in Delano, MN.">
 
     <meta charset="utf-8">
     <meta name="language" content="en-US">
@@ -17,7 +17,7 @@
     <!-- Social Sharing (OG + Twitter) -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Home | Skyhawk Composite Squadron">
-    <meta property="og:description" content="Skyhawk Composite Squadron 47 of the Civil Air Patrol transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota.">
+    <meta property="og:description" content="Skyhawk Composite Squadron transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota.">
     <meta property="og:image" content="https://skyhawk-cap.org/assets/images/webclip.png">
     <meta property="og:url" content="https://skyhawk-cap.org/">
     <meta property="og:locale" content="en_US">
@@ -25,7 +25,7 @@
 
     <meta property="twitter:card" content="summary">
     <meta property="twitter:title" content="Home | Skyhawk Composite Squadron">
-    <meta property="twitter:description" content="Skyhawk Composite Squadron 47 of the Civil Air Patrol transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota.">
+    <meta property="twitter:description" content="Skyhawk Composite Squadron transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota.">
     <meta property="twitter:image" content="https://skyhawk-cap.org/assets/images/webclip.png">
 
     <!-- Favicon & App Icons -->
@@ -54,6 +54,60 @@
     </noscript>
     <script src="/assets/js/config.js"></script>
     <script type="module">import("/assets/js/init.js"+(window.ASSET_VERSION?"?v="+window.ASSET_VERSION:"")).then(m=>m.initPage());</script>
+
+
+    <!-- Structured Data: Organization + LocalBusiness -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://skyhawk-cap.org/#organization",
+          "name": "Skyhawk Composite Squadron",
+          "alternateName": "Skyhawk Squadron – Civil Air Patrol",
+          "url": "https://skyhawk-cap.org/",
+          "logo": "https://skyhawk-cap.org/assets/images/webclip.png",
+          "description": "Skyhawk Composite Squadron builds youth leadership through Civil Air Patrol cadet programs, community service, and aerospace education in Delano, Minnesota.",
+          "sameAs": [
+            "https://www.facebook.com/capnhq/"
+          ],
+          "areaServed": {
+            "@type": "Place",
+            "name": "Delano, Minnesota"
+          }
+        },
+        {
+          "@type": "LocalBusiness",
+          "@id": "https://skyhawk-cap.org/#localbusiness",
+          "name": "Skyhawk Composite Squadron – Civil Air Patrol",
+          "image": "https://skyhawk-cap.org/assets/images/webclip.png",
+          "url": "https://skyhawk-cap.org/",
+          "telephone": "",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Delano",
+            "addressRegion": "MN",
+            "addressCountry": "US"
+          },
+
+          "openingHoursSpecification": {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": [
+              "Monday"
+            ],
+            "opens": "18:30",
+            "closes": "21:00"
+          },
+          "priceRange": "Membership-based youth program",
+          "parentOrganization": {
+            "@id": "https://skyhawk-cap.org/#organization"
+          }
+        }
+      ]
+    }
+    </script>
+
   </head>
   <body style="display:none;" class="home-page">
     <div class="header-section">
