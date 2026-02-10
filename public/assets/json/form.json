@@ -28,7 +28,18 @@
             "C/AB",
             "C/Amn",
             "C/A1C",
-            "C/SSgt"
+            "C/SrA",
+            "C/SSgt",
+            "C/TSgt",
+            "C/MSgt",
+            "C/SMSgt",
+            "C/CMSgt",
+            "C/2d Lt",
+            "C/1st Lt",
+            "C/Capt",
+            "C/Maj",
+            "C/Lt Col",
+            "C/Col"
           ]
         },
         {
@@ -89,7 +100,11 @@
             "Achievement 1 (Amn)",
             "Achievement 2 (A1C)",
             "Achievement 3 (SrA)",
-            "Wright Brothers (SSgt)"
+            "Wright Brothers (SSgt)",
+            "Achievement 4 (TSgt)",
+            "Achievement 5 (MSgt)",
+            "Achievement 6 (SMSgt)",
+            "Achievement 7 (CMSgt)"
           ]
         },
         {
@@ -100,7 +115,9 @@
           "googleId": "1806755973",
           "options": [
             "Wright Brothers written test",
-            "Mitchell Aerospace written test"
+            "Mitchell Aerospace written test",
+            "Mitchell Leadership written test",
+            "Earhart Leadership written test"
           ]
         },
         {
