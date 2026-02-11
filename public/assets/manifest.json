@@ -1,14 +1,46 @@
 {
   "name": "Skyhawk Composite Squadron",
   "short_name": "Skyhawk CAP",
+  "description": "Official website of Skyhawk Composite Squadron for Cadet and Community Activities.",
+  "lang": "en-US",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#003366",
+  "background_color": "#f2f3f4",
+  "categories": ["education", "government", "nonprofit"],
   "icons": [
     {
-      "src": "/assets/images/webclip.png",
+      "src": "/media/website/skyhawks_logo_CAP_transparent.png",
       "sizes": "192x192",
       "type": "image/png"
     }
   ],
-  "theme_color": "#003366",
-  "background_color": "#f2f3f4",
-  "start_url": "/"
+  "shortcuts": [
+    {
+      "name": "Weekly Calldown Form",
+      "short_name": "Form",
+      "url": "/form",
+      "icons": [
+        {
+          "src": "https://skyhawk-cap.org/media/website/form.svg",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Squadron Calendar",
+      "short_name": "Calendar",
+      "url": "/page?page=events/Squadron-calendar/",
+      "icons": [
+        {
+          "src": "https://skyhawk-cap.org/media/website/calendar.webp",
+          "sizes": "96x96",
+          "type": "image/webp"
+        }
+      ]
+    }
+  ]
 }
