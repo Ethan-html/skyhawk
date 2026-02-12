@@ -49,10 +49,16 @@ export function initHeaderFooter(db) {
     if (el) el.textContent = `${unit.name} (${unit.designation})`;
   };
   const renderDonate = (donate) => {
-    if (!donate) return;
     const donateBtn = document.getElementById("donations-button");
-    if (donateBtn) donateBtn.href = donate.url;
+    if (!donateBtn) return;
+    if (!donate || !donate.url) {
+      donateBtn.style.display = "none";
+      return;
+    }
+    donateBtn.style.display = "inline-block";
+    donateBtn.href = donate.url;
   };
+
 
   const escapeHtml = (s) => {
     if (!s) return "";
