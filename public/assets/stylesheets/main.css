@@ -12092,3 +12092,97 @@ a.no-border {
   white-space: nowrap;
   border: 0;
 }
+
+@media print {
+  .header-section,
+  .footer-section {
+    display: none !important;
+  }
+}
+@media print {
+  /* Hide non-essential elements */
+  .header-section,
+  .footer-section,
+  nav,
+  .mobile-navigation-menu,
+  .menu-button,
+  .donations-btn,
+  .left-nav-column,
+  .header-menu-wrap,
+  .header-contents-wrap,
+  .website-logo-container,
+  .link-block,
+  .breadcrumb-list {
+    display: none !important;
+  }
+
+  /* Shrink margins and font */
+  body {
+    margin: 10mm !important;
+    padding: 0 !important;
+    font-size: 12pt !important;
+    line-height: 1.3 !important;
+    color: #000 !important;
+    background: none !important;
+  }
+
+  /* Main content full width, no floats */
+  .main-content-column,
+  .main-content-column-nested,
+  .inside-content-section,
+  #pageContent,
+  .inside-content-background,
+  .inside-row,
+  .inside-row-nested {
+    width: 100% !important;
+    float: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Remove spacing on empty divs */
+  div:empty {
+    display: none !important;
+  }
+
+  /* Prevent headings from starting a new page alone */
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid !important;
+    page-break-before: avoid !important;
+    page-break-inside: avoid !important;
+    margin: 0 0 6pt 0 !important;
+    padding: 0 !important;
+  }
+
+  p, ul, ol, li {
+    page-break-inside: avoid !important;
+    margin: 0 0 6pt 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Remove floats on images, scale to fit */
+  img {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block;
+    float: none !important;
+    margin: 0 auto 6pt auto;
+  }
+
+  /* Tables */
+  table, tr, td, th {
+    page-break-inside: avoid !important;
+  }
+
+  /* Show URLs for links */
+  a[href]:after {
+    content: " (" attr(href) ")";
+    font-size: 10pt;
+  }
+
+  /* Force the main wrapper to behave like normal block */
+  #page,
+  .main-content-wrap {
+    display: block !important;
+  }
+}
