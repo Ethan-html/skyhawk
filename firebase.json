@@ -10,10 +10,7 @@
       {
         "source": "/assets/js/config.js",
         "headers": [
-          {
-            "key": "Cache-Control",
-            "value": "public,max-age=60"
-          }
+          { "key": "Cache-Control", "value": "no-cache, no-store, must-revalidate" }
         ]
       },
       {

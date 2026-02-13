@@ -13,18 +13,7 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/12.7.0/firebase
 import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
 // ==============================
-// Site modules
-// ==============================
-import { initMenu } from "/assets/js/menu.js";
-import { initMemberMenu } from "/assets/js/member-menu.js";
-import { initContentBoxes } from "/assets/js/content-boxes.js";
-import { initSlideshow } from "/assets/js/slideshow.js";
-import { initHeaderFooter } from "/assets/js/header-footer.js";
-import { loadPage, renderPage } from "/assets/js/load-page.js";
-import { loadMemberPage, renderMemberPage } from "/assets/js/load-member-page.js";
-import { initLogin } from "/assets/js/login.js";
-import { initMobileMenuA11y } from "/assets/js/mobile-menu-a11y.js";
-
+// Site modules (loaded dynamically with version for cache-busting)
 // ==============================
 // Firebase config
 // ==============================
@@ -158,53 +147,55 @@ const loadSection = (loader, renderer) => async db => {
 };
 
 // ==============================
-// Page configuration
+// Page configuration (built after loading versioned modules)
 // ==============================
-const pageConfigs = [
-  {
-    match: path => path === "/" || path === "/index.html",
-    modules: [initHeaderFooter, initMenu, initSlideshow, initContentBoxes],
-    requiresAuth: false
-  },
-  {
-    match: path => path.startsWith("/page"),
-    modules: [initHeaderFooter, initMenu, loadSection(loadPage, renderPage)],
-    requiresAuth: false
-  },
-  {
-    match: path => path === "/member",
-    modules: [initHeaderFooter, initMenu, initMemberMenu, initContentBoxes],
-    requiresAuth: true,
-    logout: true
-  },
-  {
-    match: path => path.startsWith("/memberpage"),
-    modules: [initHeaderFooter, initMenu, initMemberMenu, loadSection(loadMemberPage, renderMemberPage)],
-    requiresAuth: true,
-    logout: true
-  },
-  {
-    match: path => path.startsWith("/photos"),
-    modules: [initHeaderFooter],
-    requiresAuth: true,
-    logout: true
-  },
-  {
-    match: path => path.startsWith("/login"),
-    modules: [initLogin],
-    requiresAuth: false
-  },
-  {
-    match: () => true, // fallback 404 or unknown pages
-    modules: [initHeaderFooter, initMenu],
-    requiresAuth: false
-  }
-];
+function buildPageConfigs(mods) {
+  return [
+    {
+      match: path => path === "/" || path === "/index.html",
+      modules: [mods.initHeaderFooter, mods.initMenu, mods.initSlideshow, mods.initContentBoxes],
+      requiresAuth: false
+    },
+    {
+      match: path => path.startsWith("/page"),
+      modules: [mods.initHeaderFooter, mods.initMenu, loadSection(mods.loadPage, mods.renderPage)],
+      requiresAuth: false
+    },
+    {
+      match: path => path === "/member",
+      modules: [mods.initHeaderFooter, mods.initMenu, mods.initMemberMenu, mods.initContentBoxes],
+      requiresAuth: true,
+      logout: true
+    },
+    {
+      match: path => path.startsWith("/memberpage"),
+      modules: [mods.initHeaderFooter, mods.initMenu, mods.initMemberMenu, loadSection(mods.loadMemberPage, mods.renderMemberPage)],
+      requiresAuth: true,
+      logout: true
+    },
+    {
+      match: path => path.startsWith("/photos"),
+      modules: [mods.initHeaderFooter],
+      requiresAuth: true,
+      logout: true
+    },
+    {
+      match: path => path.startsWith("/login"),
+      modules: [mods.initLogin],
+      requiresAuth: false
+    },
+    {
+      match: () => true,
+      modules: [mods.initHeaderFooter, mods.initMenu],
+      requiresAuth: false
+    }
+  ];
+}
 
 // ==============================
 // Auth Gate
 // ==============================
-async function authGate(callback) {
+async function authGate(pageConfigs, callback) {
   const protectedPaths = pageConfigs.filter(p => p.requiresAuth).map(p => p.match);
 
   const isProtected = protectedPaths.some(fn => fn(location.pathname));
@@ -230,7 +221,48 @@ export async function initPage() {
   onReady(async () => {
 
     // ==============================
-    // TIER 0 — Critical CSS only
+    // Load site modules with version (cache-busted)
+    // ==============================
+    const [
+      menuMod,
+      memberMenuMod,
+      contentBoxesMod,
+      slideshowMod,
+      headerFooterMod,
+      loadPageMod,
+      loadMemberPageMod,
+      loginMod,
+      mobileMenuA11yMod
+    ] = await Promise.all([
+      import(/* @v */ withVersion("/assets/js/menu.js")),
+      import(/* @v */ withVersion("/assets/js/member-menu.js")),
+      import(/* @v */ withVersion("/assets/js/content-boxes.js")),
+      import(/* @v */ withVersion("/assets/js/slideshow.js")),
+      import(/* @v */ withVersion("/assets/js/header-footer.js")),
+      import(/* @v */ withVersion("/assets/js/load-page.js")),
+      import(/* @v */ withVersion("/assets/js/load-member-page.js")),
+      import(/* @v */ withVersion("/assets/js/login.js")),
+      import(/* @v */ withVersion("/assets/js/mobile-menu-a11y.js"))
+    ]);
+
+    const mods = {
+      initMenu: menuMod.initMenu,
+      initMemberMenu: memberMenuMod.initMemberMenu,
+      initContentBoxes: contentBoxesMod.initContentBoxes,
+      initSlideshow: slideshowMod.initSlideshow,
+      initHeaderFooter: headerFooterMod.initHeaderFooter,
+      loadPage: loadPageMod.loadPage,
+      renderPage: loadPageMod.renderPage,
+      loadMemberPage: loadMemberPageMod.loadMemberPage,
+      renderMemberPage: loadMemberPageMod.renderMemberPage,
+      initLogin: loginMod.initLogin,
+      initMobileMenuA11y: mobileMenuA11yMod.initMobileMenuA11y
+    };
+
+    const pageConfigs = buildPageConfigs(mods);
+
+    // ==============================
+    // TIER 0 — Critical CSS (versioned for cache-busting)
     // ==============================
     await loadAssets([
       withVersion("/assets/stylesheets/main.css")
@@ -268,7 +300,7 @@ export async function initPage() {
     // ==============================
     // Auth + page modules
     // ==============================
-    authGate(async () => {
+    authGate(pageConfigs, async () => {
       const path = location.pathname;
       const config = pageConfigs.find(c => c.match(path));
       if (!config) return;
@@ -276,7 +308,7 @@ export async function initPage() {
       // Run page modules in parallel
       await runParallel(config.modules.map(fn => fn(db)));
 
-      initMobileMenuA11y();
+      mods.initMobileMenuA11y();
 
       // Focus main content after login redirect (a11y)
       if (path === "/member" && sessionStorage.getItem("focusMainAfterRedirect") === "1") {
