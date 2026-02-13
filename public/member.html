@@ -40,6 +40,7 @@
       <script type="module">import("/assets/js/init.js"+(window.ASSET_VERSION?"?v="+window.ASSET_VERSION:"")).then(m=>m.initPage());</script>
    </head>
     <body style="display:none;">
+      <a href="#main-page-content" class="skip-link visually-hidden-focusable">Skip to main content</a>
       <div class="header-section">
         <div data-collapse="medium" data-animation="default" data-duration="400" class="nav-section w-nav">
           <div class="header-contents-wrap">
@@ -69,7 +70,7 @@
 
 
 
-                  <div class="menu-button w-clearfix w-nav-button mobile-menu-button">
+                  <div class="menu-button w-clearfix w-nav-button mobile-menu-button" role="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu-root">
                     <div class="menu-button-icon w-icon-nav-menu"></div>
                     <div class="menu-button-text" id="menu-button-text">Menu</div>
                   </div>
@@ -96,7 +97,7 @@
           <div class="w-nav-overlay" data-wf-ignore=""></div>
         </div>
       </div>
-      <div id="main-page-content">
+      <main id="main-page-content" tabindex="-1" role="main">
         <h1 class="visually-hidden">Skyhawk Composite Squadron 47 – Civil Air Patrol in Delano, Minnesota</h1>
         <section class="main-section">
           <div class="content-box-section-new">
@@ -117,7 +118,7 @@
             </div>
           </div>
         </section>
-      </div>
+      </main>
       <div id="footer"></div>
    </body>
 </html>

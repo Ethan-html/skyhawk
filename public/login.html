@@ -57,10 +57,12 @@
         <h2>Login to Your Account</h2>
 
         <form id="loginForm">
-          <input type="email" id="username" placeholder="Email" required>
-          <input type="password" id="password" placeholder="Password" required>
+          <label for="username" class="visually-hidden">Email</label>
+          <input type="email" id="username" placeholder="Email" required aria-describedby="errorMsg">
+          <label for="password" class="visually-hidden">Password</label>
+          <input type="password" id="password" placeholder="Password" required aria-describedby="errorMsg">
           <button type="submit">Login</button>
-          <div class="error1" id="errorMsg" hidden></div>
+          <div class="error1" id="errorMsg" role="alert" hidden aria-live="polite"></div>
         </form>
 
         <p class="login-links">
@@ -69,16 +71,18 @@
 
         <div id="password-reset-section" class="hidden-section">
           <p>Enter your email to reset your password:</p>
-          <input type="email" id="reset-email" placeholder="Enter your email">
+          <label for="reset-email" class="visually-hidden">Email for password reset</label>
+          <input type="email" id="reset-email" placeholder="Enter your email" aria-describedby="reset-status">
           <button id="reset-password-btn">Send Reset Email</button>
-          <div id="reset-status"></div>
+          <div id="reset-status" role="alert" aria-live="polite"></div>
           <p><a href="#" id="back-to-login">Back to login</a></p>
         </div>
 
         <div id="first-time-section" class="hidden-section">
-          <input type="email" id="first-time-email" placeholder="Enter your email">
+          <label for="first-time-email" class="visually-hidden">Your email</label>
+          <input type="email" id="first-time-email" placeholder="Enter your email" aria-describedby="first-reset-status">
           <button id="first-time-reset-btn">Login</button>
-          <div id="first-reset-status"></div>
+          <div id="first-reset-status" role="alert" aria-live="polite"></div>
         </div>
 
         <div id="first-time-reset-section" class="hidden-section">

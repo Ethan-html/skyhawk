@@ -47,6 +47,7 @@
 
 
       <script src="/assets/js/config.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js" crossorigin="anonymous"></script>
       <script type="module">import("/assets/js/init.js"+(window.ASSET_VERSION?"?v="+window.ASSET_VERSION:"")).then(m=>m.initPage());</script>
       <script>
         function reloadImageViaIframe(imgId) {
@@ -200,7 +201,7 @@
                   <nav class="mobile-navigation-menu" aria-hidden="true">
                     <ul id="mobile-menu-root"></ul>
                   </nav>
-                  <div class="menu-button w-clearfix w-nav-button mobile-menu-button">
+                  <div class="menu-button w-clearfix w-nav-button mobile-menu-button" role="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu-root">
                     <div class="menu-button-icon w-icon-nav-menu"></div>
                     <div class="menu-button-text">Menu</div>
                   </div>

@@ -21,4 +21,4 @@ PATCH (2)
 - Bug fixes, performance tweaks, tiny adjustments
 - No new features, no breaking changes
 */
-window.ASSET_VERSION = "2.1.3";
+window.ASSET_VERSION = "2.1.4";

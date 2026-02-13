@@ -1,6 +1,16 @@
 // /assets/js/load-page.js
 import { doc, collection, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
+// Sanitize HTML to prevent XSS (DOMPurify loaded via script or fallback)
+function sanitizeHtml(html) {
+  if (typeof window !== "undefined" && window.DOMPurify) {
+    return window.DOMPurify.sanitize(html || "", { USE_PROFILES: { html: true } });
+  }
+  const div = document.createElement("div");
+  div.textContent = html;
+  return div.innerHTML;
+}
+
 /**
  * Load page from Firebase with localStorage caching, instant render, and background revalidate
  * @param {Firestore} db - Firebase Firestore instance
@@ -116,6 +126,6 @@ export function renderPage(pageData) {
   if (active.externalUrl) {
     location.href = active.externalUrl;
   } else {
-    pageContentEl.innerHTML = active.content;
+    pageContentEl.innerHTML = sanitizeHtml(active.content);
   }
 }

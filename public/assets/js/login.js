@@ -86,9 +86,13 @@ export async function initLogin(db) {
       return;
 
     }
-    const email = document.getElementById("username").value.trim();
-    const password = document.getElementById("password").value;
+    const usernameEl = document.getElementById("username");
+    const passwordEl = document.getElementById("password");
+    const email = usernameEl.value.trim();
+    const password = passwordEl.value;
 
+    if (usernameEl) usernameEl.removeAttribute("aria-invalid");
+    if (passwordEl) passwordEl.removeAttribute("aria-invalid");
     errorMsg.style.display = "block";
     errorMsg.style.color = "#333";
     errorMsg.textContent = "Signing in…";
@@ -111,6 +115,7 @@ export async function initLogin(db) {
       errorMsg.style.color = "green";
       errorMsg.textContent = "Login successful! Redirecting…";
       setCookie("new", user.email);
+      sessionStorage.setItem("focusMainAfterRedirect", "1");
       setTimeout(() => window.location.href = "/member", 800);
 
     } catch (err) {
@@ -143,9 +148,13 @@ export async function initLogin(db) {
       setLoginState(state);
 
       // ---------------------------
-      // Combine messages
+      // Combine messages + a11y
       // ---------------------------
       errorMsg.textContent = "Login failed." + rateMessage;
+      const usernameEl = document.getElementById("username");
+      const passwordEl = document.getElementById("password");
+      if (usernameEl) usernameEl.setAttribute("aria-invalid", "true");
+      if (passwordEl) passwordEl.setAttribute("aria-invalid", "true");
     }
 
   });
@@ -259,7 +268,10 @@ export async function initLogin(db) {
   });
 
   onAuthStateChanged(auth, user => {
-    if (user && !isNew) window.location.href = "/member";
+    if (user && !isNew) {
+      sessionStorage.setItem("focusMainAfterRedirect", "1");
+      window.location.href = "/member";
+    }
   });
 
   await initHeaderFooter(db);

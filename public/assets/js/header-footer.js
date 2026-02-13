@@ -55,7 +55,7 @@ export function initHeaderFooter(db) {
       donateBtn.style.display = "none";
       return;
     }
-    donateBtn.style.display = "inline-block";
+    donateBtn.style.display = "flex";
     donateBtn.href = donate.url;
   };
 

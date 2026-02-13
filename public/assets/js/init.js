@@ -23,6 +23,7 @@ import { initHeaderFooter } from "/assets/js/header-footer.js";
 import { loadPage, renderPage } from "/assets/js/load-page.js";
 import { loadMemberPage, renderMemberPage } from "/assets/js/load-member-page.js";
 import { initLogin } from "/assets/js/login.js";
+import { initMobileMenuA11y } from "/assets/js/mobile-menu-a11y.js";
 
 // ==============================
 // Firebase config
@@ -274,6 +275,19 @@ export async function initPage() {
 
       // Run page modules in parallel
       await runParallel(config.modules.map(fn => fn(db)));
+
+      initMobileMenuA11y();
+
+      // Focus main content after login redirect (a11y)
+      if (path === "/member" && sessionStorage.getItem("focusMainAfterRedirect") === "1") {
+        sessionStorage.removeItem("focusMainAfterRedirect");
+        requestAnimationFrame(() => {
+          const main = document.getElementById("main-page-content");
+          const skipLink = document.querySelector('a[href="#main-page-content"]');
+          if (skipLink) skipLink.focus();
+          else if (main) main.focus();
+        });
+      }
 
       // Logout button
       if (config.requiresAuth && config.logout) {

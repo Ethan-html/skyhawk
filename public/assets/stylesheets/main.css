@@ -12093,6 +12093,34 @@ a.no-border {
   border: 0;
 }
 
+.skip-link.visually-hidden-focusable {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+.skip-link.visually-hidden-focusable:focus {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: auto;
+  height: auto;
+  margin: 0.5em;
+  padding: 0.5em 1em;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+  background: #fff;
+  color: #000;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
 @media print {
   .header-section,
   .footer-section {

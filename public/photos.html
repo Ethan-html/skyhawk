@@ -281,28 +281,35 @@
         }
       };
 
+      function addOption(select, value, text) {
+        const opt = document.createElement("option");
+        opt.value = value;
+        opt.textContent = text;
+        select.appendChild(opt);
+      }
       async function loadYears() {
         const years = await fetchFoldersCached("");
 
-        yearSelect.innerHTML = `<option value="">Select Year</option>`;
+        yearSelect.innerHTML = "";
+        addOption(yearSelect, "", "Select Year");
 
         years
           .filter(y => y.name.toLowerCase() !== "promotion photos") // 🚫 hide this
           .sort((a,b) => b.name.localeCompare(a.name))
           .forEach(y => {
-            yearSelect.innerHTML += `<option value="${y.name}">${y.name}</option>`;
+            addOption(yearSelect, y.name, y.name);
           });
       }
       async function loadCadets() {
         const cadetFolders = await fetchFoldersCached("promotion photos");
 
-
-        cadetSelect.innerHTML = `<option value="">Select Cadet</option>`;
+        cadetSelect.innerHTML = "";
+        addOption(cadetSelect, "", "Select Cadet");
 
         cadetFolders
           .sort((a,b) => a.name.localeCompare(b.name))
           .forEach(c => {
-            cadetSelect.innerHTML += `<option value="${c.name}">${c.name}</option>`;
+            addOption(cadetSelect, c.name, c.name);
           });
       }
       cadetSelect.onchange = async () => {
@@ -330,12 +337,13 @@
 
         const months = await fetchFoldersCached(year);
         monthSelect.style.display = "inline-block";
-        monthSelect.innerHTML = `<option value="">Select Month</option>`;
+        monthSelect.innerHTML = "";
+        addOption(monthSelect, "", "Select Month");
 
         months.sort((a,b) => a.name.localeCompare(b.name, undefined, {numeric:true}));
 
         months.forEach(m => {
-          monthSelect.innerHTML += `<option value="${m.name}">${m.name}</option>`;
+          addOption(monthSelect, m.name, m.name);
         });
 
         eventSelect.style.display = "none";
@@ -349,10 +357,11 @@
 
         const events = await fetchFoldersCached(`${year}/${month}`);
         eventSelect.style.display = "inline-block";
-        eventSelect.innerHTML = `<option value="">Select Event</option>`;
+        eventSelect.innerHTML = "";
+        addOption(eventSelect, "", "Select Event");
 
-        events.forEach(e => {
-          eventSelect.innerHTML += `<option value="${e.name}">${e.name}</option>`;
+        events.forEach(ev => {
+          addOption(eventSelect, ev.name, ev.name);
         });
       };
       eventSelect.onchange = async () => {

@@ -275,14 +275,15 @@
           sec.dataset.step = section.step;
           if (section.step === 1) sec.classList.add("active");
 
+          const errorBoxId = `section-${section.step}-error`;
           sec.innerHTML = `
       	  <h2>${section.title}</h2>
-      	  <div class="error-box" style="display:none"></div>
+      	  <div class="error-box" id="${errorBoxId}" style="display:none" role="alert"></div>
       	`;
 
 
           section.questions.forEach(q => {
-            sec.appendChild(renderQuestion(q));
+            sec.appendChild(renderQuestion(q, section.step));
           });
 
           const nav = document.createElement("div");
@@ -327,10 +328,12 @@
         form.appendChild(done);
       }
 
-      function renderQuestion(q) {
+      function renderQuestion(q, sectionStep) {
         const wrap = document.createElement("div");
+        const fieldId = `field-${sectionStep}-${(q.name || "").replace(/\W/g, "-")}`;
 
         const label = document.createElement("label");
+        label.setAttribute("for", fieldId);
         label.textContent = q.label;
         wrap.appendChild(label);
 
@@ -346,32 +349,48 @@
             el = document.createElement("textarea");
             break;
 
-          case "select":
+          case "select": {
             el = document.createElement("select");
-            el.innerHTML = `<option value="">Pick one…</option>`;
+            const selectPlaceholder = document.createElement("option");
+            selectPlaceholder.value = "";
+            selectPlaceholder.textContent = "Pick one…";
+            el.appendChild(selectPlaceholder);
             q.options.forEach(opt => {
-              el.innerHTML += `<option value="${opt}">${opt}</option>`;
+              const option = document.createElement("option");
+              option.value = opt;
+              option.textContent = opt;
+              el.appendChild(option);
             });
             break;
+          }
 
-          case "radio":
+          case "radio": {
             el = document.createElement("div");
             el.className = "radio-group";
 
             q.options.forEach(opt => {
-              const id = `${q.name}_${opt.replace(/\W/g, "")}`;
-              el.innerHTML += `
-                <input type="radio" id="${id}" name="${q.name}" value="${opt}">
-                <label for="${id}">${opt}</label>
-              `;
+              const id = `${q.name}_${String(opt).replace(/\W/g, "")}`;
+              const radio = document.createElement("input");
+              radio.type = "radio";
+              radio.id = id;
+              radio.name = q.name;
+              radio.value = opt;
+              const radioLabel = document.createElement("label");
+              radioLabel.htmlFor = id;
+              radioLabel.textContent = opt;
+              el.appendChild(radio);
+              el.appendChild(radioLabel);
             });
             break;
+          }
         }
 
         if (el.tagName !== "DIV") {
           el.name = q.name;
+          el.id = fieldId;
           if (q.required) el.required = true;
         }
+        // Radio group: individual inputs already have id/label[for] from render
 
         wrap.appendChild(el);
         return wrap;
@@ -423,19 +442,31 @@
         errorBox.textContent = "";
 
         // clear old field errors
-        section.querySelectorAll(".field-error").forEach(el =>
-          el.classList.remove("field-error")
-        );
+        section.querySelectorAll(".field-error").forEach(el => {
+          el.classList.remove("field-error");
+          el.removeAttribute("aria-invalid");
+          el.removeAttribute("aria-describedby");
+        });
+        section.querySelectorAll("input[aria-invalid], select[aria-invalid], textarea[aria-invalid]").forEach(el => {
+          el.removeAttribute("aria-invalid");
+          el.removeAttribute("aria-describedby");
+        });
 
         // validate inputs
         const requiredFields = section.querySelectorAll(
           "input[required], textarea[required], select[required]"
         );
 
+        const errorBoxId = errorBox.id || `section-${currentStep}-error`;
         requiredFields.forEach(field => {
           if (!field.value.trim()) {
             field.classList.add("field-error");
+            field.setAttribute("aria-invalid", "true");
+            field.setAttribute("aria-describedby", errorBoxId);
             valid = false;
+          } else {
+            field.removeAttribute("aria-invalid");
+            field.removeAttribute("aria-describedby");
           }
         });
 
@@ -448,7 +479,17 @@
             group.querySelectorAll("label").forEach(l =>
               l.classList.add("field-error")
             );
+            const firstRadio = group.querySelector("input");
+            if (firstRadio) {
+              firstRadio.setAttribute("aria-invalid", "true");
+              firstRadio.setAttribute("aria-describedby", errorBoxId);
+            }
             valid = false;
+          } else {
+            group.querySelectorAll("input").forEach(inp => {
+              inp.removeAttribute("aria-invalid");
+              inp.removeAttribute("aria-describedby");
+            });
           }
         });
 
