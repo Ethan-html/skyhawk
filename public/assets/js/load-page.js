@@ -4,12 +4,22 @@ import { doc, collection, getDoc, getDocs } from "https://www.gstatic.com/fireba
 // Sanitize HTML to prevent XSS (DOMPurify loaded via script or fallback)
 function sanitizeHtml(html) {
   if (typeof window !== "undefined" && window.DOMPurify) {
-    return window.DOMPurify.sanitize(html || "", { USE_PROFILES: { html: true } });
+    return window.DOMPurify.sanitize(html || "", {
+      USE_PROFILES: { html: true },
+      ADD_TAGS: ['iframe'], // allow iframe
+      ADD_ATTR: ['src', 'width', 'height', 'frameborder', 'allow', 'allowfullscreen', 'scrolling'], // common iframe attributes
+      ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|tel|data):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i // keep safe URLs
+    });
   }
+  
+  // Fallback: if DOMPurify is not loaded, just allow iframes manually
   const div = document.createElement("div");
-  div.textContent = html;
+  div.innerHTML = html; // WARNING: trust your HTML if using this
+  // Optional: remove <script> tags manually if you want extra safety
+  div.querySelectorAll('script').forEach(s => s.remove());
   return div.innerHTML;
 }
+
 
 /**
  * Load page from Firebase with localStorage caching, instant render, and background revalidate
