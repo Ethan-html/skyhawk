@@ -11452,3 +11452,78 @@ a.no-border {
     display: block !important;
   }
 }
+
+/* ==============================
+   Maintenance page (full-screen, no bypass)
+   ============================== */
+body.maintenance-page {
+  min-height: 100vh;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0d1b3a 0%, #1b3a6b 50%, #0d1b3a 100%);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #fff;
+}
+
+.maintenance-page-backdrop {
+  text-align: center;
+  padding: 2rem;
+  max-width: 420px;
+}
+
+.maintenance-page-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.maintenance-page-icon {
+  font-size: 3.5rem;
+  line-height: 1;
+  margin-bottom: 1rem;
+  opacity: 0.9;
+}
+
+.maintenance-page-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+  letter-spacing: -0.02em;
+}
+
+.maintenance-page-text {
+  font-size: 1.05rem;
+  line-height: 1.5;
+  margin: 0 0 0.5rem;
+  opacity: 0.95;
+}
+
+.maintenance-page-subtext {
+  font-size: 0.9rem;
+  opacity: 0.75;
+  margin: 0;
+}
+
+/* Announcement banner: show message (slider-alert has display:none by default - do not remove) */
+#announcement-banner-root .special-notice-alert-box .slider-alert,
+#announcement-banner-root .slider-alert {
+  display: block !important;
+  visibility: visible !important;
+}
+#announcement-banner-root .announcement-banner-message,
+#announcement-banner-root .announcement-banner-message * {
+  visibility: visible !important;
+  color: #fff !important;
+}
+/* Announcement banner close button (ensure × is visible) */
+#announcement-banner-root .special-notice-alert-box #close-alert-btn,
+.special-notice-alert-box #close-alert-btn {
+  color: #fff;
+  font-size: 1.4rem;
+  line-height: 1;
+  background: transparent;
+  border: 1.5px solid #fff;
+}

@@ -169,43 +169,44 @@ const loadSection = (loader, renderer) => async db => {
 // Page configuration (built after loading versioned modules)
 // ==============================
 function buildPageConfigs(mods) {
+  const announcementBanner = (db) => mods.initPublicSettingsBanner(db);
   return [
     {
       match: path => path === "/" || path === "/index.html",
-      modules: [mods.initHeaderFooter, mods.initMenu, mods.initSlideshow, mods.initContentBoxes],
+      modules: [announcementBanner, mods.initHeaderFooter, mods.initMenu, mods.initSlideshow, mods.initContentBoxes],
       requiresAuth: false
     },
     {
       match: path => path.startsWith("/page"),
-      modules: [mods.initHeaderFooter, mods.initMenu, loadSection(mods.loadPage, mods.renderPage)],
+      modules: [announcementBanner, mods.initHeaderFooter, mods.initMenu, loadSection(mods.loadPage, mods.renderPage)],
       requiresAuth: false
     },
     {
       match: path => path === "/member",
-      modules: [mods.initHeaderFooter, mods.initMenu, mods.initMemberMenu, mods.initContentBoxes],
+      modules: [announcementBanner, mods.initHeaderFooter, mods.initMenu, mods.initMemberMenu, mods.initContentBoxes],
       requiresAuth: true,
       logout: true
     },
     {
       match: path => path.startsWith("/memberpage"),
-      modules: [mods.initHeaderFooter, mods.initMenu, mods.initMemberMenu, loadSection(mods.loadMemberPage, mods.renderMemberPage)],
+      modules: [announcementBanner, mods.initHeaderFooter, mods.initMenu, mods.initMemberMenu, loadSection(mods.loadMemberPage, mods.renderMemberPage)],
       requiresAuth: true,
       logout: true
     },
     {
       match: path => path.startsWith("/photos"),
-      modules: [mods.initHeaderFooter],
+      modules: [announcementBanner, mods.initHeaderFooter],
       requiresAuth: true,
       logout: true
     },
     {
       match: path => path.startsWith("/login"),
-      modules: [mods.initLogin],
+      modules: [announcementBanner, mods.initLogin],
       requiresAuth: false
     },
     {
       match: () => true,
-      modules: [mods.initHeaderFooter, mods.initMenu],
+      modules: [announcementBanner, mods.initHeaderFooter, mods.initMenu],
       requiresAuth: false
     }
   ];
@@ -238,6 +239,35 @@ async function authGate(pageConfigs, callback) {
 // ==============================
 export async function initPage() {
   onReady(async () => {
+
+    // ==============================
+    // TIER 0 — Critical CSS (needed for maintenance page and layout)
+    // ==============================
+    await loadAssets([withVersion("/assets/stylesheets/main.css")]);
+
+    // ==============================
+    // Public settings (maintenance + announcement banner) — check before loading rest
+    // ==============================
+    const publicSettingsMod = await import(/* @v */ withVersion("/assets/js/public-settings.js"));
+    let publicSettings;
+    try {
+      publicSettings = await publicSettingsMod.fetchPublicSettings(db);
+    } catch (e) {
+      console.warn("[init] Public settings fetch failed", e);
+      publicSettings = { maintenanceMode: false, announcementBanner: "" };
+    }
+    window.__PUBLIC_SETTINGS__ = publicSettings;
+    if (location.hash === "#public-settings-debug") {
+      console.info("[public-settings] Loaded:", {
+        maintenanceMode: publicSettings.maintenanceMode,
+        announcementBannerLength: (publicSettings.announcementBanner || "").length,
+        hint: "Create Firestore document admin/settings with fields: maintenanceMode (boolean), announcementBanner (string)"
+      });
+    }
+    if (publicSettings.maintenanceMode) {
+      publicSettingsMod.renderMaintenancePage();
+      return;
+    }
 
     // ==============================
     // Load site modules with version (cache-busted)
@@ -275,17 +305,11 @@ export async function initPage() {
       loadMemberPage: loadMemberPageMod.loadMemberPage,
       renderMemberPage: loadMemberPageMod.renderMemberPage,
       initLogin: loginMod.initLogin,
-      initMobileMenuA11y: mobileMenuA11yMod.initMobileMenuA11y
+      initMobileMenuA11y: mobileMenuA11yMod.initMobileMenuA11y,
+      initPublicSettingsBanner: () => publicSettingsMod.initAnnouncementBanner(window.__PUBLIC_SETTINGS__?.announcementBanner)
     };
 
     const pageConfigs = buildPageConfigs(mods);
-
-    // ==============================
-    // TIER 0 — Critical CSS (versioned for cache-busting)
-    // ==============================
-    await loadAssets([
-      withVersion("/assets/stylesheets/main.css")
-    ]);
 
     // Show page immediately
     document.body.style.display = "block";
