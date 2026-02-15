@@ -192,8 +192,10 @@
     </div><br><br>
     <div id="footer"></div>
     <script>
-      const OWNER = "Ethan-html";
-      const REPO = "skyhawk-photos";
+      var _g = (window.SITE_CONFIG && window.SITE_CONFIG.github) || {};
+      const OWNER = _g.owner || "Ethan-html";
+      const REPO = _g.repo || "skyhawk-photos";
+      const BRANCH = _g.branch || "main";
       const BATCH_SIZE = 50;
 
       let allFiles = [];
@@ -225,7 +227,6 @@
       const eventSelect = document.getElementById("eventSelect");
       const photoTypeSelect = document.getElementById("photoTypeSelect");
       const cadetSelect = document.getElementById("cadetSelect");
-      let BRANCH = "main"
 
       async function fetchFolders(path = "") {
         const url = `https://api.github.com/repos/${OWNER}/${REPO}/contents/${path}?ref=${BRANCH}`;
@@ -295,6 +296,7 @@
 
         years
           .filter(y => y.name.toLowerCase() !== "promotion photos") // 🚫 hide this
+          .filter(y => y.name.toLowerCase() !== "slideshow photos") // 🚫 hide this
           .sort((a,b) => b.name.localeCompare(a.name))
           .forEach(y => {
             addOption(yearSelect, y.name, y.name);

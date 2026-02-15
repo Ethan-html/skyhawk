@@ -85,13 +85,7 @@ At a high level, the site works as follows:
 - **Routing**:
   - Dynamic content routes: `/page` and `/memberpage` use query parameters (e.g. `/page?page=about/ae`) and load from Firestore.
   - A catch-all rewrite sends unrecognized URLs to `/404`.
-- **Data Source**: Firestore provides the data model for:
-  - Main menu
-  - Homepage content boxes
-  - Footer contact and quick links
-  - Slideshow URLs
-  - Public pages (`pages` collection)
-  - Member pages (`member`-scoped collections)
+- **Data Source**: Firestore provides the data model for menu, content boxes, footer, and public/member pages. The homepage slideshow uses the same GitHub repo as the photos page (`skyhawk-photos`, `slideshow photos/slideshow.json`).
 - **Authentication**: Firebase Auth (client-only) controls access to certain routes and initializes login UI.
 - **Client-Side Modules**: Page behavior is split across small modules under `public/assets/js/` and coordinated by `init.js`.
 
@@ -200,13 +194,11 @@ The footer content is **cached in `localStorage`** and re-rendered when updated 
 
 `slideshow.js`:
 
-- Loads slideshow configuration from Firestore:
-  - Document `main/slideshow` with a `urls` field (comma-separated list of image URLs).
-- Parses URLs, filters out empties, and renders `<li>` slides inside `#glide-slides`.
-- Initializes Glide.js for carousel behavior:
-  - Single slide in view.
-  - Auto-play with hover pause.
-- Uses the same cache-first pattern as menus/content boxes.
+- Uses the **same source as the photos page**: the [skyhawk-photos](https://github.com/Ethan-html/skyhawk-photos) repo, folder `slideshow photos`.
+- Fetches `slideshow photos/slideshow.json` (via jsDelivr). JSON shape: `[{ "file": "name.webp", "hidden": false }, ...]`. Order is preserved; entries with `hidden: true` are skipped.
+- Builds image URLs from the same jsDelivr CDN base as the photos gallery.
+- Renders `<li>` slides inside `#glide-slides` and initializes Glide.js (single slide, auto-play, hover pause).
+- Cache-first from `localStorage`, then revalidates in the background.
 
 ### Dynamic Public Pages (`/page`)
 
@@ -334,8 +326,9 @@ Based on the current code, the expected Firestore structure is roughly:
       - `id`, `title`, `url`, etc.
     - `main/menu/pages/<pageId>/children` (subcollection)
       - Each child: `title`, `url`
-  - `main/slideshow` (document)
-    - `urls` (comma-separated list of image URLs)
+
+- **Slideshow (GitHub, not Firestore)**
+  - Homepage slideshow reads from the [skyhawk-photos](https://github.com/Ethan-html/skyhawk-photos) repo: `slideshow photos/slideshow.json` (order + `hidden` flag). Images are served via jsDelivr, same as the photos page.
 
 - **Public Pages**
   - `pages` (collection)
@@ -374,10 +367,9 @@ The site uses several simple but effective client-side performance techniques:
     - `config.js`: shorter cache (`max-age=60`) for safer config updates.
 
 - **LocalStorage Caching of Dynamic Data**
-  - Menus, content boxes, slideshow, footer, and pages use:
-    - **Cache-first immediate render** from `localStorage`.
-    - **Background revalidation** via a fresh Firestore read.
-    - **Update on change** (only re-render if JSON changed).
+  - Menus, content boxes, footer, and pages use cache-first + background revalidation from Firestore.
+  - Slideshow uses the same pattern but revalidates from the GitHub `slideshow.json` (same source as photos page).
+  - **Update on change** (only re-render if data changed).
 
 - **Lazy Script Loading**
   - jQuery / legacy libraries are loaded after main CSS.
@@ -442,8 +434,9 @@ Note: Login and Firestore-backed sections will interact with **your configured F
 - **`window.ASSET_VERSION`** — Bump on deploy for cache-busting. `init.js` appends `?v=<version>` to CSS and JS URLs.
 - **`window.SITE_CONFIG.firebase`** — Firebase project: `apiKey`, `authDomain`, `projectId`, `storageBucket`, `messagingSenderId`, `appId`, `measurementId`. Change when switching projects or when credentials rotate.
 - **`window.SITE_CONFIG.measurementId`** — Optional Google Analytics / gtag ID; leave empty to disable.
+- **`window.SITE_CONFIG.github`** — GitHub repo for the photos page and homepage slideshow: `owner`, `repo`, `branch`, `slideshowFolder` (folder containing `slideshow.json` and slide images).
 
-`init.js` reads this file to initialize Firebase and (optionally) gtag.
+`init.js` reads this file to initialize Firebase and (optionally) gtag. The photos page and `slideshow.js` use `SITE_CONFIG.github` for the skyhawk-photos repo.
 
 ---
 
