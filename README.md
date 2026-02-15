@@ -210,7 +210,7 @@ The footer content is **cached in `localStorage`** and re-rendered when updated 
 
 ### Dynamic Public Pages (`/page`)
 
-`page.html` combined with `load-page.js` and `renderPage` provide dynamic content pages:
+`page.html` combined with `load-page.js` and `renderPage` provide dynamic content pages. **Content structure template:** `public/edit.html` is the reference template for the HTML/structure of content injected into `#pageContent` (and is also the pattern for `/memberpage`).
 
 - URL structure: `/page?page=<section>/<child>`:
   - `section` maps to the Firestore document ID in the `pages` collection.
@@ -241,7 +241,7 @@ The footer content is **cached in `localStorage`** and re-rendered when updated 
     - **Logout button** (`#logoutBtn`, plus mobile logout icon).
     - Member-only content boxes (`initContentBoxes` with member-specific configuration).
 - `/memberpage`:
-  - Similar to `/page`, but scoped to member content:
+  - Similar to `/page`, but scoped to member content. Content is injected into `#pageContent` using the same structure as the **template** `public/edit.html` (see Dynamic Public Pages).
     - Uses `load-member-page.js`.
     - Reads data from `member` namespaced collections (see Content Model section).
   - Side navigation and active page rendering parallel the public pages behavior.
