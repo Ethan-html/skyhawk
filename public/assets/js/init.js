@@ -172,40 +172,40 @@ function buildPageConfigs(mods) {
   return [
     {
       match: path => path === "/" || path === "/index.html",
-      modules: [mods.initHeaderFooter, mods.initMenu, mods.initSlideshow, mods.initContentBoxes],
+      modules: [mods.initAnnouncementBanner, mods.initHeaderFooter, mods.initMenu, mods.initSlideshow, mods.initContentBoxes],
       requiresAuth: false
     },
     {
       match: path => path.startsWith("/page"),
-      modules: [mods.initHeaderFooter, mods.initMenu, loadSection(mods.loadPage, mods.renderPage)],
+      modules: [mods.initAnnouncementBanner, mods.initHeaderFooter, mods.initMenu, loadSection(mods.loadPage, mods.renderPage)],
       requiresAuth: false
     },
     {
       match: path => path === "/member",
-      modules: [mods.initHeaderFooter, mods.initMenu, mods.initMemberMenu, mods.initContentBoxes],
+      modules: [mods.initAnnouncementBanner, mods.initHeaderFooter, mods.initMenu, mods.initMemberMenu, mods.initContentBoxes],
       requiresAuth: true,
       logout: true
     },
     {
       match: path => path.startsWith("/memberpage"),
-      modules: [mods.initHeaderFooter, mods.initMenu, mods.initMemberMenu, loadSection(mods.loadMemberPage, mods.renderMemberPage)],
+      modules: [mods.initAnnouncementBanner, mods.initHeaderFooter, mods.initMenu, mods.initMemberMenu, loadSection(mods.loadMemberPage, mods.renderMemberPage)],
       requiresAuth: true,
       logout: true
     },
     {
       match: path => path.startsWith("/photos"),
-      modules: [mods.initHeaderFooter],
+      modules: [mods.initAnnouncementBanner, mods.initHeaderFooter],
       requiresAuth: true,
       logout: true
     },
     {
       match: path => path.startsWith("/login"),
-      modules: [mods.initLogin],
+      modules: [mods.initAnnouncementBanner, mods.initLogin],
       requiresAuth: false
     },
     {
       match: () => true,
-      modules: [mods.initHeaderFooter, mods.initMenu],
+      modules: [mods.initAnnouncementBanner, mods.initHeaderFooter, mods.initMenu],
       requiresAuth: false
     }
   ];
@@ -248,6 +248,7 @@ export async function initPage() {
       contentBoxesMod,
       slideshowMod,
       headerFooterMod,
+      announcementBannerMod,
       loadPageMod,
       loadMemberPageMod,
       loginMod,
@@ -258,6 +259,7 @@ export async function initPage() {
       import(/* @v */ withVersion("/assets/js/content-boxes.js")),
       import(/* @v */ withVersion("/assets/js/slideshow.js")),
       import(/* @v */ withVersion("/assets/js/header-footer.js")),
+      import(/* @v */ withVersion("/assets/js/announcement-banner.js")),
       import(/* @v */ withVersion("/assets/js/load-page.js")),
       import(/* @v */ withVersion("/assets/js/load-member-page.js")),
       import(/* @v */ withVersion("/assets/js/login.js")),
@@ -270,6 +272,7 @@ export async function initPage() {
       initContentBoxes: contentBoxesMod.initContentBoxes,
       initSlideshow: slideshowMod.initSlideshow,
       initHeaderFooter: headerFooterMod.initHeaderFooter,
+      initAnnouncementBanner: announcementBannerMod.initAnnouncementBanner,
       loadPage: loadPageMod.loadPage,
       renderPage: loadPageMod.renderPage,
       loadMemberPage: loadMemberPageMod.loadMemberPage,
@@ -351,5 +354,4 @@ export async function initPage() {
 
   });
 }
-
 
