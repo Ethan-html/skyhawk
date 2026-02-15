@@ -6,30 +6,15 @@ const withVersion = (url) =>
   ASSET_VERSION ? url + (url.includes("?") ? "&" : "?") + "v=" + ASSET_VERSION : url;
 
 // ==============================
-// Firebase (singleton)
+// Firebase (singleton) — config from config.js (window.SITE_CONFIG)
 // ==============================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
-// ==============================
-// Site modules (loaded dynamically with version for cache-busting)
-// ==============================
-// Firebase config
-// ==============================
-const firebaseConfig = {
-  apiKey: "AIzaSyBk_ikYB1PzkgHx4zJY73pe3EfzQRpZvqw",
-  authDomain: "skyhawk-web.firebaseapp.com",
-  projectId: "skyhawk-web",
-  storageBucket: "skyhawk-web.firebasestorage.app",
-  messagingSenderId: "340655139001",
-  appId: "1:340655139001:web:7923a1fe83ac4a4c689368",
-  measurementId: "G-M2RSE2BRK2"
-};
-
-// ==============================
-// Init Firebase
-// ==============================
+const firebaseConfig = typeof window !== "undefined" && window.SITE_CONFIG?.firebase
+  ? window.SITE_CONFIG.firebase
+  : {};
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth();
@@ -63,13 +48,15 @@ function initGA() {
   window.dataLayer = window.dataLayer || [];
   window.gtag = function () { dataLayer.push(arguments); };
 
+  const id = typeof window !== "undefined" && window.SITE_CONFIG?.measurementId;
+  if (!id) return;
   const script = document.createElement("script");
   script.async = true;
-  script.src = "https://www.googletagmanager.com/gtag/js?id=G-M2RSE2BRK2";
+  script.src = "https://www.googletagmanager.com/gtag/js?id=" + id;
 
   script.onload = () => {
     gtag("js", new Date());
-    gtag("config", "G-M2RSE2BRK2");
+    gtag("config", id);
   };
 
   // If blocked or fails, do absolutely nothing
@@ -137,6 +124,38 @@ function initLogout() {
   }
 }
 
+// ==============================
+// Share dropdown — delegated click (no inline onclick)
+// ==============================
+function initShareLinks() {
+  document.addEventListener("click", (e) => {
+    const link = e.target.closest?.(".nav-drop-list-link[data-share]");
+    if (!link) return;
+    e.preventDefault();
+    const share = link.getAttribute("data-share");
+    const url = encodeURIComponent(typeof location !== "undefined" ? location.origin : "");
+    const title = encodeURIComponent(typeof window !== "undefined" && window.currentUnit?.name ? window.currentUnit.name : "Website");
+    if (share === "email") {
+      location.href = "mailto:?subject=" + title + "&body=" + url;
+    } else if (share === "facebook") {
+      window.open("https://www.facebook.com/sharer/sharer.php?u=" + url + "&t=" + title);
+    } else if (share === "twitter") {
+      window.open("https://twitter.com/intent/tweet?text=" + title + " " + (typeof location !== "undefined" ? location.origin : ""));
+    } else if (share === "linkedin") {
+      window.open("https://www.linkedin.com/sharing/share-offsite/?url=" + url + "&title=" + title);
+    }
+  });
+}
+
+// ==============================
+// Canonical URL for /page and /memberpage
+// ==============================
+function setCanonicalIfNeeded() {
+  const path = typeof location !== "undefined" ? location.pathname : "";
+  if (path !== "/page" && path !== "/memberpage") return;
+  const link = document.getElementById("canonical-link");
+  if (link && location.href) link.setAttribute("href", location.href);
+}
 
 // ==============================
 // Helper for loading sections
@@ -270,6 +289,9 @@ export async function initPage() {
 
     // Show page immediately
     document.body.style.display = "block";
+
+    initShareLinks();
+    setCanonicalIfNeeded();
 
     // ==============================
     // TIER 1 — jQuery dependency chain (non-blocking)

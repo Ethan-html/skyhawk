@@ -13,6 +13,8 @@
     <meta name="googlebot" content="index,follow">
     <meta name="msnbot" content="index,follow">
 
+    <link id="canonical-link" rel="canonical" href="">
+
     <!-- Social Sharing (OG + Twitter) -->
     <meta property="og:type" content="website">
     <meta property="og:title" content="Home | Skyhawk Composite Squadron">
@@ -191,10 +193,10 @@
                     <div class="link-block site-share-wrapper w-hidden-medium w-hidden-small w-hidden-tiny">
                       <a href="" class="w-inline-block w--current" id="load-site-share"> <img src="/assets/images/share-icon.png" alt="Share" class="share-icon"> </a>
                       <nav class="nav-drop-list w-dropdown-list">
-                        <a href="#" class="nav-drop-list-link" onclick="window.location.href='mailto:?subject='+encodeURIComponent(window.currentUnit?.name||'Website')+'&body='+encodeURIComponent(location.origin);return false;">Email this site</a> 
-                        <a href="#" class="nav-drop-list-link" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.origin)+'&t='+encodeURIComponent(window.currentUnit?.name||'Website'));return false;">Share on Facebook</a> 
-                        <a href="#" class="nav-drop-list-link" onclick="window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent((window.currentUnit?.name||'Website')+' '+location.origin));return false;" title="Share on X (formerly Twitter)">Share on X</a> 
-                        <a href="#" class="nav-drop-list-link" onclick="window.open('https://www.linkedin.com/sharing/share-offsite/?url='+encodeURIComponent(location.origin)+'&title='+encodeURIComponent(window.currentUnit?.name||'Website'));return false;">Share on LinkedIn</a>
+                        <a href="#" class="nav-drop-list-link" data-share="email">Email this site</a>
+                        <a href="#" class="nav-drop-list-link" data-share="facebook">Share on Facebook</a>
+                        <a href="#" class="nav-drop-list-link" data-share="twitter" title="Share on X (formerly Twitter)">Share on X</a>
+                        <a href="#" class="nav-drop-list-link" data-share="linkedin">Share on LinkedIn</a>
                       </nav>
                     </div>
                   </nav>

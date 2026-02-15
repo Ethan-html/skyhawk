@@ -51,6 +51,7 @@
       }
     ],
     "rewrites": [
+      { "source": "/health", "destination": "/health.json" },
       { "source": "/login", "destination": "/login.html" },
       { "source": "/page", "destination": "/page.html" },
       { "source": "/member", "destination": "/member.html" },

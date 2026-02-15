@@ -431,35 +431,19 @@ For basic HTML/CSS/JS work without Firebase emulation:
      ```
 3. Visit `http://localhost:<port>/` in your browser.
 
-Note: Login and Firestore-backed sections will interact with **your configured Firebase project**, as configerd in `init.js`.
+Note: Login and Firestore-backed sections will interact with **your configured Firebase project**, as set in `public/assets/js/config.js`.
 
 ---
 
 ## Configuration
 
-### Asset Versioning
+**`public/assets/js/config.js`** is the single config file (no env vars on static hosting). Edit it for:
 
-- `public/assets/js/config.js`:
-  - `window.ASSET_VERSION = "2.1.1";` (example).
-- `init.js` reads `window.ASSET_VERSION` and appends `?v=<version>` to:
-  - Core CSS.
-  - Main JS modules.
-- To bust caches:
-  - Increment **MAJOR.MINOR.PATCH** in `config.js` and redeploy.
+- **`window.ASSET_VERSION`** — Bump on deploy for cache-busting. `init.js` appends `?v=<version>` to CSS and JS URLs.
+- **`window.SITE_CONFIG.firebase`** — Firebase project: `apiKey`, `authDomain`, `projectId`, `storageBucket`, `messagingSenderId`, `appId`, `measurementId`. Change when switching projects or when credentials rotate.
+- **`window.SITE_CONFIG.measurementId`** — Optional Google Analytics / gtag ID; leave empty to disable.
 
-### Firebase Config
-
-In `init.js`, the Firebase config block includes:
-
-- `apiKey`
-- `authDomain`
-- `projectId`
-- `storageBucket`
-- `messagingSenderId`
-- `appId`
-- `measurementId`
-
-These values must match your Firebase project.
+`init.js` reads this file to initialize Firebase and (optionally) gtag.
 
 ---
 

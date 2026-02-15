@@ -1,24 +1,25 @@
 /*
-Single place to bump on each deploy. Used for cache-busting asset URLs.
+ * Single config file for static hosting (no env vars).
+ * Edit this file for asset version, Firebase project, and analytics.
+ */
 
-Versioning Rules (Semantic Style)
+// --- Asset version (cache-busting) ---
+// Bump on deploy. Format: MAJOR.MINOR.PATCH
+// MAJOR = breaking; MINOR = new features; PATCH = fixes only
+window.ASSET_VERSION = "2.1.6";
 
-Format: MAJOR.MINOR.PATCH  →  Example: 6.3.2
-
-MAJOR (6)
-- Big or breaking changes
-- Something may stop working without updates
-- Major feature overhauls or structural rewrites
-
-MINOR (3)
-- New features or noticeable improvements
-- No breaking changes
-- Existing functionality continues to work
-- Closes a Issue
-
-PATCH (2)
-- Small fixes and minor improvements
-- Bug fixes, performance tweaks, tiny adjustments
-- No new features, no breaking changes
-*/
-window.ASSET_VERSION = "2.1.5";
+// --- Firebase & site ---
+// Change when switching projects or when credentials rotate.
+window.SITE_CONFIG = {
+  firebase: {
+    apiKey: "AIzaSyBk_ikYB1PzkgHx4zJY73pe3EfzQRpZvqw",
+    authDomain: "skyhawk-web.firebaseapp.com",
+    projectId: "skyhawk-web",
+    storageBucket: "skyhawk-web.firebasestorage.app",
+    messagingSenderId: "340655139001",
+    appId: "1:340655139001:web:7923a1fe83ac4a4c689368",
+    measurementId: "G-M2RSE2BRK2"
+  },
+  /** Google Analytics / gtag ID (optional; leave empty to disable) */
+  measurementId: "G-M2RSE2BRK2"
+};
