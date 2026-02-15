@@ -1,12 +1,19 @@
 // /assets/js/load-member-page.js
 import { doc, collection, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
+// Same sanitization as public pages: allow iframes and attributes used in member content
 function sanitizeHtml(html) {
   if (typeof window !== "undefined" && window.DOMPurify) {
-    return window.DOMPurify.sanitize(html || "", { USE_PROFILES: { html: true } });
+    return window.DOMPurify.sanitize(html || "", {
+      USE_PROFILES: { html: true },
+      ADD_TAGS: ["iframe"],
+      ADD_ATTR: ["src", "width", "height", "frameborder", "allow", "allowfullscreen", "scrolling", "style", "loading", "referrerpolicy"],
+      ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|tel|data):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i
+    });
   }
   const div = document.createElement("div");
-  div.textContent = html;
+  div.innerHTML = html;
+  div.querySelectorAll("script").forEach((s) => s.remove());
   return div.innerHTML;
 }
 
