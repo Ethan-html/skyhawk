@@ -55,8 +55,8 @@ function buildMenu(pagesWithChildren, menuRoot) {
 
       const ul = document.createElement("ul");
       ul.className = "dropdown-list";
-
-      children.forEach(child => {
+      const orderedChildren = sortByOptionalOrderId([...children]);
+      orderedChildren.forEach(child => {
         const cli = document.createElement("li");
         const ca = document.createElement("a");
         ca.href = child.url || "#";
@@ -142,7 +142,8 @@ function buildMobileMenu(pagesWithChildren, root, isMemberMenu = false) {
 
     if (children?.length) {
       const ul = document.createElement("ul");
-      children.forEach(child => {
+      const orderedChildren = sortByOptionalOrderId([...children]);
+      orderedChildren.forEach(child => {
         const cli = document.createElement("li");
         cli.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
 
@@ -164,9 +165,7 @@ function buildMobileMenu(pagesWithChildren, root, isMemberMenu = false) {
   root.appendChild(fragment);
 }
 
-// --------------------
-// Public init function
-// --------------------
+
 export async function initMemberMenu(db) {
   const desktopRoot = document.getElementById("member-menu");
   const mobileRoot = document.getElementById("mobile-menu-root"); // same UL as main menu

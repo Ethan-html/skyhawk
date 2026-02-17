@@ -28,7 +28,7 @@ async function fetchMenu(db) {
   }
 }
 
-// Render desktop menu
+//Render desktop menu
 function buildMenu(pagesWithChildren, menuRoot) {
   const fragment = document.createDocumentFragment();
 
@@ -51,8 +51,8 @@ function buildMenu(pagesWithChildren, menuRoot) {
 
       const ul = document.createElement("ul");
       ul.className = "dropdown-list";
-
-      children.forEach(child => {
+      const orderedChildren = sortByOptionalOrderId([...children]);
+      orderedChildren.forEach(child => {
         const cli = document.createElement("li");
         const ca = document.createElement("a");
         ca.href = child.url || "#";
@@ -82,7 +82,7 @@ function buildMenu(pagesWithChildren, menuRoot) {
   }, true);
 }
 
-// Render mobile menu
+//Render mobile menu
 function buildMobileMenu(pagesWithChildren, root) {
   root.innerHTML = "";
 
@@ -100,8 +100,8 @@ function buildMobileMenu(pagesWithChildren, root) {
 
     if (children?.length) {
       const ul = document.createElement("ul");
-
-      children.forEach(child => {
+      const orderedChildren = sortByOptionalOrderId([...children]);
+      orderedChildren.forEach(child => {
         const cli = document.createElement("li");
         cli.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
 
@@ -122,33 +122,73 @@ function buildMobileMenu(pagesWithChildren, root) {
   });
 }
 
-// Public function to initialize menu with cache + revalidate
+function filter(pagesWithChildren) {
+  return pagesWithChildren
+    .map(({ page, children }) => ({
+      page,
+      children: children.filter(child => {
+        const val = String(child.mobilemenu || "").toLowerCase();
+        return val !== "true";
+      })
+    }))
+    .filter(({ page }) => {
+      const val = String(page.mobilemenu || "").toLowerCase();
+      return val !== "true";
+    });
+}
+
+
+
+
+function sortByOptionalOrderId(items) {
+  return items.sort((a, b) => {
+    const aHas = a.orderid !== undefined && a.orderid !== "";
+    const bHas = b.orderid !== undefined && b.orderid !== "";
+
+    if (aHas && bHas) {
+      const aNum = Number(a.orderid);
+      const bNum = Number(b.orderid);
+
+      if (!Number.isNaN(aNum) && !Number.isNaN(bNum)) {
+        if (aNum !== bNum) return aNum - bNum;
+      }
+      return 0; // same number → keep Firestore order
+    }
+
+    if (aHas && !bHas) return -1; // a first
+    if (!aHas && bHas) return 1;  // b first
+
+    return 0; // neither has orderid → keep Firestore order
+  });
+}
+
+//Public function to initialize menu with cache + revalidate
 export async function initMenu(db) {
   const desktopRoot = document.getElementById("main-menu");
   const mobileRoot = document.getElementById("mobile-menu-root");
 
   if (!desktopRoot && !mobileRoot) return;
 
-  // 1️⃣ Render cached menu immediately
+  //Render cached menu immediately
   const cachedRaw = localStorage.getItem(CACHE_KEY);
   if (cachedRaw) {
     try {
       const cached = JSON.parse(cachedRaw);
-      if (desktopRoot) buildMenu(cached, desktopRoot);
+      if (desktopRoot) buildMenu(filter(cached), desktopRoot);
       if (mobileRoot) buildMobileMenu(cached, mobileRoot);
     } catch {}
   }
 
-  // 2️⃣ Fetch fresh data in background
+  // Fetch fresh data in background
   const fresh = await fetchMenu(db);
   if (!fresh.length) return;
 
-  // 3️⃣ Only update if changed
+  // Only update if changed
   if (JSON.stringify(fresh) !== cachedRaw) {
     localStorage.setItem(CACHE_KEY, JSON.stringify(fresh));
     if (desktopRoot) {
       desktopRoot.innerHTML = "";
-      buildMenu(fresh, desktopRoot);
+      buildMenu(filter(fresh), desktopRoot);
     }
     if (mobileRoot) {
       buildMobileMenu(fresh, mobileRoot);

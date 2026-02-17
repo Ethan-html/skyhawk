@@ -6,9 +6,27 @@ function sanitizeHtml(html) {
   if (typeof window !== "undefined" && window.DOMPurify) {
     return window.DOMPurify.sanitize(html || "", {
       USE_PROFILES: { html: true },
-      ADD_TAGS: ['iframe'], // allow iframe
-      ADD_ATTR: ['src', 'width', 'height', 'frameborder', 'allow', 'allowfullscreen', 'scrolling'], // common iframe attributes
-      ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|tel|data):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i // keep safe URLs
+
+      ADD_TAGS: ['iframe', 'img'],
+
+      ADD_ATTR: [
+        'src',
+        'href',
+        'width',
+        'height',
+        'alt',
+        'title',
+        'target',
+        'rel',
+        'frameborder',
+        'allow',
+        'allowfullscreen',
+        'scrolling',
+        'style' // ← REQUIRED for float/margins
+      ],
+
+      ALLOWED_URI_REGEXP:
+        /^(?:(?:https?|mailto|tel):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i
     });
   }
   
@@ -60,7 +78,8 @@ export async function loadPage(db, sectionId, onUpdate) {
       title: d.title,
       slug: d.slug,
       content: d.content,
-      externalUrl: d.externalUrl || null
+      externalUrl: d.externalUrl || null,
+      orderid: d.orderid ?? ""
     };
   });
 
@@ -80,7 +99,9 @@ export function renderPage(pageData) {
 
   const params = new URLSearchParams(location.search);
   const [, childSlug] = (params.get("page") || "").split("/");
-  const children = Object.values(pageData.children);
+  const children = sortByOptionalOrderId(
+    Object.values(pageData.children)
+  );
   let active;
   if (childSlug) {
     // Load child page by slug or fallback to first child
@@ -139,3 +160,33 @@ export function renderPage(pageData) {
     pageContentEl.innerHTML = sanitizeHtml(active.content);
   }
 }
+
+function sortByOptionalOrderId(items) {
+  return items.sort((a, b) => {
+    const aHas =
+      a.orderid !== undefined &&
+      a.orderid !== null &&
+      a.orderid !== "" &&
+      !Number.isNaN(Number(a.orderid));
+
+    const bHas =
+      b.orderid !== undefined &&
+      b.orderid !== null &&
+      b.orderid !== "" &&
+      !Number.isNaN(Number(b.orderid));
+
+    // both have valid orderid → numeric sort
+    if (aHas && bHas) {
+      const diff = Number(a.orderid) - Number(b.orderid);
+      return diff !== 0 ? diff : 0; // same number → keep Firestore order
+    }
+
+    // only one has orderid → that one goes first
+    if (aHas && !bHas) return -1;
+    if (!aHas && bHas) return 1;
+
+    // neither has orderid → keep Firestore order
+    return 0;
+  });
+}
+
