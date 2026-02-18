@@ -1,32 +1,33 @@
 // ==============================
 // Firebase
 // ==============================
-import { getAuth,
-  signInWithEmailAndPassword,
+import {
+  getAuth,
+  onAuthStateChanged,
   sendPasswordResetEmail,
-  onAuthStateChanged
+  signInWithEmailAndPassword,
+  signOut
 } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
 import { initHeaderFooter } from "/assets/js/header-footer.js";
-  //================== Cookies ============================
-  function setCookie(name, value, days = 30) {
-    const expires = new Date(Date.now() + days * 864e5).toUTCString();
-    document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
-  }
+// ================= Cookies =================
+function setCookie(name, value, days = 30) {
+  const expires = new Date(Date.now() + days * 864e5).toUTCString();
+  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
+}
 
-  function getCookie(name) {
-    return document.cookie.split("; ").reduce((r, v) => {
-      const parts = v.split("=");
-      return parts[0] === name ? decodeURIComponent(parts[1]) : r
-    }, "");
-  }
+function getCookie(name) {
+  return document.cookie.split("; ").reduce((r, v) => {
+    const parts = v.split("=");
+    return parts[0] === name ? decodeURIComponent(parts[1] || "") : r;
+  }, "");
+}
 
 // ==============================
 // Login Rate Limiting
 // ==============================
-const MAX_ATTEMPTS = 5;              // attempts before lock
+const MAX_ATTEMPTS = 5; // attempts before lock
 const LOCK_TIME_MS = 3 * 60 * 1000; // 3 minutes
-
 
 function getLoginState() {
   return JSON.parse(sessionStorage.getItem("loginRateLimit") || "{}");
@@ -45,7 +46,6 @@ function formatTime(ms) {
   const seconds = totalSeconds % 60;
   return `${minutes}m ${seconds}s`;
 }
-
 
 export async function initLogin(db) {
   const auth = getAuth();
@@ -68,11 +68,10 @@ export async function initLogin(db) {
     }
   }
 
-
   // ================= LOGIN =================
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const state = getLoginState();
+    let state = getLoginState();
     if (state.lockUntil && Date.now() >= state.lockUntil) {
       clearLoginState();
       state = {};
@@ -80,22 +79,25 @@ export async function initLogin(db) {
 
     if (state.lockUntil && Date.now() < state.lockUntil) {
       const timeLeft = state.lockUntil - Date.now();
-      errorMsg.style.display = "block";
-      errorMsg.style.color = "red";
-      errorMsg.textContent = `Too many failed attempts. Try again in ${formatTime(timeLeft)}.`;
+      if (errorMsg) {
+        errorMsg.style.display = "block";
+        errorMsg.style.color = "red";
+        errorMsg.textContent = `Too many failed attempts. Try again in ${formatTime(timeLeft)}.`;
+      }
       return;
-
     }
     const usernameEl = document.getElementById("username");
     const passwordEl = document.getElementById("password");
-    const email = usernameEl.value.trim();
-    const password = passwordEl.value;
+    const email = (usernameEl?.value || "").trim();
+    const password = passwordEl?.value || "";
 
     if (usernameEl) usernameEl.removeAttribute("aria-invalid");
     if (passwordEl) passwordEl.removeAttribute("aria-invalid");
-    errorMsg.style.display = "block";
-    errorMsg.style.color = "#333";
-    errorMsg.textContent = "Signing in…";
+    if (errorMsg) {
+      errorMsg.style.display = "block";
+      errorMsg.style.color = "#333";
+      errorMsg.textContent = "Signing in…";
+    }
 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
@@ -107,56 +109,58 @@ export async function initLogin(db) {
 
       if (isFirstLogin) {
         await sendPasswordResetEmail(auth, email);
-        alert("A password reset email has been sent. Please check your inbox to set your password.");
-        await auth.signOut();
+        alert(
+          "A password reset email has been sent. Please check your inbox to set your password."
+        );
+        await signOut(auth);
         return;
       }
 
-      errorMsg.style.color = "green";
-      errorMsg.textContent = "Login successful! Redirecting…";
+      if (errorMsg) {
+        errorMsg.style.color = "green";
+        errorMsg.textContent = "Login successful! Redirecting…";
+      }
       setCookie("new", user.email);
       sessionStorage.setItem("focusMainAfterRedirect", "1");
-      setTimeout(() => window.location.href = "/member", 800);
-
-    } catch (err) {
-      errorMsg.style.display = "block";
-      errorMsg.style.color = "red";
+      setTimeout(() => (window.location.href = "/member"), 800);
+    } catch {
+      if (errorMsg) {
+        errorMsg.style.display = "block";
+        errorMsg.style.color = "red";
+      }
 
       // ---------------------------
       // Update rate limit state
       // ---------------------------
-      const state = getLoginState();
-      state.failCount = (state.failCount || 0) + 1;
-      state.lastFail = Date.now();
+      const nextState = getLoginState();
+      nextState.failCount = (nextState.failCount || 0) + 1;
+      nextState.lastFail = Date.now();
 
       let rateMessage = "";
 
       // Lock triggered
-      if (state.failCount >= MAX_ATTEMPTS) {
-        state.failCount = 0;
-        state.lockUntil = Date.now() + LOCK_TIME_MS;
+      if (nextState.failCount >= MAX_ATTEMPTS) {
+        nextState.failCount = 0;
+        nextState.lockUntil = Date.now() + LOCK_TIME_MS;
         rateMessage = ` Too many failed attempts. Login locked for ${formatTime(LOCK_TIME_MS)}.`;
-      } 
+      }
       // Show countdown ONLY when 3 or fewer attempts left
       else {
-        const remaining = MAX_ATTEMPTS - state.failCount;
+        const remaining = MAX_ATTEMPTS - nextState.failCount;
         if (remaining <= 3) {
           rateMessage = ` ${remaining} attempt${remaining === 1 ? "" : "s"} remaining.`;
         }
       }
 
-      setLoginState(state);
+      setLoginState(nextState);
 
       // ---------------------------
       // Combine messages + a11y
       // ---------------------------
-      errorMsg.textContent = "Login failed." + rateMessage;
-      const usernameEl = document.getElementById("username");
-      const passwordEl = document.getElementById("password");
+      if (errorMsg) errorMsg.textContent = "Login failed." + rateMessage;
       if (usernameEl) usernameEl.setAttribute("aria-invalid", "true");
       if (passwordEl) passwordEl.setAttribute("aria-invalid", "true");
     }
-
   });
 
   // ================= PASSWORD RESET UI =================
@@ -176,7 +180,7 @@ export async function initLogin(db) {
 
   const actionCodeSettings = {
     url: "https://skyhawk-cap.org/login",
-    handleCodeInApp: false,
+    handleCodeInApp: false
   };
 
   resendResetLink?.addEventListener("click", async (e) => {
@@ -199,20 +203,20 @@ export async function initLogin(db) {
 
   if (isNew && firstTimeSection) {
     loginForm.style.display = "none";
-    forgotLink.style.display = "none";
+    if (forgotLink) forgotLink.style.display = "none";
     firstTimeSection.style.display = "block";
     firstTimeEmailInput.value = newEmail || "";
     firstTimeEmailInput.focus();
   }
 
-  forgotLink?.addEventListener("click", e => {
+  forgotLink?.addEventListener("click", (e) => {
     e.preventDefault();
     loginForm.style.display = "none";
     forgotLink.style.display = "none";
     resetSection.style.display = "block";
   });
 
-  backToLogin?.addEventListener("click", e => {
+  backToLogin?.addEventListener("click", (e) => {
     e.preventDefault();
     resetSection.style.display = "none";
     loginForm.style.display = "block";
@@ -240,9 +244,11 @@ export async function initLogin(db) {
     } catch (err) {
       resetStatus.style.color = "red";
       resetStatus.textContent =
-        err.code === "auth/user-not-found" ? "No account found with that email." :
-        err.code === "auth/invalid-email" ? "Invalid email address." :
-        "Failed to send reset email. Please try again later.";
+        err.code === "auth/user-not-found"
+          ? "No account found with that email."
+          : err.code === "auth/invalid-email"
+            ? "Invalid email address."
+            : "Failed to send reset email. Please try again later.";
     }
   });
 
@@ -267,7 +273,7 @@ export async function initLogin(db) {
     }
   });
 
-  onAuthStateChanged(auth, user => {
+  onAuthStateChanged(auth, (user) => {
     if (user && !isNew) {
       sessionStorage.setItem("focusMainAfterRedirect", "1");
       window.location.href = "/member";

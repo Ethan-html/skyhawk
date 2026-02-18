@@ -6,7 +6,7 @@ const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1
 function getFocusables(container) {
   if (!container) return [];
   return Array.from(container.querySelectorAll(FOCUSABLE)).filter(
-    el => el.offsetParent !== null && !el.hasAttribute("disabled")
+    (el) => el.offsetParent !== null && !el.hasAttribute("disabled")
   );
 }
 

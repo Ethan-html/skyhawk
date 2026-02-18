@@ -1,0 +1,10 @@
+.firebase/
+functions/
+node_modules/
+
+**/*.min.js
+public/assets/js/jquery*.js
+public/assets/js/main-*.js
+public/assets/js/copywrite.js
+
+public/assets/manifest.json

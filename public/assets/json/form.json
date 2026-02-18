@@ -48,11 +48,7 @@
           "label": "Flight",
           "required": true,
           "googleId": "1167956420",
-          "options": [
-            "Alpha",
-            "Bravo",
-            "I don't know"
-          ]
+          "options": ["Alpha", "Bravo", "I don't know"]
         },
         {
           "name": "attend",
@@ -60,10 +56,7 @@
           "label": "Will you attend Monday's meeting?",
           "required": true,
           "googleId": "1799457051",
-          "options": [
-            "Yes",
-            "No"
-          ]
+          "options": ["Yes", "No"]
         }
       ]
     },
@@ -126,11 +119,7 @@
           "label": "Request a Cadet Evaluation or Presentation (Optional)",
           "required": false,
           "googleId": "1305054419",
-          "options": [
-            "Promotion Board",
-            "Chief Speech Oral Presentation",
-            "SDA Oral Presentation"
-          ]
+          "options": ["Promotion Board", "Chief Speech Oral Presentation", "SDA Oral Presentation"]
         },
         {
           "name": "final4",
@@ -138,9 +127,7 @@
           "label": "Request a Final 4 (Optional)",
           "required": false,
           "googleId": "353007884",
-          "options": [
-            "Yes"
-          ]
+          "options": ["Yes"]
         }
       ]
     }

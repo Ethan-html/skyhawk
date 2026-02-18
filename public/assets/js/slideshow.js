@@ -91,7 +91,7 @@ async function fetchSlideshowFromGitHub() {
 /**
  * @param {object} db - Firestore instance (unused; slideshow now uses GitHub)
  */
-export async function initSlideshow(db) {
+export async function initSlideshow(_db) {
   // 1. Render from cache immediately
   const cachedRaw = localStorage.getItem(CACHE_KEY);
   if (cachedRaw) {

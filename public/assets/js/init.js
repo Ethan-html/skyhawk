@@ -1,7 +1,8 @@
 // ==============================
 // Versioned assets (cache-busting)
 // ==============================
-const ASSET_VERSION = typeof window !== "undefined" && window.ASSET_VERSION ? window.ASSET_VERSION : "";
+const ASSET_VERSION =
+  typeof window !== "undefined" && window.ASSET_VERSION ? window.ASSET_VERSION : "";
 const withVersion = (url) =>
   ASSET_VERSION ? url + (url.includes("?") ? "&" : "?") + "v=" + ASSET_VERSION : url;
 
@@ -9,13 +10,19 @@ const withVersion = (url) =>
 // Firebase (singleton) — config from config.js (window.SITE_CONFIG)
 // ==============================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
-import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import {
+  getFirestore,
+  collection,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import {
+  getAuth,
+  signOut,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
 
-const firebaseConfig = typeof window !== "undefined" && window.SITE_CONFIG?.firebase
-  ? window.SITE_CONFIG.firebase
-  : {};
+const firebaseConfig =
+  typeof window !== "undefined" && window.SITE_CONFIG?.firebase ? window.SITE_CONFIG.firebase : {};
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth();
@@ -33,7 +40,7 @@ function onReady(fn) {
 // ==============================
 async function runParallel(tasks) {
   const results = await Promise.allSettled(tasks);
-  results.forEach(r => {
+  results.forEach((r) => {
     if (r.status === "rejected") console.warn("Init failed:", r.reason);
   });
 }
@@ -47,7 +54,9 @@ function initGA() {
 
   // Always create a safe no-op gtag first
   window.dataLayer = window.dataLayer || [];
-  window.gtag = function () { dataLayer.push(arguments); };
+  window.gtag = function () {
+    window.dataLayer.push(arguments);
+  };
 
   const id = typeof window !== "undefined" && window.SITE_CONFIG?.measurementId;
   if (!id) return;
@@ -56,8 +65,8 @@ function initGA() {
   script.src = "https://www.googletagmanager.com/gtag/js?id=" + id;
 
   script.onload = () => {
-    gtag("js", new Date());
-    gtag("config", id);
+    window.gtag("js", new Date());
+    window.gtag("config", id);
   };
 
   // If blocked or fails, do absolutely nothing
@@ -70,28 +79,29 @@ function initGA() {
 // Universal asset loader (JS & CSS)
 // ==============================
 function loadAssets(urls) {
-  const promises = urls.map((url) =>
-    new Promise((resolve, reject) => {
-      const path = url.split("?")[0];
-      if (path.endsWith(".js")) {
-        const s = document.createElement("script");
-        s.src = url;
-        s.defer = true;
-        s.onload = resolve;
-        s.onerror = reject;
-        document.head.appendChild(s);
-      } else if (path.endsWith(".css")) {
-        const l = document.createElement("link");
-        l.rel = "stylesheet";
-        l.href = url;
-        l.onload = resolve;
-        l.onerror = reject;
-        document.head.appendChild(l);
-      } else {
-        console.warn("Unknown asset type:", url);
-        resolve();
-      }
-    })
+  const promises = urls.map(
+    (url) =>
+      new Promise((resolve, reject) => {
+        const path = url.split("?")[0];
+        if (path.endsWith(".js")) {
+          const s = document.createElement("script");
+          s.src = url;
+          s.defer = true;
+          s.onload = resolve;
+          s.onerror = reject;
+          document.head.appendChild(s);
+        } else if (path.endsWith(".css")) {
+          const l = document.createElement("link");
+          l.rel = "stylesheet";
+          l.href = url;
+          l.onload = resolve;
+          l.onerror = reject;
+          document.head.appendChild(l);
+        } else {
+          console.warn("Unknown asset type:", url);
+          resolve();
+        }
+      })
   );
   return Promise.allSettled(promises).then((results) => {
     results.forEach((r) => {
@@ -135,13 +145,22 @@ function initShareLinks() {
     e.preventDefault();
     const share = link.getAttribute("data-share");
     const url = encodeURIComponent(typeof location !== "undefined" ? location.origin : "");
-    const title = encodeURIComponent(typeof window !== "undefined" && window.currentUnit?.name ? window.currentUnit.name : "Website");
+    const title = encodeURIComponent(
+      typeof window !== "undefined" && window.currentUnit?.name
+        ? window.currentUnit.name
+        : "Website"
+    );
     if (share === "email") {
       location.href = "mailto:?subject=" + title + "&body=" + url;
     } else if (share === "facebook") {
       window.open("https://www.facebook.com/sharer/sharer.php?u=" + url + "&t=" + title);
     } else if (share === "twitter") {
-      window.open("https://twitter.com/intent/tweet?text=" + title + " " + (typeof location !== "undefined" ? location.origin : ""));
+      window.open(
+        "https://twitter.com/intent/tweet?text=" +
+          title +
+          " " +
+          (typeof location !== "undefined" ? location.origin : "")
+      );
     } else if (share === "linkedin") {
       window.open("https://www.linkedin.com/sharing/share-offsite/?url=" + url + "&title=" + title);
     }
@@ -161,7 +180,7 @@ function setCanonicalIfNeeded() {
 // ==============================
 // Helper for loading sections
 // ==============================
-const loadSection = (loader, renderer) => async db => {
+const loadSection = (loader, renderer) => async (db) => {
   const sectionId = (new URLSearchParams(location.search).get("page") || "").split("/")[0];
   return sectionId && loader(db, sectionId, renderer);
 };
@@ -173,35 +192,52 @@ function buildPageConfigs(mods) {
   const announcementBanner = (db) => mods.initPublicSettingsBanner(db);
   return [
     {
-      match: path => path === "/" || path === "/index.html",
-      modules: [announcementBanner, mods.initHeaderFooter, mods.initMenu, mods.initSlideshow, mods.initContentBoxes],
+      match: (path) => path === "/" || path === "/index.html",
+      modules: [
+        announcementBanner,
+        mods.initHeaderFooter,
+        mods.initMenu,
+        mods.initSlideshow,
+        mods.initContentBoxes
+      ],
       requiresAuth: false
     },
     {
-      match: path => path === "/member",
-      modules: [announcementBanner, mods.initHeaderFooter, mods.initMemberMenu, mods.initSlideshow, mods.initContentBoxes],
+      match: (path) => path === "/member",
+      modules: [
+        announcementBanner,
+        mods.initHeaderFooter,
+        mods.initMemberMenu,
+        mods.initSlideshow,
+        mods.initContentBoxes
+      ],
       requiresAuth: true,
       logout: true
     },
     {
-      match: path => path.startsWith("/memberpage"),
-      modules: [announcementBanner, mods.initHeaderFooter, mods.initMemberMenu, loadSection(mods.loadMemberPage, mods.renderMemberPage)],
+      match: (path) => path.startsWith("/memberpage"),
+      modules: [
+        announcementBanner,
+        mods.initHeaderFooter,
+        mods.initMemberMenu,
+        loadSection(mods.loadMemberPage, mods.renderMemberPage)
+      ],
       requiresAuth: true,
       logout: true
     },
     {
-      match: path => path.startsWith("/photos"),
+      match: (path) => path.startsWith("/photos"),
       modules: [announcementBanner, mods.initHeaderFooter],
       requiresAuth: true,
       logout: true
     },
     {
-      match: path => path.startsWith("/login"),
+      match: (path) => path.startsWith("/login"),
       modules: [announcementBanner, mods.initLogin],
       requiresAuth: false
     },
     {
-      match: path => path.startsWith("/404"),
+      match: (path) => path.startsWith("/404"),
       modules: [announcementBanner, mods.initHeaderFooter, mods.initMemberMenu],
       requiresAuth: true,
       logout: true
@@ -218,13 +254,13 @@ function buildPageConfigs(mods) {
 // Auth Gate
 // ==============================
 async function authGate(pageConfigs, callback) {
-  const protectedPaths = pageConfigs.filter(p => p.requiresAuth).map(p => p.match);
+  const protectedPaths = pageConfigs.filter((p) => p.requiresAuth).map((p) => p.match);
 
-  const isProtected = protectedPaths.some(fn => fn(location.pathname));
+  const isProtected = protectedPaths.some((fn) => fn(location.pathname));
   if (isProtected) document.body.style.display = "none";
 
-  return new Promise(resolve => {
-    onAuthStateChanged(auth, async user => {
+  return new Promise((resolve) => {
+    onAuthStateChanged(auth, async (user) => {
       if (isProtected && !user) {
         window.location.replace("/login");
       } else {
@@ -241,7 +277,6 @@ async function authGate(pageConfigs, callback) {
 // ==============================
 export async function initPage() {
   onReady(async () => {
-
     // ==============================
     // TIER 0 — Critical CSS (needed for maintenance page and layout)
     // ==============================
@@ -301,7 +336,8 @@ export async function initPage() {
       renderMemberPage: loadMemberPageMod.renderMemberPage,
       initLogin: loginMod.initLogin,
       initMobileMenuA11y: mobileMenuA11yMod.initMobileMenuA11y,
-      initPublicSettingsBanner: () => publicSettingsMod.initAnnouncementBanner(window.__PUBLIC_SETTINGS__?.announcementBanner)
+      initPublicSettingsBanner: () =>
+        publicSettingsMod.initAnnouncementBanner(window.__PUBLIC_SETTINGS__?.announcementBanner)
     };
 
     const pageConfigs = buildPageConfigs(mods);
@@ -317,7 +353,9 @@ export async function initPage() {
     // ==============================
     (async () => {
       await loadAssets([withVersion("/assets/js/jquery.min.js")]);
-      await loadAssets([withVersion("/assets/js/jquery.cycle2-fef2f3645726cce4154911d6140d7d52.min.js")]);
+      await loadAssets([
+        withVersion("/assets/js/jquery.cycle2-fef2f3645726cce4154911d6140d7d52.min.js")
+      ]);
     })();
 
     // ==============================
@@ -343,11 +381,11 @@ export async function initPage() {
     // ==============================
     authGate(pageConfigs, async () => {
       const path = location.pathname;
-      const config = pageConfigs.find(c => c.match(path));
+      const config = pageConfigs.find((c) => c.match(path));
       if (!config) return;
 
       // Run page modules in parallel
-      await runParallel(config.modules.map(fn => fn(db)));
+      await runParallel(config.modules.map((fn) => fn(db)));
 
       mods.initMobileMenuA11y();
 
@@ -367,12 +405,12 @@ export async function initPage() {
         initLogout();
       }
     });
-
   });
 }
 
 // --------------------
-// Fetch member menu from Firestore
+// Fetch member menu from Firestore and cache to localStorage.
+// Member menu module reads from this cache.
 // --------------------
 async function fetchMemberMenu(db) {
   try {
@@ -380,13 +418,11 @@ async function fetchMemberMenu(db) {
     const pagesSnap = await getDocs(pagesCollection);
 
     const pagesWithChildren = await Promise.all(
-      pagesSnap.docs.map(async pageDoc => {
-        const childrenSnap = await getDocs(
-          collection(pagesCollection, pageDoc.id, "children")
-        );
+      pagesSnap.docs.map(async (pageDoc) => {
+        const childrenSnap = await getDocs(collection(pagesCollection, pageDoc.id, "children"));
         return {
           page: pageDoc.data(),
-          children: childrenSnap.docs.map(d => d.data())
+          children: childrenSnap.docs.map((d) => d.data())
         };
       })
     );
@@ -397,8 +433,9 @@ async function fetchMemberMenu(db) {
     return [];
   }
 }
-const CACHE_KEY = "menuPagesMember";
-const fresh = await fetchMemberMenu(db);
-localStorage.setItem(CACHE_KEY, JSON.stringify(fresh));
 
-
+const MEMBER_MENU_CACHE_KEY = "menuPagesMember";
+const memberMenuFresh = await fetchMemberMenu(db);
+if (memberMenuFresh.length) {
+  localStorage.setItem(MEMBER_MENU_CACHE_KEY, JSON.stringify(memberMenuFresh));
+}

@@ -1,5 +1,8 @@
 // /assets/js/content-boxes.js
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import {
+  collection,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
 const CACHE_KEY = "contentBoxesChildren";
 
@@ -8,7 +11,7 @@ async function fetchContentBoxes(db) {
   try {
     const colRef = collection(db, "main", "contentBoxes", "children");
     const snap = await getDocs(colRef);
-    return snap.docs.map(d => d.data());
+    return snap.docs.map((d) => d.data());
   } catch (err) {
     console.warn("Failed to fetch content boxes:", err);
     return [];

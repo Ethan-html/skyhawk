@@ -1,8 +1,12 @@
 // header-footer.js
-import { doc, getDoc, getDocs, collection } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import {
+  doc,
+  getDoc,
+  getDocs,
+  collection
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
 export function initHeaderFooter(db) {
-
   // --------------------
   // Generic cache-first loader
   // --------------------
@@ -11,7 +15,9 @@ export function initHeaderFooter(db) {
     if (cached) {
       try {
         onUpdate(JSON.parse(cached));
-      } catch { cached = null; }
+      } catch {
+        cached = null;
+      }
     }
 
     try {
@@ -36,7 +42,7 @@ export function initHeaderFooter(db) {
 
   const fetchCollectionData = async (path) => {
     const snap = await getDocs(collection(db, ...path));
-    return snap.docs.map(d => d.data());
+    return snap.docs.map((d) => d.data());
   };
 
   // --------------------
@@ -59,7 +65,6 @@ export function initHeaderFooter(db) {
     donateBtn.href = donate.url;
   };
 
-
   const escapeHtml = (s) => {
     if (!s) return "";
     const div = document.createElement("div");
@@ -75,7 +80,10 @@ export function initHeaderFooter(db) {
     const phone = escapeHtml(contact?.phone || "");
     const email = escapeHtml(contact?.email || "");
     const linksHTML = (quickLinks || [])
-      .map((l) => `<li><a href="${escapeHtml(l.url || "#")}" class="footer-link"${l.external === "true" ? ' target="_blank" rel="noopener noreferrer"' : ""}>${escapeHtml(l.title || "")}</a></li>`)
+      .map(
+        (l) =>
+          `<li><a href="${escapeHtml(l.url || "#")}" class="footer-link"${l.external === "true" ? ' target="_blank" rel="noopener noreferrer"' : ""}>${escapeHtml(l.title || "")}</a></li>`
+      )
       .join("");
 
     footer.innerHTML = `
@@ -136,11 +144,15 @@ export function initHeaderFooter(db) {
   loadAndRevalidate("site_unit", () => fetchDocData(["main", "unit"]), renderUnit);
   loadAndRevalidate("site_donate", () => fetchDocData(["main", "donate"]), renderDonate);
 
-  loadAndRevalidate("site_footer", async () => {
-    const [contact, quickLinks] = await Promise.all([
-      fetchDocData(["main", "contact"]),
-      fetchCollectionData(["main", "quickLinks", "children"])
-    ]);
-    return { contact, quickLinks };
-  }, data => renderFooter(data.contact, data.quickLinks));
+  loadAndRevalidate(
+    "site_footer",
+    async () => {
+      const [contact, quickLinks] = await Promise.all([
+        fetchDocData(["main", "contact"]),
+        fetchCollectionData(["main", "quickLinks", "children"])
+      ]);
+      return { contact, quickLinks };
+    },
+    (data) => renderFooter(data.contact, data.quickLinks)
+  );
 }

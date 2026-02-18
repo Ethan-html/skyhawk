@@ -63,10 +63,10 @@
   function spawnBus(svg) {
     const bus = document.createElement("div");
     bus.style.position = "fixed";
-  bus.style.bottom = "50px";
-  bus.style.left = "-250px";
-  bus.style.width = "250px";
-  bus.style.zIndex = "99999";
+    bus.style.bottom = "50px";
+    bus.style.left = "-250px";
+    bus.style.width = "250px";
+    bus.style.zIndex = "99999";
 
     bus.innerHTML = svg;
     document.body.appendChild(bus);

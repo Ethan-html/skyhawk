@@ -1,5 +1,4 @@
 // /assets/js/member-menu.js
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
 const CACHE_KEY = "menuPagesMember";
 
@@ -7,6 +6,7 @@ const CACHE_KEY = "menuPagesMember";
 // Render menu (desktop & mobile)
 // --------------------
 function buildMenu(pagesWithChildren, menuRoot) {
+  menuRoot.replaceChildren();
   const fragment = document.createDocumentFragment();
 
   pagesWithChildren.forEach(({ page, children }) => {
@@ -29,7 +29,7 @@ function buildMenu(pagesWithChildren, menuRoot) {
       const ul = document.createElement("ul");
       ul.className = "dropdown-list";
       const orderedChildren = sortByOptionalOrderId([...children]);
-      orderedChildren.forEach(child => {
+      orderedChildren.forEach((child) => {
         const cli = document.createElement("li");
         const ca = document.createElement("a");
         ca.href = child.url || "#";
@@ -47,15 +47,27 @@ function buildMenu(pagesWithChildren, menuRoot) {
   });
 
   menuRoot.appendChild(fragment);
+}
 
-  menuRoot.addEventListener("mouseenter", (e) => {
-    const li = e.target.closest(".main-li.has-dropdown");
-    if (li) li.classList.add("open");
-  }, true);
-  menuRoot.addEventListener("mouseleave", (e) => {
-    const li = e.target.closest(".main-li.has-dropdown");
-    if (li && !li.contains(e.relatedTarget)) li.classList.remove("open");
-  }, true);
+function ensureDesktopHoverHandlers(menuRoot) {
+  if (menuRoot.dataset.memberMenuHoverHandlers === "1") return;
+  menuRoot.dataset.memberMenuHoverHandlers = "1";
+  menuRoot.addEventListener(
+    "mouseenter",
+    (e) => {
+      const li = e.target.closest(".main-li.has-dropdown");
+      if (li) li.classList.add("open");
+    },
+    true
+  );
+  menuRoot.addEventListener(
+    "mouseleave",
+    (e) => {
+      const li = e.target.closest(".main-li.has-dropdown");
+      if (li && !li.contains(e.relatedTarget)) li.classList.remove("open");
+    },
+    true
+  );
 }
 
 function buildMobileMenu(pagesWithChildren, root) {
@@ -75,7 +87,7 @@ function buildMobileMenu(pagesWithChildren, root) {
 
   homeLi.appendChild(homeA);
   fragment.appendChild(homeLi);
-  
+
   pagesWithChildren.forEach(({ page, children }) => {
     const li = document.createElement("li");
     li.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
@@ -90,7 +102,7 @@ function buildMobileMenu(pagesWithChildren, root) {
     if (children?.length) {
       const ul = document.createElement("ul");
       const orderedChildren = sortByOptionalOrderId([...children]);
-      orderedChildren.forEach(child => {
+      orderedChildren.forEach((child) => {
         const cli = document.createElement("li");
         cli.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
 
@@ -128,27 +140,29 @@ function sortByOptionalOrderId(items) {
     }
 
     if (aHas && !bHas) return -1; // a first
-    if (!aHas && bHas) return 1;  // b first
+    if (!aHas && bHas) return 1; // b first
 
     return 0; // neither has orderid → keep Firestore order
   });
 }
 
-export async function initMemberMenu(db) {
+export async function initMemberMenu(_db) {
   const desktopRoot = document.getElementById("member-menu");
   const mobileRoot = document.getElementById("mobile-menu-root");
   if (!desktopRoot && !mobileRoot) return;
-  let menuData = [];
+
+  // Render from cache (populated by init.js)
   const cachedRaw = localStorage.getItem(CACHE_KEY);
-  if (cachedRaw) {
-    try {
-      menuData = JSON.parse(cachedRaw);
-      if (desktopRoot) buildMenu(menuData, desktopRoot);
-      if (mobileRoot) buildMobileMenu(menuData, mobileRoot);
-    } catch {}
+  if (!cachedRaw) return;
+
+  try {
+    const menuData = JSON.parse(cachedRaw);
+    if (desktopRoot) {
+      buildMenu(menuData, desktopRoot);
+      ensureDesktopHoverHandlers(desktopRoot);
+    }
+    if (mobileRoot) buildMobileMenu(menuData, mobileRoot);
+  } catch (err) {
+    console.warn("Failed to parse member menu cache:", err);
   }
-
-
 }
-
-

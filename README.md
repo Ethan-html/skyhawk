@@ -49,7 +49,7 @@ This website:
 ## Live Site and Environments
 
 - **Production**: `https://skyhawk-cap.org/`
-- **Admin interface**:  `https://admin.skyhawk-cap.org/`
+- **Admin interface**: `https://admin.skyhawk-cap.org/`
 
 ---
 
@@ -451,7 +451,7 @@ Important security-related notes:
 
 rules_version = '2';
 service cloud.firestore {
-  match /databases/{database}/documents {
+match /databases/{database}/documents {
 
     // --------------------
     // PUBLIC CONTENT
@@ -520,9 +520,9 @@ service cloud.firestore {
       // Any document outside /main, /pages, or /member
       // is completely inaccessible.
     }
-  }
-}
 
+}
+}
 
 - **Authentication Handling**
   - Auth is client-side only.

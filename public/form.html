@@ -1,39 +1,51 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en-US">
   <head>
-
     <title>Cadet Calldown Form</title>
-    <link rel="icon" type="image/png" href="/media/website/skyhawks_logo_CAP_transparent.ico">
-    <meta name="description" content="Skyhawk Composite Squadron builds youth leadership through Civil Air Patrol cadet programs, service, and aerospace education in Delano, MN.">
+    <link rel="icon" type="image/png" href="/media/website/skyhawks_logo_CAP_transparent.ico" />
+    <meta
+      name="description"
+      content="Skyhawk Composite Squadron builds youth leadership through Civil Air Patrol cadet programs, service, and aerospace education in Delano, MN."
+    />
 
-    <meta charset="utf-8">
-    <meta name="language" content="en-US">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="index,follow">
-    <meta name="googlebot" content="index,follow">
-    <meta name="msnbot" content="index,follow">
+    <meta charset="utf-8" />
+    <meta name="language" content="en-US" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="index,follow" />
+    <meta name="googlebot" content="index,follow" />
+    <meta name="msnbot" content="index,follow" />
 
-    <link rel="canonical" href="https://skyhawk-cap.org/calldown">
+    <link rel="canonical" href="https://skyhawk-cap.org/calldown" />
 
     <!-- Social Sharing (OG + Twitter) -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Home | Skyhawk Composite Squadron">
-    <meta property="og:description" content="Skyhawk Composite Squadron 47 of the Civil Air Patrol transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota.">
-    <meta property="og:image" content="https://skyhawk-cap.org/assets/images/webclip.png">
-    <meta property="og:url" content="https://skyhawk-cap.org/">
-    <meta property="og:locale" content="en_US">
-    <meta property="article:author" content="https://www.facebook.com/capnhq/">
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Home | Skyhawk Composite Squadron" />
+    <meta
+      property="og:description"
+      content="Skyhawk Composite Squadron 47 of the Civil Air Patrol transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota."
+    />
+    <meta property="og:image" content="https://skyhawk-cap.org/assets/images/webclip.png" />
+    <meta property="og:url" content="https://skyhawk-cap.org/" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="article:author" content="https://www.facebook.com/capnhq/" />
 
-    <meta property="twitter:card" content="summary">
-    <meta property="twitter:title" content="Home | Skyhawk Composite Squadron">
-    <meta property="twitter:description" content="Skyhawk Composite Squadron 47 of the Civil Air Patrol transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota.">
-    <meta property="twitter:image" content="https://skyhawk-cap.org/assets/images/webclip.png">
+    <meta property="twitter:card" content="summary" />
+    <meta property="twitter:title" content="Home | Skyhawk Composite Squadron" />
+    <meta
+      property="twitter:description"
+      content="Skyhawk Composite Squadron 47 of the Civil Air Patrol transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota."
+    />
+    <meta property="twitter:image" content="https://skyhawk-cap.org/assets/images/webclip.png" />
 
     <!-- Favicon & App Icons -->
-    <link rel="apple-touch-icon" href="/assets/images/webclip.png">
-    <link rel="manifest" href="/assets/manifest.json">
-    <link rel="icon" href="/media/website/skyhawks_logo_CAP_transparent.png">
-    <link rel="shortcut icon" href="/media/website/skyhawks_logo_CAP_transparent.png" type="image/png">
+    <link rel="apple-touch-icon" href="/assets/images/webclip.png" />
+    <link rel="manifest" href="/assets/manifest.json" />
+    <link rel="icon" href="/media/website/skyhawks_logo_CAP_transparent.png" />
+    <link
+      rel="shortcut icon"
+      href="/media/website/skyhawks_logo_CAP_transparent.png"
+      type="image/png"
+    />
 
     <style>
       body {
@@ -86,7 +98,9 @@
         border-radius: 8px;
         font-size: 1rem;
         background: #f9f9f9;
-        transition: border 0.2s, box-shadow 0.2s;
+        transition:
+          border 0.2s,
+          box-shadow 0.2s;
       }
 
       input[type="text"]:focus,
@@ -137,7 +151,7 @@
         transition: all 0.2s;
       }
 
-      .radio-group input[type="radio"]:checked+label::before {
+      .radio-group input[type="radio"]:checked + label::before {
         background: #666;
         border-color: #666;
       }
@@ -200,41 +214,41 @@
         background: #f9f9f9;
       }
       .form-nav {
-  		  display: flex;
-  		  justify-content: space-between;
-  		  align-items: center;
-  		  margin-top: 20px;
-  		  gap: 10px;
-  		}
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        gap: 10px;
+      }
 
-  		.form-nav .right {
-  		  margin-left: auto;
-  		}
-  		.error-box {
-  		  background: #fdecea;
-  		  color: #b00020;
-  		  border: 1px solid #f5c2c7;
-  		  padding: 12px 14px;
-  		  border-radius: 8px;
-  		  margin-bottom: 20px;
-  		  font-size: 0.95rem;
-  		}
+      .form-nav .right {
+        margin-left: auto;
+      }
+      .error-box {
+        background: #fdecea;
+        color: #b00020;
+        border: 1px solid #f5c2c7;
+        padding: 12px 14px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 0.95rem;
+      }
 
-  		.field-error {
-  		  border-color: #b00020 !important;
-  		  background: #fff5f5;
-  		}
+      .field-error {
+        border-color: #b00020 !important;
+        background: #fff5f5;
+      }
       html.iframed,
       html.iframed body {
         background: transparent !important;
       }
 
       html.iframed form {
-        background: transparent !important;  /* keep the form see-through */
-        box-shadow: none;                    /* remove shadow if you want */
-        border: 2px solid black;             /* add a black border */
-        border-radius: 12px;                 /* optional: keep rounded corners */
-        padding: 30px 35px;                  /* keep padding inside the form */
+        background: transparent !important; /* keep the form see-through */
+        box-shadow: none; /* remove shadow if you want */
+        border: 2px solid black; /* add a black border */
+        border-radius: 12px; /* optional: keep rounded corners */
+        padding: 30px 35px; /* keep padding inside the form */
       }
     </style>
   </head>
@@ -258,19 +272,19 @@
 
       /* ---------- Load JSON ---------- */
       fetch("assets/json/form.json")
-        .then(res => res.json())
-        .then(config => {
+        .then((res) => res.json())
+        .then((config) => {
           formConfig = config;
           renderForm();
           loadFormData();
         })
-        .catch(err => console.error("Failed to load form.json", err));
+        .catch((err) => console.error("Failed to load form.json", err));
 
       /* ---------- Render Form ---------- */
       function renderForm() {
         form.innerHTML = "";
 
-        formConfig.sections.forEach(section => {
+        formConfig.sections.forEach((section) => {
           const sec = document.createElement("section");
           sec.dataset.step = section.step;
           if (section.step === 1) sec.classList.add("active");
@@ -281,38 +295,35 @@
       	  <div class="error-box" id="${errorBoxId}" style="display:none" role="alert"></div>
       	`;
 
-
-          section.questions.forEach(q => {
+          section.questions.forEach((q) => {
             sec.appendChild(renderQuestion(q, section.step));
           });
 
           const nav = document.createElement("div");
-      	nav.className = "form-nav";
+          nav.className = "form-nav";
 
+          if (section.step > 1) {
+            const back = document.createElement("button");
+            back.type = "button";
+            back.textContent = "Back";
+            back.onclick = prevStep;
+            nav.appendChild(back);
+          }
 
-      	if (section.step > 1) {
-      	  const back = document.createElement("button");
-      	  back.type = "button";
-      	  back.textContent = "Back";
-      	  back.onclick = prevStep;
-      	  nav.appendChild(back);
-      	}
-
-      	if (section.step < formConfig.sections.length) {
-      	  const next = document.createElement("button");
-      	  next.type = "button";
-      	  next.textContent = "Next";
-      	  next.className = "right";
-      	  next.onclick = nextStep;
-      	  nav.appendChild(next);
-      	} else {
-      	  const submit = document.createElement("button");
-      	  submit.type = "submit";
-      	  submit.textContent = "Submit";
-      	  submit.className = "right";
-      	  nav.appendChild(submit);
-      	}
-
+          if (section.step < formConfig.sections.length) {
+            const next = document.createElement("button");
+            next.type = "button";
+            next.textContent = "Next";
+            next.className = "right";
+            next.onclick = nextStep;
+            nav.appendChild(next);
+          } else {
+            const submit = document.createElement("button");
+            submit.type = "submit";
+            submit.textContent = "Submit";
+            submit.className = "right";
+            nav.appendChild(submit);
+          }
 
           sec.appendChild(nav);
           form.appendChild(sec);
@@ -355,7 +366,7 @@
             selectPlaceholder.value = "";
             selectPlaceholder.textContent = "Pick one…";
             el.appendChild(selectPlaceholder);
-            q.options.forEach(opt => {
+            q.options.forEach((opt) => {
               const option = document.createElement("option");
               option.value = opt;
               option.textContent = opt;
@@ -368,7 +379,7 @@
             el = document.createElement("div");
             el.className = "radio-group";
 
-            q.options.forEach(opt => {
+            q.options.forEach((opt) => {
               const id = `${q.name}_${String(opt).replace(/\W/g, "")}`;
               const radio = document.createElement("input");
               radio.type = "radio";
@@ -397,7 +408,7 @@
       }
       /* ---------- Navigation ---------- */
       function showStep(step) {
-        document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
+        document.querySelectorAll("section").forEach((s) => s.classList.remove("active"));
         document.querySelector(`section[data-step="${step}"]`)?.classList.add("active");
         currentStep = step;
         saveFormData();
@@ -442,15 +453,17 @@
         errorBox.textContent = "";
 
         // clear old field errors
-        section.querySelectorAll(".field-error").forEach(el => {
+        section.querySelectorAll(".field-error").forEach((el) => {
           el.classList.remove("field-error");
           el.removeAttribute("aria-invalid");
           el.removeAttribute("aria-describedby");
         });
-        section.querySelectorAll("input[aria-invalid], select[aria-invalid], textarea[aria-invalid]").forEach(el => {
-          el.removeAttribute("aria-invalid");
-          el.removeAttribute("aria-describedby");
-        });
+        section
+          .querySelectorAll("input[aria-invalid], select[aria-invalid], textarea[aria-invalid]")
+          .forEach((el) => {
+            el.removeAttribute("aria-invalid");
+            el.removeAttribute("aria-describedby");
+          });
 
         // validate inputs
         const requiredFields = section.querySelectorAll(
@@ -458,7 +471,7 @@
         );
 
         const errorBoxId = errorBox.id || `section-${currentStep}-error`;
-        requiredFields.forEach(field => {
+        requiredFields.forEach((field) => {
           if (!field.value.trim()) {
             field.classList.add("field-error");
             field.setAttribute("aria-invalid", "true");
@@ -471,14 +484,12 @@
         });
 
         // validate radio groups
-        section.querySelectorAll(".radio-group").forEach(group => {
+        section.querySelectorAll(".radio-group").forEach((group) => {
           const name = group.querySelector("input")?.name;
           if (!name) return;
 
           if (!section.querySelector(`input[name="${name}"]:checked`)) {
-            group.querySelectorAll("label").forEach(l =>
-              l.classList.add("field-error")
-            );
+            group.querySelectorAll("label").forEach((l) => l.classList.add("field-error"));
             const firstRadio = group.querySelector("input");
             if (firstRadio) {
               firstRadio.setAttribute("aria-invalid", "true");
@@ -486,7 +497,7 @@
             }
             valid = false;
           } else {
-            group.querySelectorAll("input").forEach(inp => {
+            group.querySelectorAll("input").forEach((inp) => {
               inp.removeAttribute("aria-invalid");
               inp.removeAttribute("aria-describedby");
             });
@@ -511,7 +522,6 @@
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       }
 
-
       function loadFormData() {
         const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
 
@@ -532,34 +542,33 @@
       form.addEventListener("input", saveFormData);
 
       /* ---------- Submit ---------- */
-      form.addEventListener("submit", e => {
+      form.addEventListener("submit", (e) => {
         e.preventDefault();
 
         const params = new URLSearchParams();
         localStorage.removeItem("cadetFormData");
-        formConfig.sections.forEach(section => {
-          section.questions.forEach(q => {
+        formConfig.sections.forEach((section) => {
+          section.questions.forEach((q) => {
             const val = form[q.name]?.value;
             if (val) params.append(`entry.${q.googleId}`, val);
           });
         });
 
         fetch(`${formConfig.googleFormUrl}?${params}`, {
-      	  method: "GET",
-      	  mode: "no-cors"
-      	}).then(() => {
-      	  document.getElementById("confirmationMessage").textContent =
-      	    getAttend() === "Yes"
-      	      ? formConfig.confirmationMessages.attendYes
-      	      : formConfig.confirmationMessages.attendNo;
+          method: "GET",
+          mode: "no-cors"
+        }).then(() => {
+          document.getElementById("confirmationMessage").textContent =
+            getAttend() === "Yes"
+              ? formConfig.confirmationMessages.attendYes
+              : formConfig.confirmationMessages.attendNo;
 
-      	  localStorage.setItem(COMPLETED_KEY, "true");
-      	  localStorage.removeItem(STORAGE_KEY);
+          localStorage.setItem(COMPLETED_KEY, "true");
+          localStorage.removeItem(STORAGE_KEY);
 
-      	  form.reset();
-      	  showStep(4);
-      	});
-
+          form.reset();
+          showStep(4);
+        });
       });
     </script>
   </body>

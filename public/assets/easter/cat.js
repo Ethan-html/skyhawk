@@ -60,12 +60,12 @@
       img.style.opacity = "1";
     });
     const audio = document.createElement("audio");
-      audio.src = "/assets/easter/cat.mp3"; // leading slash = safer path
-      audio.volume = 0.8; // optional
-      audio.play().catch(() => {
-        // Autoplay can fail if user hasn’t interacted with page yet
-        console.log("Audio autoplay blocked");
-      });
+    audio.src = "/assets/easter/cat.mp3"; // leading slash = safer path
+    audio.volume = 0.8; // optional
+    audio.play().catch(() => {
+      // Autoplay can fail if user hasn’t interacted with page yet
+      console.log("Audio autoplay blocked");
+    });
     const timeLeft = endTime - Date.now();
     if (timeLeft <= 0) return;
 

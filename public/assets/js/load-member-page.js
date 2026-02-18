@@ -1,5 +1,10 @@
 // /assets/js/load-member-page.js
-import { doc, collection, getDoc, getDocs } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import {
+  doc,
+  collection,
+  getDoc,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
 // Same sanitization as public pages: allow iframes and attributes used in member content
 function sanitizeHtml(html) {
@@ -7,8 +12,19 @@ function sanitizeHtml(html) {
     return window.DOMPurify.sanitize(html || "", {
       USE_PROFILES: { html: true },
       ADD_TAGS: ["iframe"],
-      ADD_ATTR: ["src", "width", "height", "frameborder", "allow", "allowfullscreen", "scrolling", "style", "loading", "referrerpolicy"],
-      ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|tel|data):|[^a-z]|[a-z+.\-]+(?:[^a-z+.\-:]|$))/i
+      ADD_ATTR: [
+        "src",
+        "width",
+        "height",
+        "frameborder",
+        "allow",
+        "allowfullscreen",
+        "scrolling",
+        "style",
+        "loading",
+        "referrerpolicy"
+      ],
+      ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|tel|data):|[^a-z]|[a-z+.-]+(?:[^-a-z+.:]|$))/i
     });
   }
   const div = document.createElement("div");
@@ -29,7 +45,7 @@ export async function loadMemberPage(db, sectionId, onUpdate) {
 
   // 1️⃣ Instant render from cache
   if (cachedRaw) {
-    try { 
+    try {
       onUpdate(JSON.parse(cachedRaw));
     } catch {}
   }
@@ -55,7 +71,7 @@ export async function loadMemberPage(db, sectionId, onUpdate) {
       children: {}
     };
 
-    childrenSnap.forEach(c => {
+    childrenSnap.forEach((c) => {
       const d = c.data();
       fresh.children[d.slug] = {
         title: d.title,
@@ -70,7 +86,6 @@ export async function loadMemberPage(db, sectionId, onUpdate) {
       localStorage.setItem(cacheKey, JSON.stringify(fresh));
       onUpdate(fresh);
     }
-
   } catch (err) {
     console.error("Failed to load member page:", err);
   }

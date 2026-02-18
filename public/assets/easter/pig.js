@@ -4,7 +4,6 @@
   const STORAGE_KEY = "pigVideoPlayed";
   let keys = [];
 
-
   if (localStorage.getItem(STORAGE_KEY) === "true") {
     return;
   }
@@ -23,31 +22,28 @@
 
     localStorage.setItem(STORAGE_KEY, "true");
 
-const overlay = document.createElement("div");
-overlay.id = "devonVideoOverlay";
-overlay.style.position = "fixed";
-overlay.style.top = "0";
-overlay.style.left = "0";
-overlay.style.width = "100%";
-overlay.style.height = "100%";
-overlay.style.background = "black";
-overlay.style.zIndex = "999999";
-overlay.style.opacity = "0";
-overlay.style.transition = "opacity 1s ease";
-overlay.style.overflow = "hidden";
+    const overlay = document.createElement("div");
+    overlay.id = "devonVideoOverlay";
+    overlay.style.position = "fixed";
+    overlay.style.top = "0";
+    overlay.style.left = "0";
+    overlay.style.width = "100%";
+    overlay.style.height = "100%";
+    overlay.style.background = "black";
+    overlay.style.zIndex = "999999";
+    overlay.style.opacity = "0";
+    overlay.style.transition = "opacity 1s ease";
+    overlay.style.overflow = "hidden";
 
-
-const video = document.createElement("video");
-video.src = "/assets/easter/pig.mp4";
-video.autoplay = true;
-video.playsInline = true;
-video.style.width = "100%";
-video.style.height = "100%";
-video.style.objectFit = "fill";
-video.style.display = "block";
-video.style.background = "black";
-
-
+    const video = document.createElement("video");
+    video.src = "/assets/easter/pig.mp4";
+    video.autoplay = true;
+    video.playsInline = true;
+    video.style.width = "100%";
+    video.style.height = "100%";
+    video.style.objectFit = "fill";
+    video.style.display = "block";
+    video.style.background = "black";
 
     // Lock scrolling (safer way)
     document.documentElement.style.overflow = "hidden";
@@ -68,7 +64,7 @@ video.style.background = "black";
       console.error("Video failed to load:", e);
     });
 
-    video.play().catch(err => {
+    video.play().catch((err) => {
       console.warn("Autoplay prevented:", err);
     });
 

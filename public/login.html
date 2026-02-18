@@ -1,58 +1,79 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en-US">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="/favicon.ico" sizes="any">
-    <link rel="shortcut icon" href="/favicon.ico">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="shortcut icon" href="/favicon.ico" />
     <title>Member Login | Skyhawk Squadron</title>
 
-    <meta name="description" content="Skyhawk Composite Squadron builds youth leadership through Civil Air Patrol cadet programs, service, and aerospace education in Delano, MN.">
-    <link rel="canonical" href="https://skyhawk-cap.org/login">
+    <meta
+      name="description"
+      content="Skyhawk Composite Squadron builds youth leadership through Civil Air Patrol cadet programs, service, and aerospace education in Delano, MN."
+    />
+    <link rel="canonical" href="https://skyhawk-cap.org/login" />
 
     <!-- Icons -->
-    <link rel="icon" href="/media/website/skyhawks_logo_CAP_transparent.png" type="image/png">
-    <link rel="apple-touch-icon" href="/assets/images/webclip.png">
-    <link rel="manifest" href="/assets/manifest.json">
+    <link rel="icon" href="/media/website/skyhawks_logo_CAP_transparent.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/assets/images/webclip.png" />
+    <link rel="manifest" href="/assets/manifest.json" />
 
     <!-- Open Graph -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Member Login | Skyhawk Squadron">
-    <meta property="og:description" content="Secure member login for Skyhawk Composite Squadron.">
-    <meta property="og:image" content="https://skyhawk-cap.org/assets/images/webclip.png">
-    <meta property="og:url" content="https://skyhawk-cap.org/login">
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Member Login | Skyhawk Squadron" />
+    <meta property="og:description" content="Secure member login for Skyhawk Composite Squadron." />
+    <meta property="og:image" content="https://skyhawk-cap.org/assets/images/webclip.png" />
+    <meta property="og:url" content="https://skyhawk-cap.org/login" />
 
     <!-- Twitter -->
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="Member Login | Skyhawk Squadron">
-    <meta name="twitter:description" content="Secure member login for Skyhawk Composite Squadron.">
-    <meta name="twitter:image" content="https://skyhawk-cap.org/assets/images/webclip.png">
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Member Login | Skyhawk Squadron" />
+    <meta
+      name="twitter:description"
+      content="Secure member login for Skyhawk Composite Squadron."
+    />
+    <meta name="twitter:image" content="https://skyhawk-cap.org/assets/images/webclip.png" />
 
     <script>
-      var script = document.createElement('script');
-      script.src = '/assets/js/config.js?t=' + new Date().getTime();
+      var script = document.createElement("script");
+      script.src = "/assets/js/config.js?t=" + new Date().getTime();
 
       script.onload = function () {
-        import("/assets/js/init.js" + (window.ASSET_VERSION ? "?v=" + window.ASSET_VERSION : ""))
-          .then(m => m.initPage());
+        import(
+          "/assets/js/init.js" + (window.ASSET_VERSION ? "?v=" + window.ASSET_VERSION : "")
+        ).then((m) => m.initPage());
       };
 
       document.head.appendChild(script);
     </script>
-
   </head>
-  <body style="display:none;">
+  <body style="display: none">
     <div class="header-section">
-      <div data-collapse="medium" data-animation="default" data-duration="400" class="nav-section w-nav">
+      <div
+        data-collapse="medium"
+        data-animation="default"
+        data-duration="400"
+        class="nav-section w-nav"
+      >
         <div class="header-contents-wrap">
           <div class="header-container w-container">
             <div class="logo-container">
-              <a href="/" class="logo w-clearfix w-nav-brand"> <img src="/assets/images/CAP-2017-logo-horizontal-optimized.webp" alt="Skyhawk Composite Squadron" class="logo-image"> </a>
+              <a href="/" class="logo w-clearfix w-nav-brand">
+                <img
+                  src="/assets/images/CAP-2017-logo-horizontal-optimized.webp"
+                  alt="Skyhawk Composite Squadron"
+                  class="logo-image"
+                />
+              </a>
               <h2 class="website-tagline" id="unit-name"></h2>
             </div>
             <div class="header-content-right-wrap">
               <div class="website-logo-container">
-                <img src="/media/website/skyhawks_logo_CAP_transparent.webp" alt="Skyhawk Composite Squadron" class="website-logo">
+                <img
+                  src="/media/website/skyhawks_logo_CAP_transparent.webp"
+                  alt="Skyhawk Composite Squadron"
+                  class="website-logo"
+                />
               </div>
             </div>
           </div>
@@ -62,15 +83,29 @@
     </div>
     <div class="blue-line1"></div>
     <div class="login-page">
-      <h1 class="visually-hidden">Skyhawk Composite Squadron – Civil Air Patrol in Delano, Minnesota</h1>
+      <h1 class="visually-hidden">
+        Skyhawk Composite Squadron – Civil Air Patrol in Delano, Minnesota
+      </h1>
       <div class="login-card">
         <h2>Login to Your Account</h2>
 
         <form id="loginForm">
           <label for="username" class="visually-hidden">Email</label>
-          <input type="email" id="username" placeholder="Email" required aria-describedby="errorMsg">
+          <input
+            type="email"
+            id="username"
+            placeholder="Email"
+            required
+            aria-describedby="errorMsg"
+          />
           <label for="password" class="visually-hidden">Password</label>
-          <input type="password" id="password" placeholder="Password" required aria-describedby="errorMsg">
+          <input
+            type="password"
+            id="password"
+            placeholder="Password"
+            required
+            aria-describedby="errorMsg"
+          />
           <button type="submit">Login</button>
           <div class="error1" id="errorMsg" role="alert" hidden aria-live="polite"></div>
         </form>
@@ -82,7 +117,12 @@
         <div id="password-reset-section" class="hidden-section">
           <p>Enter your email to reset your password:</p>
           <label for="reset-email" class="visually-hidden">Email for password reset</label>
-          <input type="email" id="reset-email" placeholder="Enter your email" aria-describedby="reset-status">
+          <input
+            type="email"
+            id="reset-email"
+            placeholder="Enter your email"
+            aria-describedby="reset-status"
+          />
           <button id="reset-password-btn">Send Reset Email</button>
           <div id="reset-status" role="alert" aria-live="polite"></div>
           <p><a href="#" id="back-to-login">Back to login</a></p>
@@ -90,7 +130,12 @@
 
         <div id="first-time-section" class="hidden-section">
           <label for="first-time-email" class="visually-hidden">Your email</label>
-          <input type="email" id="first-time-email" placeholder="Enter your email" aria-describedby="first-reset-status">
+          <input
+            type="email"
+            id="first-time-email"
+            placeholder="Enter your email"
+            aria-describedby="first-reset-status"
+          />
           <button id="first-time-reset-btn">Login</button>
           <div id="first-reset-status" role="alert" aria-live="polite"></div>
         </div>
@@ -99,7 +144,7 @@
           <h4>An <strong>email</strong> has been sent to set up your password.</h4>
           <p>Once you set your password, return here to log in.</p>
           <p>Didn't receive it? <a href="#" id="resend-reset-email">Resend email</a></p>
-          <button onclick="window.location.href='/login'">Login</button>
+          <button onclick="window.location.href = '/login'">Login</button>
         </div>
 
         <div class="login-footer">

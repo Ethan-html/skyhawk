@@ -49,7 +49,7 @@
     iframe.style.border = "none";
     iframe.style.zIndex = "1"; // behind video
     iframe.style.overflow = "auto"; // allow scrolling inside iframe
-    iframe.scrolling = "yes";       // ensure iframe scrolls
+    iframe.scrolling = "yes"; // ensure iframe scrolls
     iframe.style.pointerEvents = "auto";
     document.body.appendChild(iframe);
     iframe.allow = "autoplay"; // allow control

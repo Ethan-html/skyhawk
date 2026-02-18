@@ -135,7 +135,7 @@
     overlay.appendChild(panel);
     document.body.appendChild(overlay);
 
-    requestAnimationFrame(() => overlay.style.opacity = "1");
+    requestAnimationFrame(() => (overlay.style.opacity = "1"));
 
     document.getElementById("readLogBtn").onclick = showLog;
   }
@@ -177,7 +177,7 @@
     `;
 
     const bar = document.getElementById("collapseBar");
-    requestAnimationFrame(() => bar.style.width = "0%");
+    requestAnimationFrame(() => (bar.style.width = "0%"));
 
     // ✅ When bar finishes, save state and reload
     setTimeout(() => {
@@ -199,93 +199,91 @@
       location.reload(); // reset page
     }, 500);
   }
-  
-// -----------------------------
-// Hint 1 bonus on /photos
-// -----------------------------
-function photoPageHintWatcher() {
-  const state = getState();
 
-  // Only run if hint 1 has been read
-  if (!state.active || !state.read) return;
+  // -----------------------------
+  // Hint 1 bonus on /photos
+  // -----------------------------
+  function photoPageHintWatcher() {
+    const state = getState();
 
-  // Only on /photos or /photos/
-  if (!window.location.pathname.startsWith("/photos")) return;
+    // Only run if hint 1 has been read
+    if (!state.active || !state.read) return;
 
-  const yearSelect = document.getElementById("yearSelect");
-  const monthSelect = document.getElementById("monthSelect");
-  const eventSelect = document.getElementById("eventSelect");
-  const photoTypeSelect = document.getElementById("photoTypeSelect");
+    // Only on /photos or /photos/
+    if (!window.location.pathname.startsWith("/photos")) return;
 
-  // Wait until selects exist
-  if (!yearSelect || !monthSelect || !eventSelect || !photoTypeSelect) {
-    setTimeout(photoPageHintWatcher, 500);
-    return;
-  }
+    const yearSelect = document.getElementById("yearSelect");
+    const monthSelect = document.getElementById("monthSelect");
+    const eventSelect = document.getElementById("eventSelect");
+    const photoTypeSelect = document.getElementById("photoTypeSelect");
 
-  // Force photo type to "meeting" (adjust if needed)
-  if (photoTypeSelect.value !== "meeting") {
-    photoTypeSelect.value = "meeting";
-    photoTypeSelect.dispatchEvent(new Event("change"));
-    setTimeout(photoPageHintWatcher, 500);
-    return;
-  }
-
-  // Make sure selects are visible
-  yearSelect.style.display = "inline-block";
-  monthSelect.style.display = "inline-block";
-  eventSelect.style.display = "inline-block";
-
-  const secretYear = "1940";
-  const secretMonth = "March";
-  const secretEvent = "Historic Flight Event";
-
-  // Add missing options if needed
-  if (!Array.from(yearSelect.options).some(o => o.value === secretYear)) {
-    yearSelect.innerHTML += `<option value="${secretYear}">${secretYear}</option>`;
-  }
-  if (!Array.from(monthSelect.options).some(o => o.value === secretMonth)) {
-    monthSelect.innerHTML += `<option value="${secretMonth}">${secretMonth}</option>`;
-  }
-  if (!Array.from(eventSelect.options).some(o => o.value === secretEvent)) {
-    eventSelect.innerHTML += `<option value="${secretEvent}">${secretEvent}</option>`;
-  }
-
-  // Auto-select the secret values
-  yearSelect.value = secretYear;
-  monthSelect.value = secretMonth;
-  eventSelect.value = secretEvent;
-
-  // Trigger gallery JS to notice changes
-  yearSelect.dispatchEvent(new Event("change"));
-  monthSelect.dispatchEvent(new Event("change"));
-  eventSelect.dispatchEvent(new Event("change"));
-
-  // Show alert once
-  if (
-    yearSelect.value === secretYear &&
-    monthSelect.value === secretMonth &&
-    eventSelect.value === secretEvent
-  ) {
-    if (!window.__hint1AlertShown) {
-      alert("⚠ ERROR FOUND AND FIXED");
-      window.__hint1AlertShown = true;
+    // Wait until selects exist
+    if (!yearSelect || !monthSelect || !eventSelect || !photoTypeSelect) {
+      setTimeout(photoPageHintWatcher, 500);
+      return;
     }
+
+    // Force photo type to "meeting" (adjust if needed)
+    if (photoTypeSelect.value !== "meeting") {
+      photoTypeSelect.value = "meeting";
+      photoTypeSelect.dispatchEvent(new Event("change"));
+      setTimeout(photoPageHintWatcher, 500);
+      return;
+    }
+
+    // Make sure selects are visible
+    yearSelect.style.display = "inline-block";
+    monthSelect.style.display = "inline-block";
+    eventSelect.style.display = "inline-block";
+
+    const secretYear = "1940";
+    const secretMonth = "March";
+    const secretEvent = "Historic Flight Event";
+
+    // Add missing options if needed
+    if (!Array.from(yearSelect.options).some((o) => o.value === secretYear)) {
+      yearSelect.innerHTML += `<option value="${secretYear}">${secretYear}</option>`;
+    }
+    if (!Array.from(monthSelect.options).some((o) => o.value === secretMonth)) {
+      monthSelect.innerHTML += `<option value="${secretMonth}">${secretMonth}</option>`;
+    }
+    if (!Array.from(eventSelect.options).some((o) => o.value === secretEvent)) {
+      eventSelect.innerHTML += `<option value="${secretEvent}">${secretEvent}</option>`;
+    }
+
+    // Auto-select the secret values
+    yearSelect.value = secretYear;
+    monthSelect.value = secretMonth;
+    eventSelect.value = secretEvent;
+
+    // Trigger gallery JS to notice changes
+    yearSelect.dispatchEvent(new Event("change"));
+    monthSelect.dispatchEvent(new Event("change"));
+    eventSelect.dispatchEvent(new Event("change"));
+
+    // Show alert once
+    if (
+      yearSelect.value === secretYear &&
+      monthSelect.value === secretMonth &&
+      eventSelect.value === secretEvent
+    ) {
+      if (!window.__hint1AlertShown) {
+        alert("⚠ ERROR FOUND AND FIXED");
+        window.__hint1AlertShown = true;
+      }
+    }
+
+    // Repeat every 5 seconds to survive gallery JS overwrites
+    setTimeout(photoPageHintWatcher, 5000);
   }
 
-  // Repeat every 5 seconds to survive gallery JS overwrites
-  setTimeout(photoPageHintWatcher, 5000);
-}
+  // Start the watcher after page load
+  window.addEventListener("load", () => {
+    photoPageHintWatcher();
+  });
 
-// Start the watcher after page load
-window.addEventListener("load", () => {
-  photoPageHintWatcher();
-});
-
-
-// Start the watcher after page load
-window.addEventListener("load", () => {
-  photoPageHintWatcher();
-});
-
+  // Start the watcher after page load
+  window.addEventListener("load", () => {
+    photoPageHintWatcher();
+  });
 })();
