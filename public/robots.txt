@@ -4,10 +4,8 @@
 
 # Block sensitive or member/admin pages
 User-agent: *
-Disallow: /member
 Disallow: /memberpage
 Disallow: /edit
-Disallow: /memberpage?page=cadet-programs/cadet-promotions
 
 # Optional: allow everything else
 Allow: /
