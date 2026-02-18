@@ -28,7 +28,12 @@
     <meta name="twitter:description" content="Secure member login for Skyhawk Composite Squadron.">
     <meta name="twitter:image" content="https://skyhawk-cap.org/assets/images/webclip.png">
 
-    <script src="/assets/js/config.js"></script>
+    <script>
+      var script = document.createElement('script');
+      script.src = '/assets/js/config.js?t=' + new Date().getTime();
+      document.head.appendChild(script);
+    </script>
+
     <script type="module">import("/assets/js/init.js"+(window.ASSET_VERSION?"?v="+window.ASSET_VERSION:"")).then(m=>m.initPage());</script>
   </head>
   <body style="display:none;">

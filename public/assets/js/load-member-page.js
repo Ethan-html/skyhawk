@@ -87,6 +87,17 @@ export function renderMemberPage(pageData) {
   const children = Object.values(pageData.children);
   const active = children.find((c) => c.slug === childSlug) || children[0];
 
+  const leftNav = document.querySelector(".left-nav-column");
+  const mainContent = document.querySelector(".main-content-column");
+  if (pageData.id === "page") {
+    leftNav.style.display = "none";
+    mainContent.style.width = "100%";
+    mainContent.style.marginLeft = "0";
+  } else {
+    leftNav.style.display = "";
+    mainContent.style.width = "";
+    mainContent.style.marginLeft = "";
+  }
   const sideList = document.getElementById("sideNavList");
   const sideTitle = document.getElementById("sideNavTitleLink");
   const pageTitleEl = document.getElementById("pageTitle");

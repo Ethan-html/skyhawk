@@ -2,44 +2,44 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
-    <loc>https://skyhawk-cap.org/</loc>
+    <loc>https://skyhawk-cap.org/member</loc>
     <priority>1.0</priority>
-    <lastmod>2026-02-12</lastmod>
+    <lastmod>2026-02-17</lastmod>
     <changefreq>weekly</changefreq>
   </url>
 
   <url>
     <loc>https://skyhawk-cap.org/calldown</loc>
     <priority>0.8</priority>
-    <lastmod>2026-02-12</lastmod>
+    <lastmod>2026-02-17</lastmod>
     <changefreq>monthly</changefreq>
   </url>
 
   <url>
     <loc>https://skyhawk-cap.org/login</loc>
     <priority>0.8</priority>
-    <lastmod>2026-02-12</lastmod>
+    <lastmod>2026-02-17</lastmod>
     <changefreq>monthly</changefreq>
   </url>
 
   <url>
     <loc>https://skyhawk-cap.org/photos</loc>
     <priority>0.8</priority>
-    <lastmod>2026-02-12</lastmod>
+    <lastmod>2026-02-17</lastmod>
     <changefreq>monthly</changefreq>
   </url>
 
   <url>
     <loc>https://skyhawk-cap.org/signature</loc>
     <priority>0.7</priority>
-    <lastmod>2026-02-12</lastmod>
+    <lastmod>2026-02-17</lastmod>
     <changefreq>monthly</changefreq>
   </url>
 
   <url>
     <loc>https://skyhawk-cap.org/ribbon</loc>
     <priority>0.7</priority>
-    <lastmod>2026-02-12</lastmod>
+    <lastmod>2026-02-17</lastmod>
     <changefreq>monthly</changefreq>
   </url>
 

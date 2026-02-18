@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en-US">
   <head>
-    <title>404</title>
+    <title>404 - Caution: Uncharted Airspace<</title>
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="description" content="Skyhawk Composite Squadron builds youth leadership through Civil Air Patrol cadet programs, service, and aerospace education in Delano, MN.">
@@ -34,93 +34,84 @@
     <link rel="manifest" href="/assets/manifest.json">
     <link rel="icon" href="/media/website/skyhawks_logo_CAP_transparent.png">
     <link rel="shortcut icon" href="/media/website/skyhawks_logo_CAP_transparent.png" type="image/png">
+    <style>
+      /* Basic reset */
+      body, html {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: 'Arial', sans-serif;
+      }
 
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #0b1e38; /* Navy CAP theme background */
+        color: #ffffff;
+        text-align: center;
+        flex-direction: column;
+      }
 
-      <script src="/assets/js/config.js"></script>
-      <script type="module">import("/assets/js/init.js"+(window.ASSET_VERSION?"?v="+window.ASSET_VERSION:"")).then(m=>m.initPage());</script>
+      h1 {
+        font-size: 6rem;
+        color: #ffcc00; /* Warning color for “Caution” */
+        margin: 0;
+      }
+
+      p {
+        font-size: 1.8rem;
+        margin: 15px 0 40px;
+        color: #ffffff;
+      }
+
+      a.button {
+        text-decoration: none;
+        background-color: #003366; /* CAP dark blue */
+        color: #ffffff;
+        padding: 12px 25px;
+        border-radius: 6px;
+        font-weight: bold;
+        margin: 0 10px;
+        border: 2px solid #ffcc00; /* subtle accent for warning */
+        transition: 0.3s;
+      }
+
+      a.button:hover {
+        background-color: #0055a5;
+        color: #ffcc00;
+        box-shadow: 0 0 10px #ffcc00;
+      }
+
+      /* Optional subtle radar grid behind text */
+      .radar-grid {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-image:
+          radial-gradient(circle at center, rgba(255,255,255,0.05) 1px, transparent 1px),
+          radial-gradient(circle at center, rgba(255,255,255,0.05) 2px, transparent 2px);
+        background-size: 50px 50px, 100px 100px;
+        z-index: 0;
+      }
+
+      .content {
+        position: relative;
+        z-index: 1;
+      }
+    </style>
   </head>
-  <body style="display:none;">
-    <div class="header-section">
-         <div data-collapse="medium" data-animation="default" data-duration="400" class="nav-section w-nav">
-            <div class="header-contents-wrap">
-               <div class="header-container w-container">
-                  <div class="logo-container">
-                     <a href="/" class="logo w-clearfix w-nav-brand"> <img src="/assets/images/CAP-2017-logo-horizontal-optimized.webp" alt="Skyhawk Composite Squadron" class="logo-image"> </a>
-                     <h2 class="website-tagline" id="unit-name"></h2>
-                  </div>
-                  <div class="header-content-right-wrap">
-                     <a id="donations-button" class="donations-btn">
-                        <div class="donations-btn-image">
-                           <div class="donations-btn-ripple"></div>
-                           <img src="/assets/images/heart.svg" alt="Donate to Skyhawk Squadron">
-                        </div>
-                        <div class="donations-btn-text">
-                           Ways to Give
-                        </div>
-                     </a>
-                     <div class="website-logo-container">
-                        <img src="/media/website/skyhawks_logo_CAP_transparent.webp" alt="Skyhawk Composite Squadron" class="website-logo">
-                     </div>
-                  </div>
-               </div>
-               <nav class="header-menu-wrap">
-                  <div class="header-menu-inside-wrap">
-                     <div class="nav-container w-container">
-                        <button id="mobile-menu-toggle" aria-label="Menu" class="mobile-menu-btn">
-                          ☰
-                        </button>
-                        <nav class="desktop-navigation-menu">
-                           <ul class="main-ul" id="main-menu"></ul>
-                           <div class="link-block site-share-wrapper w-hidden-medium w-hidden-small w-hidden-tiny">
-                              <a href="" class="w-inline-block w--current" id="load-site-share"> <img src="/assets/images/share-icon.png" alt="Share" class="share-icon"> </a>
-                              <nav class="nav-drop-list w-dropdown-list">
-                                <a href="#" class="nav-drop-list-link" onclick="window.location.href='mailto:?subject='+encodeURIComponent(window.currentUnit?.name||'Website')+'&body='+encodeURIComponent(location.origin);return false;">Email this site</a> 
-                                <a href="#" class="nav-drop-list-link" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(location.origin)+'&t='+encodeURIComponent(window.currentUnit?.name||'Website'));return false;">Share on Facebook</a> 
-                                <a href="#" class="nav-drop-list-link" onclick="window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent((window.currentUnit?.name||'Website')+' '+location.origin));return false;" title="Share on X (formerly Twitter)">Share on X</a> 
-                                <a href="#" class="nav-drop-list-link" onclick="window.open('https://www.linkedin.com/sharing/share-offsite/?url='+encodeURIComponent(location.origin)+'&title='+encodeURIComponent(window.currentUnit?.name||'Website'));return false;">Share on LinkedIn</a>
-                              </nav>
-                        </nav>
-                     </div>
-                  </div>
-               </nav>
-            </div>
-            <div class="w-nav-overlay" data-wf-ignore=""></div>
-         </div>
-    </div>
-    <div id="main-body">
-      <h1 class="visually-hidden">Skyhawk Composite Squadron – Civil Air Patrol in Delano, Minnesota</h1>
-      <div class="inside-content-section section-wrap">
-        <div class="inside-content-background no-columns">
-          <div class="inside-row w-row">
-            <div class="main-content-column w-col w-col-12 w-col-stack">
-              <div class="inside-page-header-content-wrap">
-                <nav>
-                  <ol class="breadcrumb-list w-clearfix w-list-unstyled">
-                    <li class="breadcrumb-list-item"><a class="breadcrumb-link link" href="/">Home</a><div class="breadcrumb-divider">/</div></li>
-                  </ol>
-                </nav>
-              </div>
-              <div class="landing-page-title-wrapper">
-                <h1 class="h1-heading">The Page You Requested is No Longer Available</h1>
-              </div>
-              <div class="inside-row-nested w-row">
-                <div class="main-content-column-nested w-col w-col-12 w-col-stack">
-                  <div id="main-content" class="main-content-wrap nested-content-wrap" tabindex="-1">
-                    <div id="session-message-wrapper"></div>
-                    <p>You may not be able to find this page because of:</p>
-                    <ul>
-                      <li>An out-of-date bookmark or favorite</li>
-                      <li>A search engine that has an out-of-date listing for us</li>
-                      <li>A mistyped address</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+  <body>
+    <div class="radar-grid"></div>
+    <div class="content">
+      <h1>⚠ 404</h1>
+      <p>Caution: Uncharted Airspace<br>please turn back now</p>
+      <div>
+        <a href="/" class="button">Return to Base</a>
+
       </div>
     </div>
-    <div id="footer"></div>
   </body>
+</html>
+
 </html>

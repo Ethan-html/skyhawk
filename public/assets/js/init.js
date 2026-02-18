@@ -11,6 +11,7 @@ const withVersion = (url) =>
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
 
 const firebaseConfig = typeof window !== "undefined" && window.SITE_CONFIG?.firebase
   ? window.SITE_CONFIG.firebase
@@ -177,19 +178,14 @@ function buildPageConfigs(mods) {
       requiresAuth: false
     },
     {
-      match: path => path.startsWith("/page"),
-      modules: [announcementBanner, mods.initHeaderFooter, mods.initMenu, loadSection(mods.loadPage, mods.renderPage)],
-      requiresAuth: false
-    },
-    {
       match: path => path === "/member",
-      modules: [announcementBanner, mods.initHeaderFooter, mods.initMenu, mods.initMemberMenu, mods.initContentBoxes],
+      modules: [announcementBanner, mods.initHeaderFooter, mods.initMemberMenu, mods.initSlideshow, mods.initContentBoxes],
       requiresAuth: true,
       logout: true
     },
     {
       match: path => path.startsWith("/memberpage"),
-      modules: [announcementBanner, mods.initHeaderFooter, mods.initMenu, mods.initMemberMenu, loadSection(mods.loadMemberPage, mods.renderMemberPage)],
+      modules: [announcementBanner, mods.initHeaderFooter, mods.initMemberMenu, loadSection(mods.loadMemberPage, mods.renderMemberPage)],
       requiresAuth: true,
       logout: true
     },
@@ -205,8 +201,14 @@ function buildPageConfigs(mods) {
       requiresAuth: false
     },
     {
+      match: path => path.startsWith("/404"),
+      modules: [announcementBanner, mods.initHeaderFooter, mods.initMemberMenu],
+      requiresAuth: true,
+      logout: true
+    },
+    {
       match: () => true,
-      modules: [announcementBanner, mods.initHeaderFooter, mods.initMenu],
+      modules: [announcementBanner, mods.initHeaderFooter],
       requiresAuth: false
     }
   ];
@@ -224,7 +226,7 @@ async function authGate(pageConfigs, callback) {
   return new Promise(resolve => {
     onAuthStateChanged(auth, async user => {
       if (isProtected && !user) {
-        window.location.replace("/");
+        window.location.replace("/login");
       } else {
         document.body.style.display = "block";
         if (callback) await callback();
@@ -273,35 +275,28 @@ export async function initPage() {
     // Load site modules with version (cache-busted)
     // ==============================
     const [
-      menuMod,
       memberMenuMod,
       contentBoxesMod,
       slideshowMod,
       headerFooterMod,
-      loadPageMod,
       loadMemberPageMod,
       loginMod,
       mobileMenuA11yMod
     ] = await Promise.all([
-      import(/* @v */ withVersion("/assets/js/menu.js")),
       import(/* @v */ withVersion("/assets/js/member-menu.js")),
       import(/* @v */ withVersion("/assets/js/content-boxes.js")),
       import(/* @v */ withVersion("/assets/js/slideshow.js")),
       import(/* @v */ withVersion("/assets/js/header-footer.js")),
-      import(/* @v */ withVersion("/assets/js/load-page.js")),
       import(/* @v */ withVersion("/assets/js/load-member-page.js")),
       import(/* @v */ withVersion("/assets/js/login.js")),
       import(/* @v */ withVersion("/assets/js/mobile-menu-a11y.js"))
     ]);
 
     const mods = {
-      initMenu: menuMod.initMenu,
       initMemberMenu: memberMenuMod.initMemberMenu,
       initContentBoxes: contentBoxesMod.initContentBoxes,
       initSlideshow: slideshowMod.initSlideshow,
       initHeaderFooter: headerFooterMod.initHeaderFooter,
-      loadPage: loadPageMod.loadPage,
-      renderPage: loadPageMod.renderPage,
       loadMemberPage: loadMemberPageMod.loadMemberPage,
       renderMemberPage: loadMemberPageMod.renderMemberPage,
       initLogin: loginMod.initLogin,
@@ -375,5 +370,35 @@ export async function initPage() {
 
   });
 }
+
+// --------------------
+// Fetch member menu from Firestore
+// --------------------
+async function fetchMemberMenu(db) {
+  try {
+    const pagesCollection = collection(db, "member", "menu", "pages");
+    const pagesSnap = await getDocs(pagesCollection);
+
+    const pagesWithChildren = await Promise.all(
+      pagesSnap.docs.map(async pageDoc => {
+        const childrenSnap = await getDocs(
+          collection(pagesCollection, pageDoc.id, "children")
+        );
+        return {
+          page: pageDoc.data(),
+          children: childrenSnap.docs.map(d => d.data())
+        };
+      })
+    );
+
+    return pagesWithChildren;
+  } catch (err) {
+    console.warn("Failed to fetch member menu:", err);
+    return [];
+  }
+}
+const CACHE_KEY = "menuPagesMember";
+const fresh = await fetchMemberMenu(db);
+localStorage.setItem(CACHE_KEY, JSON.stringify(fresh));
 
 

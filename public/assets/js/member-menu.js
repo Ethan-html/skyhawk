@@ -4,33 +4,6 @@ import { collection, getDocs } from "https://www.gstatic.com/firebasejs/12.7.0/f
 const CACHE_KEY = "menuPagesMember";
 
 // --------------------
-// Fetch member menu from Firestore
-// --------------------
-async function fetchMemberMenu(db) {
-  try {
-    const pagesCollection = collection(db, "member", "menu", "pages");
-    const pagesSnap = await getDocs(pagesCollection);
-
-    const pagesWithChildren = await Promise.all(
-      pagesSnap.docs.map(async pageDoc => {
-        const childrenSnap = await getDocs(
-          collection(pagesCollection, pageDoc.id, "children")
-        );
-        return {
-          page: pageDoc.data(),
-          children: childrenSnap.docs.map(d => d.data())
-        };
-      })
-    );
-
-    return pagesWithChildren;
-  } catch (err) {
-    console.warn("Failed to fetch member menu:", err);
-    return [];
-  }
-}
-
-// --------------------
 // Render menu (desktop & mobile)
 // --------------------
 function buildMenu(pagesWithChildren, menuRoot) {
@@ -85,50 +58,24 @@ function buildMenu(pagesWithChildren, menuRoot) {
   }, true);
 }
 
-function buildMobileMenu(pagesWithChildren, root, isMemberMenu = false) {
-  if (!isMemberMenu) root.innerHTML = ""; // clear only if it's main menu
+function buildMobileMenu(pagesWithChildren, root) {
+  root.innerHTML = ""; // always clear first
+
   const fragment = document.createDocumentFragment();
 
-  // --------------------
-  // For member menu, add a divider first
-  if (isMemberMenu) {
-    const menuButtonText = document.getElementById("menu-button-text");
-    if (menuButtonText) menuButtonText.textContent = "Member Menu";
-    // Top divider
-    const topDivider = document.createElement("li");
-    topDivider.className = "mobile-menu-divider";
-    topDivider.style.borderTop = "2px solid #ccc";
-    topDivider.style.margin = "8px 0";
-    topDivider.style.height = "0";
-    topDivider.style.width = "100%";
-    topDivider.style.listStyle = "none"; // remove bullet
-    fragment.appendChild(topDivider);
+  const homeLi = document.createElement("li");
+  homeLi.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
+  homeLi.className = "active mm-listitem mm-listitem_selected";
 
-    // Member Menu title
-    const titleLi = document.createElement("li");
-    titleLi.className = "mobile-menu-title";
-    titleLi.textContent = "Member Menu";
-    titleLi.style.fontWeight = "bold";
-    titleLi.style.fontSize = "1.8em";       // double size (adjust as needed)
-    titleLi.style.color = "#fff";           // white text
-    titleLi.style.textAlign = "center";     // center text
-    titleLi.style.padding = "8px 0";        // vertical padding
-    titleLi.style.listStyle = "none";       // remove bullet
-    titleLi.style.pointerEvents = "none";   // make it non-clickable
-    fragment.appendChild(titleLi);
+  const homeA = document.createElement("a");
+  homeA.className = "nav-link w-nav-link w--current";
+  homeA.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
+  homeA.href = "/member";
+  homeA.textContent = "Home";
 
-
-    // Bottom divider
-    const bottomDivider = document.createElement("li");
-    bottomDivider.className = "mobile-menu-divider";
-    bottomDivider.style.borderTop = "2px solid #ccc";
-    bottomDivider.style.margin = "0 0 8px 0";
-    bottomDivider.style.height = "0";
-    bottomDivider.style.width = "100%";
-    bottomDivider.style.listStyle = "none"; // remove bullet
-    fragment.appendChild(bottomDivider);
-  }
-
+  homeLi.appendChild(homeA);
+  fragment.appendChild(homeLi);
+  
   pagesWithChildren.forEach(({ page, children }) => {
     const li = document.createElement("li");
     li.setAttribute("data-breakpoints", "xs,sm,md,lg,xl");
@@ -165,35 +112,43 @@ function buildMobileMenu(pagesWithChildren, root, isMemberMenu = false) {
   root.appendChild(fragment);
 }
 
+function sortByOptionalOrderId(items) {
+  return items.sort((a, b) => {
+    const aHas = a.orderid !== undefined && a.orderid !== "";
+    const bHas = b.orderid !== undefined && b.orderid !== "";
+
+    if (aHas && bHas) {
+      const aNum = Number(a.orderid);
+      const bNum = Number(b.orderid);
+
+      if (!Number.isNaN(aNum) && !Number.isNaN(bNum)) {
+        if (aNum !== bNum) return aNum - bNum;
+      }
+      return 0; // same number → keep Firestore order
+    }
+
+    if (aHas && !bHas) return -1; // a first
+    if (!aHas && bHas) return 1;  // b first
+
+    return 0; // neither has orderid → keep Firestore order
+  });
+}
 
 export async function initMemberMenu(db) {
   const desktopRoot = document.getElementById("member-menu");
-  const mobileRoot = document.getElementById("mobile-menu-root"); // same UL as main menu
-
+  const mobileRoot = document.getElementById("mobile-menu-root");
   if (!desktopRoot && !mobileRoot) return;
-
+  let menuData = [];
   const cachedRaw = localStorage.getItem(CACHE_KEY);
   if (cachedRaw) {
     try {
-      const cached = JSON.parse(cachedRaw);
-      if (desktopRoot) buildMenu(cached, desktopRoot);
-      if (mobileRoot) buildMobileMenu(cached, mobileRoot, true); // <-- pass true
+      menuData = JSON.parse(cachedRaw);
+      if (desktopRoot) buildMenu(menuData, desktopRoot);
+      if (mobileRoot) buildMobileMenu(menuData, mobileRoot);
     } catch {}
   }
 
-  const fresh = await fetchMemberMenu(db);
-  if (!fresh.length) return;
 
-  if (JSON.stringify(fresh) !== cachedRaw) {
-    localStorage.setItem(CACHE_KEY, JSON.stringify(fresh));
-    if (desktopRoot) {
-      desktopRoot.innerHTML = "";
-      buildMenu(fresh, desktopRoot);
-    }
-    if (mobileRoot) {
-      buildMobileMenu(fresh, mobileRoot, true); // <-- pass true
-    }
-  }
 }
 
 
