@@ -316,7 +316,8 @@ export async function initPage() {
       headerFooterMod,
       loadMemberPageMod,
       loginMod,
-      mobileMenuA11yMod
+      mobileMenuA11yMod,
+      statsMod
     ] = await Promise.all([
       import(/* @v */ withVersion("/assets/js/member-menu.js")),
       import(/* @v */ withVersion("/assets/js/content-boxes.js")),
@@ -324,7 +325,8 @@ export async function initPage() {
       import(/* @v */ withVersion("/assets/js/header-footer.js")),
       import(/* @v */ withVersion("/assets/js/load-member-page.js")),
       import(/* @v */ withVersion("/assets/js/login.js")),
-      import(/* @v */ withVersion("/assets/js/mobile-menu-a11y.js"))
+      import(/* @v */ withVersion("/assets/js/mobile-menu-a11y.js")),
+      import(/* @v */ withVersion("/assets/js/stats.js"))
     ]);
 
     const mods = {
@@ -337,7 +339,9 @@ export async function initPage() {
       initLogin: loginMod.initLogin,
       initMobileMenuA11y: mobileMenuA11yMod.initMobileMenuA11y,
       initPublicSettingsBanner: () =>
-        publicSettingsMod.initAnnouncementBanner(window.__PUBLIC_SETTINGS__?.announcementBanner)
+        publicSettingsMod.initAnnouncementBanner(window.__PUBLIC_SETTINGS__?.announcementBanner),
+      trackSiteVisit: statsMod.trackSiteVisit,
+      trackPageView: statsMod.trackPageView
     };
 
     const pageConfigs = buildPageConfigs(mods);
@@ -383,6 +387,20 @@ export async function initPage() {
       const path = location.pathname;
       const config = pageConfigs.find((c) => c.match(path));
       if (!config) return;
+
+      // Fire-and-forget stats tracking for authenticated pages
+      if (config.requiresAuth && mods.trackSiteVisit && mods.trackPageView) {
+        (async () => {
+          try {
+            await mods.trackSiteVisit();
+
+            const pageId = location.pathname + location.search;
+            await mods.trackPageView(pageId);
+          } catch (e) {
+            console.warn("Stats tracking failed:", e);
+          }
+        })();
+      }
 
       // Run page modules in parallel
       await runParallel(config.modules.map((fn) => fn(db)));
