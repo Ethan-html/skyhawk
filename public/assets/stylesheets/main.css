@@ -11094,9 +11094,6 @@ a.no-border {
 .home-page #main-menu li {
   min-height: 2rem;
 }
-.home-page #footer {
-  min-height: 200px;
-}
 
 .mobile-logout-container {
   display: none; /* hidden on desktop */
