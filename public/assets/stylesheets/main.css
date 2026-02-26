@@ -10792,6 +10792,7 @@ a.no-border {
   border-radius: 6px;
   text-decoration: none;
   overflow: hidden;
+  color: #ffffff;
 }
 .donations-btn .donations-btn-image {
   padding-right: 0.5rem;
