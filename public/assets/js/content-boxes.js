@@ -9,7 +9,7 @@ const CACHE_KEY = "contentBoxesChildren";
 // Helper: load collection with cache
 async function fetchContentBoxes(db) {
   try {
-    const colRef = collection(db, "main", "contentBoxes", "children");
+    const colRef = collection(db, "member", "contentBoxes", "children");
     const snap = await getDocs(colRef);
     return snap.docs.map((d) => d.data());
   } catch (err) {
