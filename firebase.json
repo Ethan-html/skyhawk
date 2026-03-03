@@ -10,7 +10,7 @@
       },
       {
         "source": "/photos",
-        "destination": "https://photos.domain",
+        "destination": "https://photos.skyhawk-cap.org",
         "type": 301
       }
     ],
