@@ -130,6 +130,18 @@
         }
       }
     </style>
+    <script>
+      var script = document.createElement("script");
+      script.src = "/assets/js/config.js?t=" + new Date().getTime();
+
+      script.onload = function () {
+        import(
+          "/assets/js/init.js" + (window.ASSET_VERSION ? "?v=" + window.ASSET_VERSION : "")
+        ).then((m) => m.initPage());
+      };
+
+      document.head.appendChild(script);
+    </script>
   </head>
   <body>
     <form id="ribbon-form" method="post" action="https://mcchord.org/rack_builder/check_cdt2.asp">

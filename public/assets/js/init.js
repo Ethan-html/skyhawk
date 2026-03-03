@@ -197,7 +197,6 @@ function buildPageConfigs(mods) {
         announcementBanner,
         mods.initHeaderFooter,
         mods.initMenu,
-        mods.initSlideshow,
         mods.initContentBoxes
       ],
       requiresAuth: false
@@ -208,7 +207,6 @@ function buildPageConfigs(mods) {
         announcementBanner,
         mods.initHeaderFooter,
         mods.initMemberMenu,
-        mods.initSlideshow,
         mods.initContentBoxes
       ],
       requiresAuth: true,
@@ -222,12 +220,6 @@ function buildPageConfigs(mods) {
         mods.initMemberMenu,
         loadSection(mods.loadMemberPage, mods.renderMemberPage)
       ],
-      requiresAuth: true,
-      logout: true
-    },
-    {
-      match: (path) => path.startsWith("/photos"),
-      modules: [announcementBanner, mods.initHeaderFooter],
       requiresAuth: true,
       logout: true
     },
@@ -265,7 +257,7 @@ async function authGate(pageConfigs, callback) {
         window.location.replace("/login");
       } else {
         document.body.style.display = "block";
-        if (callback) await callback();
+        if (callback) await callback(user);
         resolve();
       }
     });
@@ -312,7 +304,6 @@ export async function initPage() {
     const [
       memberMenuMod,
       contentBoxesMod,
-      slideshowMod,
       headerFooterMod,
       loadMemberPageMod,
       loginMod,
@@ -321,7 +312,6 @@ export async function initPage() {
     ] = await Promise.all([
       import(/* @v */ withVersion("/assets/js/member-menu.js")),
       import(/* @v */ withVersion("/assets/js/content-boxes.js")),
-      import(/* @v */ withVersion("/assets/js/slideshow.js")),
       import(/* @v */ withVersion("/assets/js/header-footer.js")),
       import(/* @v */ withVersion("/assets/js/load-member-page.js")),
       import(/* @v */ withVersion("/assets/js/login.js")),
@@ -332,7 +322,6 @@ export async function initPage() {
     const mods = {
       initMemberMenu: memberMenuMod.initMemberMenu,
       initContentBoxes: contentBoxesMod.initContentBoxes,
-      initSlideshow: slideshowMod.initSlideshow,
       initHeaderFooter: headerFooterMod.initHeaderFooter,
       loadMemberPage: loadMemberPageMod.loadMemberPage,
       renderMemberPage: loadMemberPageMod.renderMemberPage,
@@ -383,13 +372,13 @@ export async function initPage() {
     // ==============================
     // Auth + page modules
     // ==============================
-    authGate(pageConfigs, async () => {
+    authGate(pageConfigs, async (user) => {
       const path = location.pathname;
       const config = pageConfigs.find((c) => c.match(path));
       if (!config) return;
 
       // Fire-and-forget stats tracking for authenticated pages
-      if (config.requiresAuth && mods.trackSiteVisit && mods.trackPageView) {
+      if (user && mods.trackSiteVisit && mods.trackPageView) {
         (async () => {
           try {
             await mods.trackSiteVisit();

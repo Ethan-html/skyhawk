@@ -19,6 +19,18 @@
     />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js"></script>
+    <script>
+      var script = document.createElement("script");
+      script.src = "/assets/js/config.js?t=" + new Date().getTime();
+
+      script.onload = function () {
+        import(
+          "/assets/js/init.js" + (window.ASSET_VERSION ? "?v=" + window.ASSET_VERSION : "")
+        ).then((m) => m.initPage());
+      };
+
+      document.head.appendChild(script);
+    </script>
     <script type="text/javascript">
       let type = "generic";
       let grade_type = "Senior";

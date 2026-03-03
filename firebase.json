@@ -7,8 +7,14 @@
         "source": "/",
         "destination": "/member",
         "type": 301
+      },
+      {
+        "source": "/photos",
+        "destination": "https://photos.domain",
+        "type": 301
       }
     ],
+
     "headers": [
       {
         "source": "/assets/js/config.js",
@@ -56,7 +62,6 @@
       { "source": "/login", "destination": "/login.html" },
       { "source": "/member", "destination": "/member.html" },
       { "source": "/memberpage", "destination": "/memberpage.html" },
-      { "source": "/photos", "destination": "/photos.html" },
       { "source": "/form", "destination": "/form.html" },
       { "source": "/calldown", "destination": "/form.html" },
       { "source": "/404", "destination": "/404.html" },

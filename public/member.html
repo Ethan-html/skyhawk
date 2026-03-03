@@ -63,35 +63,6 @@
     <link rel="dns-prefetch" href="https://firestore.googleapis.com" />
     <link rel="dns-prefetch" href="https://www.googleapis.com" />
     <link rel="dns-prefetch" href="https://securetoken.googleapis.com" />
-
-    <link
-      rel="preload"
-      href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css"
-      as="style"
-      onload="
-        this.onload = null;
-        this.rel = 'stylesheet';
-      "
-    />
-    <link
-      rel="preload"
-      href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.theme.min.css"
-      as="style"
-      onload="
-        this.onload = null;
-        this.rel = 'stylesheet';
-      "
-    />
-    <noscript>
-      <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css"
-      />
-      <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.theme.min.css"
-      />
-    </noscript>
     <script>
       var script = document.createElement("script");
       script.src = "/assets/js/config.js?t=" + new Date().getTime();
@@ -103,54 +74,6 @@
       };
 
       document.head.appendChild(script);
-    </script>
-
-    <!-- Structured Data: Organization + LocalBusiness -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@graph": [
-          {
-            "@type": "Organization",
-            "@id": "https://skyhawk-cap.org/#organization",
-            "name": "Skyhawk Composite Squadron",
-            "alternateName": "Skyhawk Squadron – Civil Air Patrol",
-            "url": "https://skyhawk-cap.org/",
-            "logo": "https://skyhawk-cap.org/media/website/skyhawks_logo_CAP_transparent",
-            "description": "Skyhawk Composite Squadron builds youth leadership through Civil Air Patrol cadet programs, community service, and aerospace education in Delano, Minnesota.",
-            "sameAs": ["https://www.facebook.com/capnhq/"],
-            "areaServed": {
-              "@type": "Place",
-              "name": "Delano, Minnesota"
-            }
-          },
-          {
-            "@type": "LocalBusiness",
-            "@id": "https://skyhawk-cap.org/#localbusiness",
-            "name": "Skyhawk Composite Squadron – Civil Air Patrol",
-            "image": "https://skyhawk-cap.org/media/website/skyhawks_logo_CAP_transparent",
-            "url": "https://skyhawk-cap.org/",
-            "telephone": "",
-            "address": {
-              "@type": "PostalAddress",
-              "addressLocality": "Delano",
-              "addressRegion": "MN",
-              "addressCountry": "US"
-            },
-
-            "openingHoursSpecification": {
-              "@type": "OpeningHoursSpecification",
-              "dayOfWeek": ["Monday"],
-              "opens": "18:30",
-              "closes": "21:00"
-            },
-            "priceRange": "Membership-based youth program",
-            "parentOrganization": {
-              "@id": "https://skyhawk-cap.org/#organization"
-            }
-          }
-        ]
-      }
     </script>
   </head>
   <body style="display: none" class="home-page">
@@ -232,27 +155,6 @@
       </h1>
       <section class="main-section">
         <div class="content-box-section-new">
-          <div id="slideshow-container" class="glide">
-            <div class="glide__track" data-glide-el="track">
-              <ul class="glide__slides" id="glide-slides">
-                <!-- Static hero image for LCP -->
-                <!--
-                  <li class="glide__slide glide__slide--active">
-                    <img src="/media/website/slidshow/withRecruiters.webp"
-                         alt="Skyhawk Composite Squadron Cadets with Recruiters"
-                         width="1903" height="520"
-                         fetchpriority="high">
-                  </li>
-                -->
-              </ul>
-            </div>
-            <div class="glide__arrows" data-glide-el="controls">
-              <button class="glide__arrow glide__arrow--left" data-glide-dir="<">‹</button>
-              <button class="glide__arrow glide__arrow--right" data-glide-dir=">">›</button>
-            </div>
-            <div class="glide__bullets" data-glide-el="controls[nav]"></div>
-          </div>
-          <div class="blue-line"></div>
           <div class="content-box-section">
             <div class="content-box-section-container"></div>
             <div class="cb-wrapper w-clearfix" id="content-boxes-wrapper">
