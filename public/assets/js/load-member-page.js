@@ -95,6 +95,7 @@ export async function loadMemberPage(db, sectionId, onUpdate) {
  * Render member page to DOM
  * @param {object} pageData
  */
+// Extend renderMemberPage to attach staff diagram lightbox if relevant
 export function renderMemberPage(pageData) {
   if (!pageData) return;
 
@@ -142,4 +143,78 @@ export function renderMemberPage(pageData) {
   } else {
     pageContentEl.innerHTML = sanitizeHtml(active.content);
   }
+
+  // -------------------------------------------
+  // Attach Staff Diagram Lightbox if relevant
+  // -------------------------------------------
+  const staffImg = pageContentEl.querySelector("#staffDiagram");
+  if (staffImg) {
+    // Force newest version immediately
+    const version = window.ASSET_VERSION || new Date().getTime();
+    const url = new URL(staffImg.src, window.location.origin);
+    url.searchParams.set("v", version);
+    staffImg.src = url.toString(); // Replace main image immediately
+
+    // Create lightbox once
+    let lightbox = document.getElementById("staff-lightbox");
+    if (!lightbox) {
+      lightbox = document.createElement("div");
+      lightbox.id = "staff-lightbox";
+      Object.assign(lightbox.style, {
+        position: "fixed",
+        inset: "0",
+        background: "rgba(0,0,0,0.95)",
+        display: "none",
+        justifyContent: "center",
+        alignItems: "center",
+        zIndex: "9999"
+      });
+      const imgContainer = document.createElement("div");
+      Object.assign(imgContainer.style, {
+        background: "white",
+        padding: "10px",
+        borderRadius: "8px",
+        boxShadow: "0 0 20px rgba(0,0,0,0.5)",
+        maxHeight: "90vh",
+        overflow: "auto"
+      });
+      const lightboxImg = document.createElement("img");
+      lightboxImg.id = "staff-lightbox-img";
+      Object.assign(lightboxImg.style, {
+        display: "block",
+        maxWidth: "100%",
+        height: "auto"
+      });
+      imgContainer.appendChild(lightboxImg);
+      lightbox.appendChild(imgContainer);
+      document.body.appendChild(lightbox);
+
+      lightbox.addEventListener("click", (e) => {
+        if (e.target === lightbox) {
+          lightbox.style.display = "none";
+          document.body.style.overflow = "";
+        }
+      });
+    }
+
+    // Click handler for lightbox
+    staffImg.style.cursor = "pointer";
+    staffImg.addEventListener("click", () => {
+      const version = window.ASSET_VERSION || new Date().getTime();
+      const url = new URL(staffImg.src, window.location.origin);
+      url.searchParams.set("v", version);
+
+      const preloaded = new Image();
+      preloaded.src = url.toString();
+      preloaded.onload = () => {
+        staffImg.src = preloaded.src;
+        const lbImg = document.getElementById("staff-lightbox-img");
+        lbImg.src = preloaded.src;
+        lightbox.style.display = "flex";
+        document.body.style.overflow = "hidden";
+      };
+    });
+  }
+
 }
+
