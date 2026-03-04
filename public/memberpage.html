@@ -65,114 +65,80 @@
       src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"
       crossorigin="anonymous"
     ></script>
-    <script>
-      function reloadImageViaIframe(imgId) {
-        const img = document.getElementById(imgId);
-        if (!img) return;
+<script>
+document.addEventListener("DOMContentLoaded", () => {
 
-        const iframe = document.createElement("iframe");
-        iframe.style.display = "none";
-        iframe.src = img.src;
-        document.body.appendChild(iframe);
+  /* ---------------------------
+     LIGHTBOX SETUP (create once)
+  ---------------------------- */
 
-        // Force reload
-        iframe.onload = () => {
-          try {
-            iframe.contentWindow.location.reload(true);
-          } catch (e) {
-            console.warn("Iframe reload may be blocked by browser:", e);
-          }
-          // Clean up
-          setTimeout(() => document.body.removeChild(iframe), 1000);
-        };
-      }
-      document.addEventListener("DOMContentLoaded", () => {
-        const imgId = "staffDiagram";
+  const lightbox = document.createElement("div");
+  Object.assign(lightbox.style, {
+    position: "fixed",
+    inset: "0",
+    background: "rgba(0,0,0,0.95)",
+    display: "none",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: "9999"
+  });
 
-        // Create lightbox overlay once
-        const lightbox = document.createElement("div");
-        Object.assign(lightbox.style, {
-          position: "fixed",
-          top: "0",
-          left: "0",
-          width: "100vw",
-          height: "100vh",
-          background: "rgba(0,0,0,0.95)",
-          display: "none",
-          justifyContent: "center",
-          alignItems: "center",
-          zIndex: "9999",
-          overflow: "hidden" // prevent page scroll behind overlay
-        });
+  const imgContainer = document.createElement("div");
+  Object.assign(imgContainer.style, {
+    background: "white",
+    padding: "10px",
+    borderRadius: "8px",
+    boxShadow: "0 0 20px rgba(0,0,0,0.5)",
+    maxHeight: "90vh",
+    overflow: "auto"
+  });
 
-        // Container for image
-        const imgContainer = document.createElement("div");
-        Object.assign(imgContainer.style, {
-          background: "white",
-          padding: "10px",
-          borderRadius: "8px",
-          boxShadow: "0 0 20px rgba(0,0,0,0.5)",
-          maxHeight: "90vh",
-          overflow: "auto", // only image scrolls if too tall
-          boxSizing: "border-box"
-        });
+  const lightboxImg = document.createElement("img");
+  Object.assign(lightboxImg.style, {
+    display: "block",
+    maxWidth: "100%",
+    height: "auto"
+  });
 
-        // Image itself
-        const lightboxImg = document.createElement("img");
-        Object.assign(lightboxImg.style, {
-          display: "block",
-          maxWidth: "100%",
-          height: "auto",
-          touchAction: "pinch-zoom",
-          userSelect: "none"
-        });
+  imgContainer.appendChild(lightboxImg);
+  lightbox.appendChild(imgContainer);
+  document.body.appendChild(lightbox);
 
-        imgContainer.appendChild(lightboxImg);
-        lightbox.appendChild(imgContainer);
-        document.body.appendChild(lightbox);
+  /* ---------------------------
+     CLOSE LIGHTBOX
+  ---------------------------- */
 
-        // Close lightbox on overlay click
-        lightbox.addEventListener("click", (e) => {
-          if (e.target === lightbox) {
-            lightbox.style.display = "none";
-            document.body.style.overflow = ""; // restore page scroll
-          }
-        });
+  lightbox.addEventListener("click", (e) => {
+    if (e.target === lightbox) {
+      lightbox.style.display = "none";
+      document.body.style.overflow = "";
+    }
+  });
 
-        // Attach click listener to current image
-        function attachLightbox() {
-          const img = document.getElementById(imgId);
-          if (!img) return;
+  /* ---------------------------
+     CLICK HANDLER (DELEGATED)
+  ---------------------------- */
 
-          img.style.cursor = "pointer";
+  document.addEventListener("click", (e) => {
+    const img = e.target.closest("#staffDiagram");
+    if (!img) return;
 
-          // Remove old listeners
-          const newImg = img.cloneNode(true);
-          img.replaceWith(newImg);
+    // Force newest version on first click
+    const version = window.ASSET_VERSION || new Date().getTime();
+    const url = new URL(img.getAttribute("src"), window.location.origin);
+    url.searchParams.set("v", version);
+    img.src = url.toString();
 
-          newImg.addEventListener("click", () => {
-            lightboxImg.src = newImg.src;
-            lightbox.style.display = "flex";
-            document.body.style.overflow = "hidden"; // prevent scrolling behind
-          });
-        }
+    // Open lightbox
+    lightboxImg.src = img.src;
+    lightbox.style.display = "flex";
+    document.body.style.overflow = "hidden";
+  });
 
-        // Initial attach
-        attachLightbox();
+});
+</script>
 
-        // Observe parent for dynamic reloads
-        const parent = document.getElementById(imgId)?.parentNode;
-        if (parent) {
-          const observer = new MutationObserver(() => attachLightbox());
-          observer.observe(parent, { childList: true, subtree: true });
-        }
 
-        // Optional fallback for reloads
-        setInterval(attachLightbox, 1000);
-      });
-      // Usage
-      reloadImageViaIframe("staffDiagram");
-    </script>
   </head>
   <body style="display: none">
     <div class="header-section">
