@@ -32,7 +32,7 @@ export function initHeaderFooter() {
                   <div class="footer-signoff-grip w-inline-block">
                     <div id="GRIPFooterLogo" style="padding-top: 10px;">
                       <span id="GRIPFooterLogoText" style="color: #919293; font-size: 10px; font-family: Arial, sans-serif; text-transform: uppercase; display: block; text-align: left; font-weight: 700; letter-spacing: 0.02rem;">
-                        WEB DEVELOPMENT BY <a href="" target="_blank" rel="noopener noreferrer" style="color: #919293; text-decoration: underline;">ETHAN LARSON</a>
+                        WEB DEVELOPMENT BY <a href="" target="_blank" rel="noopener noreferrer" style="color: #919293; text-decoration: underline;">C/TSgt Larson</a>
                       </span>
                     </div>
                   </div>
