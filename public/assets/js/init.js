@@ -235,16 +235,6 @@ function buildPageConfigs(mods) {
       logout: true
     },
     {
-      match: (path) => path.startsWith("/calldown"),
-      modules: [announcementBanner],
-      requiresAuth: false,
-    },
-    {
-      match: (path) => path.startsWith("/form"),
-      modules: [announcementBanner],
-      requiresAuth: false,
-    },
-    {
       match: () => true,
       modules: [announcementBanner, mods.initHeaderFooter],
       requiresAuth: false
