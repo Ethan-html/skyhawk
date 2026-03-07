@@ -31,8 +31,8 @@ export function initHeaderFooter() {
                 <div class="column w-clearfix w-col w-col-3 w-col-stack">
                   <div class="footer-signoff-grip w-inline-block">
                     <div id="GRIPFooterLogo" style="padding-top: 10px;">
-                      <span id="GRIPFooterLogoText" style="color: #919293; font-size: 10px; font-family: Arial, sans-serif; text-transform: uppercase; display: block; text-align: left; font-weight: 700; letter-spacing: 0.02rem;">
-                          WEB DEVELOPMENT BY 
+                      <span id="GRIPFooterLogoText" style="color: #919293; font-size: 10px; font-family: Arial, sans-serif; text-transform: uppercase; display: block; text-align: left; font-weight: 700;">
+                          Website developed BY 
                           <a href="https://techduck.com/codered" target="_blank" rel="noopener noreferrer" style="color: #919293; text-decoration: underline;">
                               <span style="text-transform: none;">C/TSgt </span><span style="text-transform: uppercase;">Larson</span>
                           </a>
