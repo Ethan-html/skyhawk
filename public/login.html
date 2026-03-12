@@ -132,15 +132,19 @@ initLogin(db);
 
     <!-- Login Form -->
     <form id="loginForm" class="space-y-6">
-      <input type="email" required placeholder="Email Address" id="username"
+      <input type="email" required placeholder="Email Address" id="username" name="username"
+             autocomplete="username"
              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/30 dark:bg-gray-800 dark:border-gray-600 dark:text-white outline-none transition shadow-sm focus:shadow-lg"/>
-      <input type="password" required placeholder="Password" id="password"
+      
+      <input type="password" required placeholder="Password" id="password" name="password"
+             autocomplete="current-password"
              class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/30 dark:bg-gray-800 dark:border-gray-600 dark:text-white outline-none transition shadow-sm focus:shadow-lg"/>
-      <button class="w-full py-3 font-semibold text-white bg-primary hover:bg-accent rounded-xl transition shadow-md">
+      
+      <button type="submit" class="w-full py-3 font-semibold text-white bg-primary hover:bg-accent rounded-xl transition shadow-md">
         Login
       </button>
-      <div id="errorMsg"
-           class="hidden text-sm text-red-600 dark:text-red-400 mb-4">
+
+      <div id="errorMsg" class="hidden text-sm text-red-600 dark:text-red-400 mb-4" role="alert" aria-live="polite">
       </div>
     </form>
     <!-- PASSWORD RESET -->
@@ -154,6 +158,7 @@ initLogin(db);
         type="email"
         id="reset-email"
         placeholder="Enter your email"
+        autocomplete="email"
         class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/30 dark:bg-gray-800 dark:border-gray-600 dark:text-white outline-none transition shadow-sm"
       />
 
@@ -178,6 +183,7 @@ initLogin(db);
       <input
         type="email"
         id="first-time-email"
+        autocomplete="email"
         placeholder="Enter your email"
         aria-describedby="first-reset-status"
         class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/30 dark:bg-gray-800 dark:border-gray-600 dark:text-white outline-none transition shadow-sm"
