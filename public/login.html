@@ -1,157 +1,297 @@
-<!doctype html>
-<html lang="en-US">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <title>Member Login | Skyhawk Squadron</title>
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="shortcut icon" href="/favicon.ico" />
+<title>Member Login | Skyhawk Squadron</title>
 
-    <meta
-      name="description"
-      content="Skyhawk Composite Squadron builds youth leadership through Civil Air Patrol cadet programs, service, and aerospace education in Delano, MN."
-    />
-    <link rel="canonical" href="https://skyhawk-cap.org/login" />
+<script src="https://cdn.tailwindcss.com"></script>
+<meta name="description" content="Skyhawk Composite Squadron builds youth leadership through Civil Air Patrol cadet programs, service, and aerospace education in Delano, MN."/>
+<link rel="canonical" href="https://skyhawk-cap.org/login" />
 
-    <!-- Icons -->
-    <link rel="icon" href="/media/website/skyhawks_logo_CAP_transparent.png" type="image/png" />
-    <link rel="apple-touch-icon" href="/assets/images/webclip.png" />
-    <link rel="manifest" href="/assets/manifest.json" />
+<!-- Icons -->
+<link rel="icon" href="/media/website/skyhawks_logo_CAP_transparent.png" type="image/png" />
+<link rel="apple-touch-icon" href="/assets/images/webclip.png" />
+<link rel="manifest" href="/assets/manifest.json" />
 
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Member Login | Skyhawk Squadron" />
-    <meta property="og:description" content="Secure member login for Skyhawk Composite Squadron." />
-    <meta property="og:image" content="https://skyhawk-cap.org/assets/images/webclip.png" />
-    <meta property="og:url" content="https://skyhawk-cap.org/login" />
+<!-- Open Graph -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Member Login | Skyhawk Squadron" />
+<meta property="og:description" content="Secure member login for Skyhawk Composite Squadron." />
+<meta property="og:image" content="https://skyhawk-cap.org/assets/images/webclip.png" />
+<meta property="og:url" content="https://skyhawk-cap.org/login" />
 
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Member Login | Skyhawk Squadron" />
-    <meta
-      name="twitter:description"
-      content="Secure member login for Skyhawk Composite Squadron."
-    />
-    <meta name="twitter:image" content="https://skyhawk-cap.org/assets/images/webclip.png" />
+<!-- Twitter -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="Member Login | Skyhawk Squadron" />
+<meta name="twitter:description" content="Secure member login for Skyhawk Composite Squadron."/>
+<meta name="twitter:image" content="https://skyhawk-cap.org/assets/images/webclip.png" />
 
-    <script>
-      var script = document.createElement("script");
-      script.src = "/assets/js/config.js?t=" + new Date().getTime();
+<script>
+tailwind.config = {
+  darkMode: 'class',
+  theme: {
+    extend: {
+      colors: {
+        primary: "#001489",
+        accent: "#ba0c2f",
+        bgLight: "#f4f6f8",
+        bgDark: "#0f1115"
+      }
+    }
+  }
+}
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+import { initLogin } from "/assets/js/login.js"; // your login script
 
-      script.onload = function () {
-        import(
-          "/assets/js/init.js" + (window.ASSET_VERSION ? "?v=" + window.ASSET_VERSION : "")
-        ).then((m) => m.initPage());
-      };
+// ==============================
+// Firebase config
+// ==============================
+const firebaseConfig = {
+  apiKey: "AIzaSyBk_ikYB1PzkgHx4zJY73pe3EfzQRpZvqw",
+  authDomain: "skyhawk-web.firebaseapp.com",
+  projectId: "skyhawk-web",
+  storageBucket: "skyhawk-web.firebasestorage.app",
+  messagingSenderId: "340655139001",
+  appId: "1:340655139001:web:7923a1fe83ac4a4c689368",
+  measurementId: "G-M2RSE2BRK2"
+};
 
-      document.head.appendChild(script);
-    </script>
-  </head>
-  <body style="display: none">
-    <div class="header-section">
-      <div
-        data-collapse="medium"
-        data-animation="default"
-        data-duration="400"
-        class="nav-section w-nav"
+// ==============================
+// Initialize Firebase
+// ==============================
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// ==============================
+// Run login script
+// ==============================
+initLogin(db);
+</script>
+
+</head>
+
+<body class="min-h-screen flex flex-col bg-gradient-to-br from-gray-100 to-gray-300 dark:from-gray-900 dark:to-black transition-colors duration-300">
+
+<!-- HEADER - Mobile -->
+<header class="bg-white dark:bg-gray-900 shadow-sm w-full md:hidden">
+  <div class="max-w-7xl mx-auto py-2 flex items-center justify-between">
+
+    <!-- Left Logo & Title -->
+    <div class="flex flex-col items-start">
+      <img src="https://skyhawk-cap.org/assets/images/CAP-2017-logo-horizontal-optimized.webp"
+           class="w-[280px]"
+           alt="Civil Air Patrol">
+
+      <div class="ml-8 text-lg font-semibold text-primary dark:text-blue-400/80 tracking-wide">
+        SKYHAWK SQUADRON (040)
+      </div>
+    </div>
+
+    <!-- Right Squadron Logo -->
+    <img src="https://skyhawk-cap.org/media/website/skyhawks_logo_CAP_transparent.webp"
+         class="w-[120px] object-contain"
+         alt="Skyhawk Squadron">
+  </div>
+  <!-- Divider -->
+  <div class="h-1 bg-primary dark:bg-blue-700/60"></div>
+</header>
+
+
+<!-- HEADER - Desktop -->
+<header class="bg-white dark:bg-gray-900 shadow-sm w-full hidden md:block">
+  <div class="max-w-7xl mx-auto py-2 flex items-center justify-between">
+
+    <!-- Left Logo -->
+    <img src="/assets/images/CAP-2017-logo-horizontal-optimized.webp"
+         class="w-[350px]"
+         alt="Civil Air Patrol">
+
+    <!-- Right Squadron Logo -->
+    <img src="/media/website/skyhawk-optimized.webp"
+         class="w-[300px] object-contain"
+         alt="Skyhawk Squadron">
+  </div>
+
+  <!-- Divider -->
+  <div class="h-1 bg-primary dark:bg-blue-700/60"></div>
+</header>
+
+<!-- MAIN CONTENT -->
+<main class="flex-grow flex items-center justify-center px-4 py-16">
+  <div class="w-full max-w-md bg-white/90 dark:bg-gray-900/90 backdrop-blur rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 p-10 transition hover:shadow-3xl">
+
+    <!-- Title -->
+    <div class="text-center mb-8">
+      <h2 id="login-header" class="text-2xl font-semibold text-gray-800 dark:text-white">Member Login</h2>
+    </div>
+
+    <!-- Login Form -->
+    <form id="loginForm" class="space-y-6">
+      <input type="email" required placeholder="Email Address" id="username"
+             class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/30 dark:bg-gray-800 dark:border-gray-600 dark:text-white outline-none transition shadow-sm focus:shadow-lg"/>
+      <input type="password" required placeholder="Password" id="password"
+             class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/30 dark:bg-gray-800 dark:border-gray-600 dark:text-white outline-none transition shadow-sm focus:shadow-lg"/>
+      <button class="w-full py-3 font-semibold text-white bg-primary hover:bg-accent rounded-xl transition shadow-md">
+        Login
+      </button>
+      <div id="errorMsg"
+           class="hidden text-sm text-red-600 dark:text-red-400 mb-4">
+      </div>
+    </form>
+    <!-- PASSWORD RESET -->
+    <div id="password-reset-section" class="hidden mt-6 space-y-4">
+
+      <p class="text-sm text-gray-600 dark:text-gray-300">
+        Enter your email to reset your password
+      </p>
+
+      <input
+        type="email"
+        id="reset-email"
+        placeholder="Enter your email"
+        class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/30 dark:bg-gray-800 dark:border-gray-600 dark:text-white outline-none transition shadow-sm"
+      />
+
+      <button
+        id="reset-password-btn"
+        class="w-full py-3 font-semibold text-white bg-primary hover:bg-accent rounded-xl transition shadow-md">
+        Send Reset Email
+      </button>
+
+      <div id="reset-status"
+           class="text-sm"
+           role="alert"
+           aria-live="polite"></div>
+    </div>
+    <!-- FIRST-TIME LOGIN / PASSWORD SETUP -->
+    <div id="first-time-section" class="hidden mt-6 space-y-4">
+      <p class="text-sm text-gray-600 dark:text-gray-300">
+        Enter your email to set up your account for the first time.
+      </p>
+
+      <label for="first-time-email" class="sr-only">Your email</label>
+      <input
+        type="email"
+        id="first-time-email"
+        placeholder="Enter your email"
+        aria-describedby="first-reset-status"
+        class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:border-primary focus:ring-2 focus:ring-primary/30 dark:bg-gray-800 dark:border-gray-600 dark:text-white outline-none transition shadow-sm"
+      />
+
+      <button
+        id="first-time-reset-btn"
+        class="w-full py-3 font-semibold text-white bg-primary hover:bg-accent rounded-xl transition shadow-md"
       >
-        <div class="header-contents-wrap">
-          <div class="header-container w-container">
-            <div class="logo-container">
-              <a href="/" class="logo w-clearfix w-nav-brand">
-                <img
-                  src="/assets/images/CAP-2017-logo-horizontal-optimized.webp"
-                  alt="Skyhawk Composite Squadron"
-                  class="logo-image"
-                />
-              </a>
-              <h2 class="website-tagline" id="unit-name"></h2>
-            </div>
-            <div class="header-content-right-wrap">
-              <div class="website-logo-container">
-                <img
-                  src="/media/website/skyhawks_logo_CAP_transparent.webp"
-                  alt="Skyhawk Composite Squadron"
-                  class="website-logo"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="w-nav-overlay" data-wf-ignore=""></div>
+        Login
+      </button>
+
+      <div id="first-reset-status" class="text-sm" role="alert" aria-live="polite"></div>
+    </div>
+    <div id="first-time-reset-section" class="hidden mt-6 space-y-4 text-center">
+      <h4 class="text-gray-800 dark:text-white text-lg font-semibold">
+        An <strong>email</strong> has been sent to set up your password.
+      </h4>
+      <p class="text-sm text-gray-600 dark:text-gray-300">
+        Once you set your password, return here to log in.
+      </p>
+      <p class="text-sm text-gray-600 dark:text-gray-300">
+        Didn't receive it?
+        <a href="#" id="resend-reset-email" class="text-primary dark:text-gray-400 hover:text-accent transition">Resend email</a>
+      </p>
+      <button
+        onclick="window.location.href = '/login'"
+        class="w-full py-3 font-semibold text-white bg-primary hover:bg-accent rounded-xl transition shadow-md"
+      >
+        Login
+      </button>
+    </div>
+
+    <!-- Links -->
+    <div class="flex justify-between mt-6 text-sm">
+      <a href="#" id="forgot-password-link" class="text-primary dark:text-gray-400 hover:text-accent transition"> Forgot Password?</a>
+      <a href="https://admin.skyhawk-cap.org/request-access" id="request-account-link" class="text-primary dark:text-gray-400 hover:text-accent transition"> Request Account </a>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="w-full border-t border-gray-300 dark:border-gray-700 bg-gray-200/70 dark:bg-gray-900/70 backdrop-blur text-gray-700 dark:text-gray-300 mt-12">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
+    <div class="flex flex-col md:flex-row md:items-center gap-3">
+      <span>© 2026 Civil Air Patrol. All rights reserved.</span>
+      <div class="flex gap-4">
+        <a href="https://mnwg.cap.gov/locations/delano" target="_blank" class="hover:text-primary transition">About Us</a>
+        <a href="https://www.mncap.org/public/contact.cfm?unit=040" target="_blank" class="hover:text-primary transition">Contact Us</a>
+        <a href="https://www.gocivilairpatrol.com/legal-privacy-statement" target="_blank" class="hover:text-primary transition">Legal & Privacy</a>
       </div>
     </div>
-    <div class="blue-line1"></div>
-    <div class="login-page">
-      <h1 class="visually-hidden">
-        Skyhawk Composite Squadron – Civil Air Patrol in Delano, Minnesota
-      </h1>
-      <div class="login-card">
-        <h2>Login to Your Account</h2>
+    <div class="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+      Website Developed by
+      <a href="https://techduck.com/codered" target="_blank" class="underline hover:text-primary ml-1 normal-case">C/TSgt Larson</a>
 
-        <form id="loginForm">
-          <label for="username" class="visually-hidden">Email</label>
-          <input
-            type="email"
-            id="username"
-            placeholder="Email"
-            required
-            aria-describedby="errorMsg"
-          />
-          <label for="password" class="visually-hidden">Password</label>
-          <input
-            type="password"
-            id="password"
-            placeholder="Password"
-            required
-            aria-describedby="errorMsg"
-          />
-          <button type="submit">Login</button>
-          <div class="error1" id="errorMsg" role="alert" hidden aria-live="polite"></div>
-        </form>
+      <!-- Minimal Dark Mode Toggle -->
+<div id="footerThemeSwitcher"
+     class="relative w-14 h-7 bg-gray-300 dark:bg-gray-700 rounded-full p-[3px] flex items-center cursor-pointer transition">
 
-        <p class="login-links">
-          <a href="#" id="forgot-password-link">Forgot your password?</a>
-        </p>
+  <!-- Sliding Circle -->
+  <div id="toggleCircle"
+       class="absolute left-[3px] top-[3px] w-5 h-5 bg-white dark:bg-gray-900 rounded-full shadow transition-all duration-300">
+  </div>
 
-        <div id="password-reset-section" class="hidden-section">
-          <p>Enter your email to reset your password:</p>
-          <label for="reset-email" class="visually-hidden">Email for password reset</label>
-          <input
-            type="email"
-            id="reset-email"
-            placeholder="Enter your email"
-            aria-describedby="reset-status"
-          />
-          <button id="reset-password-btn">Send Reset Email</button>
-          <div id="reset-status" role="alert" aria-live="polite"></div>
-          <p><a href="#" id="back-to-login">Back to login</a></p>
-        </div>
+  <!-- Light (Sun) -->
+  <span class="absolute left-1.5 flex items-center justify-center text-yellow-500 pointer-events-none">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            fill="none"/>
+    </svg>
+  </span>
 
-        <div id="first-time-section" class="hidden-section">
-          <label for="first-time-email" class="visually-hidden">Your email</label>
-          <input
-            type="email"
-            id="first-time-email"
-            placeholder="Enter your email"
-            aria-describedby="first-reset-status"
-          />
-          <button id="first-time-reset-btn">Login</button>
-          <div id="first-reset-status" role="alert" aria-live="polite"></div>
-        </div>
+  <!-- Dark (Moon) -->
+  <span class="absolute right-1.5 flex items-center justify-center text-gray-700 dark:text-gray-200 pointer-events-none">
+    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/>
+    </svg>
+  </span>
 
-        <div id="first-time-reset-section" class="hidden-section">
-          <h4>An <strong>email</strong> has been sent to set up your password.</h4>
-          <p>Once you set your password, return here to log in.</p>
-          <p>Didn't receive it? <a href="#" id="resend-reset-email">Resend email</a></p>
-          <button onclick="window.location.href = '/login'">Login</button>
-        </div>
-
-        <div class="login-footer">
-          <p>Members only</p>
-        </div>
-      </div>
+</div>
     </div>
-    <div id="footer"></div>
-  </body>
+  </div>
+</footer>
+<script>
+const toggle = document.getElementById('footerThemeSwitcher');
+const toggleCircle = document.getElementById('toggleCircle');
+
+let theme = localStorage.getItem('theme') || 'light';
+applyTheme(theme);
+
+toggle.addEventListener('click', () => {
+  theme = theme === 'light' ? 'dark' : 'light';
+  localStorage.setItem('theme', theme);
+  applyTheme(theme);
+});
+
+function applyTheme(theme) {
+
+  if (theme === 'dark') {
+    document.documentElement.classList.add('dark');
+    toggleCircle.style.transform = 'translateX(29px)';
+  } else {
+    document.documentElement.classList.remove('dark');
+    toggleCircle.style.transform = 'translateX(0)';
+  }
+
+}
+</script>
+
+</body>
 </html>

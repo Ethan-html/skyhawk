@@ -6,7 +6,7 @@
 // --- Asset version (cache-busting) ---
 // Bump on deploy. Format: MAJOR.MINOR.PATCH
 // MAJOR = breaking; MINOR = new features; PATCH = fixes only
-window.ASSET_VERSION = "4.0.11";
+window.ASSET_VERSION = "4.0.12";
 
 // --- Firebase & site ---
 // Change when switching projects or when credentials rotate.
