@@ -249,6 +249,11 @@
         border-radius: 12px; /* optional: keep rounded corners */
         padding: 30px 35px; /* keep padding inside the form */
       }
+      button:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+      }
+
     </style>
   </head>
   <body>
@@ -602,9 +607,18 @@
         return [1];
       }
 
-      /* ---------- Submit ---------- */
+      let submitting = false;
       form.addEventListener("submit", (e) => {
         e.preventDefault();
+
+        if (submitting) return; // stop double submits
+        submitting = true;
+
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.textContent = "Submitting...";
+        }
 
         const params = new URLSearchParams();
         const allowedSteps = getAllowedSteps();
@@ -618,10 +632,15 @@
           });
         });
 
-        fetch(`${formConfig.googleFormUrl}?${params}`, {
-          method: "GET",
-          mode: "no-cors"
-        }).then(() => {
+        fetch(formConfig.googleFormUrl, {
+          method: "POST",
+          mode: "no-cors",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: params
+        })
+        .then(() => {
           document.getElementById("confirmationMessage").textContent =
             getAttend() === "Yes"
               ? formConfig.confirmationMessages.attendYes
@@ -632,8 +651,18 @@
 
           form.reset();
           showStep(4);
+        })
+        .catch(() => {
+          submitting = false;
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Submit";
+          }
+          alert("Submission failed. Please try again.");
         });
+
       });
+
 
     </script>
   </body>
