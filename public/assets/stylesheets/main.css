@@ -11373,3 +11373,13 @@ body.maintenance-page {
   background: transparent;
   border: 1.5px solid #fff;
 }
+.cb {
+  display: block;
+  overflow: hidden;
+}
+
+.cb-image {
+  width: 100%;
+  height: auto;
+  display: block;
+}
