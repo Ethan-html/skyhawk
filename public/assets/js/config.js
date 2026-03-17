@@ -6,7 +6,9 @@
 // --- Asset version (cache-busting) ---
 // Bump on deploy. Format: MAJOR.MINOR.PATCH
 // MAJOR = breaking; MINOR = new features; PATCH = fixes only
-window.ASSET_VERSION = "4.0.13";
+window.ASSET_VERSION = "5.0.0";
+
+// V5.0.0 First official release to Cadets!
 
 // --- Firebase & site ---
 // Change when switching projects or when credentials rotate.
