@@ -258,10 +258,78 @@
   </head>
   <body>
     <form id="cadetForm"><div id="formContainer"></div></form>
+
+<div id="closedMessage" style="
+  display:none;
+  max-width:900px;
+  margin:40px auto;
+  background:#ffffff;
+  padding:40px 45px;
+  border-radius:14px;
+  box-shadow:0 12px 25px rgba(0,0,0,0.08);
+  text-align:center;
+  border-top:5px solid #666;
+">
+  <h2 style="margin-bottom:10px; font-size:1.8rem; color:#333;">
+    Form Closed
+  </h2>
+
+  <p style="margin-bottom:15px; font-size:1.05rem; color:#555;">
+    This form is currently closed for the week.
+  </p>
+
+  <p style="margin-bottom:25px; font-size:1rem; color:#666;">
+    Please check back later to submit your response for the next meeting.
+  </p>
+
+  <div style="
+    display:inline-block;
+    background:#f5f5f5;
+    padding:12px 18px;
+    border-radius:8px;
+    font-size:0.95rem;
+    color:#444;
+    border:1px solid #e0e0e0;
+  ">
+    <strong>Reminder:</strong> All responses must be submitted before <strong>Sunday at 22:00</strong>.
+  </div>
+</div>
     <script>
       if (window.self !== window.top) {
         document.documentElement.classList.add("iframed");
       }
+
+      function isFormClosed() {
+        const now = new Date();
+
+        const day = now.getDay(); // 0 = Sunday, 1 = Monday, 2 = Tuesday
+        const hours = now.getHours();
+        const minutes = now.getMinutes();
+
+        const currentMinutes = hours * 60 + minutes;
+
+        const monday10am = 10 * 60;
+        const tuesday10am = 10 * 60;
+
+        // Monday after 10:00 AM
+        if (day === 1 && currentMinutes >= monday10am) {
+          return true;
+        }
+
+        // Tuesday before 10:00 AM
+        if (day === 2 && currentMinutes < tuesday10am) {
+          return true;
+        }
+
+        return false;
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        if (isFormClosed()) {
+          document.getElementById("cadetForm").style.display = "none";
+          document.getElementById("closedMessage").style.display = "block";
+        }
+      });
 
       const form = document.getElementById("cadetForm");
       let formConfig = null;
