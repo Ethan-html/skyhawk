@@ -260,7 +260,7 @@
     <form id="cadetForm"><div id="formContainer"></div></form>
 
 <div id="closedMessage" style="
-  display:none;
+  display: block;
   max-width:900px;
   margin:40px auto;
   background:#ffffff;
@@ -280,6 +280,14 @@
 
   <p style="margin-bottom:25px; font-size:1rem; color:#666;">
     Please check back later to submit your response for the next meeting.
+  </p>
+
+  <p style="margin-bottom:-15px; font-size:1rem; color:#666;">
+    You are still welcome to attend the upcoming meeting; drill tests and other submissions must wait until next week.
+  </p>
+
+  <p style="margin-bottom:35px; font-size:1rem; color:#666;">
+    Please make sure to submit your response before the cutoff date next week to ensure your drill test is scheduled.
   </p>
 
   <div style="
@@ -427,6 +435,13 @@
           case "text":
             el = document.createElement("input");
             el.type = "text";
+
+            // ONLY apply to the name field
+            if (q.name === "name") {
+              el.placeholder = "First, Last";
+              el.addEventListener("blur", () => formatName(el));
+            }
+
             break;
 
           case "textarea":
@@ -487,6 +502,59 @@
         );
       }
 
+      function formatName(input) {
+        let value = input.value.trim();
+        if (!value) return;
+
+        // Remove extra spaces
+        value = value.replace(/\s+/g, " ");
+
+        // Normalize commas (remove spaces around)
+        value = value.replace(/\s*,\s*/g, ",");
+
+        let first = "";
+        let last = "";
+
+        if (value.includes(",")) {
+          const parts = value.split(",");
+          if (parts.length === 2) {
+            // Check if it’s already "First, Last"
+            const firstCap = parts[0].charAt(0).toUpperCase() + parts[0].slice(1).toLowerCase();
+            const lastCap = parts[1].charAt(0).toUpperCase() + parts[1].slice(1).toLowerCase();
+            // If first part looks like a last name, swap
+            if (firstCap === parts[1].charAt(0).toUpperCase() + parts[1].slice(1).toLowerCase()) {
+              first = parts[1].trim();
+              last = parts[0].trim();
+            } else {
+              first = parts[0].trim();
+              last = parts[1].trim();
+            }
+          }
+        } else {
+          const parts = value.split(" ");
+          if (parts.length >= 2) {
+            first = parts[0];
+            last = parts.slice(1).join(" ");
+          }
+        }
+
+        // Capitalize properly
+        const cap = (str) =>
+          str
+            .toLowerCase()
+            .split(" ")
+            .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+            .join(" ");
+
+        first = cap(first);
+        last = cap(last);
+
+        // ✅ Only set if both parts exist
+        if (first && last) {
+          input.value = `${first}, ${last}`;
+        }
+      }
+
       function resolveNextStep() {
         const section = formConfig.sections.find(s => s.step === currentStep);
         if (!section?.navigation) return currentStep + 1;
@@ -509,8 +577,6 @@
         saveFormData();
       }
 
-
-
       function getAttend() {
         return form.querySelector('input[name="attend"]:checked')?.value;
       }
@@ -528,16 +594,12 @@
         }
       }
 
-
-
       function prevStep() {
         const prev = stepHistory.pop();
         if (prev !== undefined) {
           showStep(prev);
         }
       }
-
-
 
       function validateCurrentSection() {
         const section = document.querySelector(`section[data-step="${currentStep}"]`);
@@ -616,7 +678,6 @@
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       }
 
-
       function loadFormData() {
         const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
 
@@ -638,8 +699,6 @@
         stepHistory = [];
         showStep(1);
       }
-
-
 
       form.addEventListener("input", saveFormData);
       form.addEventListener("change", (e) => {
@@ -688,6 +747,9 @@
           submitBtn.textContent = "Submitting...";
         }
 
+        const nameField = form.querySelector('[name="name"]');
+        if (nameField) formatName(nameField);
+
         const params = new URLSearchParams();
         const allowedSteps = getAllowedSteps();
 
@@ -728,7 +790,6 @@
           }
           alert("Submission failed. Please try again.");
         });
-
       });
 
 
