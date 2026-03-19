@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en-US">
+<html lang="en-US" class="bg-slate-50">
   <head>
     <title>Cadet Calldown Form</title>
     <link rel="icon" type="image/png" href="/media/website/skyhawks_logo_CAP_transparent.ico" />
@@ -47,6 +47,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
+        darkMode: "class",
         theme: {
           extend: {
             colors: {
@@ -70,51 +71,77 @@
         }
       };
     </script>
+    <script>
+      const storedTheme = localStorage.getItem("theme") || "light";
+      if (storedTheme === "dark") {
+        document.documentElement.classList.add("dark");
+      }
+    </script>
   </head>
-  <body class="min-h-screen bg-slate-950 text-slate-100 antialiased">
+  <body
+    class="min-h-screen bg-slate-50 text-slate-900 antialiased transition-colors duration-200 dark:bg-slate-950 dark:text-slate-100"
+  >
     <div class="relative isolate overflow-hidden">
       <div
-        class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(96,165,250,0.16),_transparent_30%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.14),_transparent_28%),linear-gradient(180deg,_#020617_0%,_#0f172a_45%,_#111827_100%)]"
+        class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(96,165,250,0.16),_transparent_26%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.12),_transparent_26%),linear-gradient(180deg,_#f8fafc_0%,_#eef4fb_42%,_#f8fafc_100%)] dark:bg-[radial-gradient(circle_at_top,_rgba(96,165,250,0.16),_transparent_30%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.14),_transparent_28%),linear-gradient(180deg,_#020617_0%,_#0f172a_45%,_#111827_100%)]"
       ></div>
       <div
-        class="absolute inset-x-0 top-0 -z-10 h-72 bg-gradient-to-b from-skyhawk-500/10 to-transparent blur-3xl"
+        class="absolute inset-x-0 top-0 -z-10 h-48 bg-gradient-to-b from-skyhawk-500/10 to-transparent blur-3xl dark:h-72"
       ></div>
 
-      <main class="mx-auto flex min-h-screen max-w-6xl flex-col px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
-        <div class="mx-auto mb-8 w-full max-w-4xl">
+      <main class="mx-auto flex min-h-screen max-w-6xl flex-col px-4 py-5 sm:px-6 sm:py-6 lg:px-8">
+        <div class="mx-auto mb-4 w-full max-w-4xl">
           <div
-            class="rounded-[2rem] border border-white/10 bg-white/5 p-6 shadow-glow backdrop-blur-xl sm:p-8"
+            class="rounded-[1.75rem] border border-slate-200/80 bg-white/85 p-4 shadow-xl shadow-skyhawk-100/60 backdrop-blur-xl dark:border-white/10 dark:bg-white/10 dark:shadow-glow sm:p-5"
           >
-            <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-              <div class="max-w-2xl">
+            <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <div class="min-w-0">
                 <p
-                  class="mb-3 inline-flex items-center rounded-full border border-skyhawk-300/20 bg-skyhawk-400/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em] text-skyhawk-100"
+                  class="mb-2 inline-flex items-center rounded-full border border-skyhawk-200 bg-skyhawk-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.24em] text-skyhawk-700 dark:border-skyhawk-300/20 dark:bg-skyhawk-400/10 dark:text-skyhawk-100"
                 >
                   Skyhawk Composite Squadron
                 </p>
-                <h1 class="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                  Weekly cadet response form
-                </h1>
-                <p class="mt-4 max-w-2xl text-sm leading-6 text-slate-300 sm:text-base">
-                  Confirm attendance, drill testing, and any notes for the next meeting using a
-                  cleaner, faster workflow built for mobile and desktop.
+                <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
+                  <h1
+                    class="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-[1.85rem]"
+                  >
+                    Weekly cadet response form
+                  </h1>
+                  <span
+                    class="inline-flex w-fit items-center rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700 dark:bg-emerald-400/10 dark:text-emerald-200"
+                  >
+                    Fast two-step check-in
+                  </span>
+                </div>
+                <p
+                  class="mt-2 max-w-2xl text-sm leading-6 text-slate-600 dark:text-slate-300 sm:text-[0.95rem]"
+                >
+                  Tell staff whether you are coming, then finish the matching second step.
                 </p>
               </div>
 
               <div
-                class="grid gap-3 rounded-2xl border border-white/10 bg-slate-950/40 p-4 text-sm text-slate-300 sm:min-w-64"
+                class="grid gap-2 rounded-2xl border border-slate-200 bg-slate-50/90 px-4 py-3 text-sm text-slate-600 shadow-sm dark:border-white/10 dark:bg-slate-950/40 dark:text-slate-300 sm:grid-cols-2 sm:items-center sm:gap-3"
               >
                 <div>
-                  <p class="text-xs font-semibold uppercase tracking-[0.24em] text-slate-500">
-                    Weekly reminder
+                  <p
+                    class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400"
+                  >
+                    Deadline
                   </p>
-                  <p class="mt-1 font-medium text-slate-100">Submit before Sunday at 22:00</p>
+                  <p class="mt-1 font-semibold text-slate-900 dark:text-slate-100">
+                    Sunday at 22:00
+                  </p>
                 </div>
-                <div class="h-px bg-white/10"></div>
-                <p class="leading-6 text-slate-400">
-                  Responses help staff prepare attendance, drill tests, and logistics before the
-                  next meeting.
-                </p>
+                <div class="hidden h-10 w-px bg-slate-200 dark:bg-white/10 sm:block"></div>
+                <div>
+                  <p
+                    class="text-[11px] font-semibold uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400"
+                  >
+                    Why it matters
+                  </p>
+                  <p class="mt-1 leading-5">Helps staff plan attendance, testing, and logistics.</p>
+                </div>
               </div>
             </div>
           </div>
@@ -122,23 +149,23 @@
 
         <form
           id="cadetForm"
-          class="mx-auto w-full max-w-4xl rounded-[2rem] border border-white/10 bg-white/95 p-5 text-slate-900 shadow-glow ring-1 ring-white/10 backdrop-blur sm:p-8 lg:p-10"
+          class="mx-auto w-full max-w-4xl rounded-[1.75rem] border border-slate-200/80 bg-white/92 p-5 text-slate-900 shadow-xl shadow-skyhawk-100/70 ring-1 ring-white/60 backdrop-blur sm:p-7 lg:p-8 dark:border-white/10 dark:bg-slate-900/85 dark:text-slate-100 dark:shadow-glow dark:ring-white/10"
         >
           <div id="formContainer"></div>
         </form>
 
         <div
           id="closedMessage"
-          class="mx-auto hidden w-full max-w-4xl rounded-[2rem] border border-amber-300/20 bg-white/95 p-6 text-center text-slate-900 shadow-glow ring-1 ring-amber-200/40 backdrop-blur sm:p-10"
+          class="mx-auto hidden w-full max-w-4xl rounded-[1.75rem] border border-amber-300/40 bg-white/95 p-6 text-center text-slate-900 shadow-xl shadow-amber-100/60 ring-1 ring-amber-200/50 backdrop-blur dark:border-amber-300/20 dark:bg-slate-900/90 dark:text-slate-100 dark:shadow-none dark:ring-white/10 sm:p-10"
         >
           <div
-            class="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-100 text-amber-600 shadow-lg shadow-amber-200/60"
+            class="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-100 text-amber-600 shadow-lg shadow-amber-200/60 dark:bg-amber-400/15 dark:text-amber-200 dark:shadow-none"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="currentColor"
-              class="h-8 w-8"
+              class="h-7 w-7"
             >
               <path
                 fill-rule="evenodd"
@@ -147,23 +174,25 @@
               />
             </svg>
           </div>
-          <h2 class="mt-6 text-3xl font-semibold tracking-tight text-slate-900">Form Closed</h2>
-          <p class="mt-3 text-base leading-7 text-slate-600 sm:text-lg">
+          <h2 class="mt-5 text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">
+            Form Closed
+          </h2>
+          <p class="mt-3 text-base leading-7 text-slate-600 dark:text-slate-300 sm:text-lg">
             This form is currently closed for the week.
           </p>
-          <p class="mt-4 text-sm leading-7 text-slate-500 sm:text-base">
+          <p class="mt-4 text-sm leading-7 text-slate-500 dark:text-slate-400 sm:text-base">
             Please check back later to submit your response for the next meeting. You are still
             welcome to attend the upcoming meeting; drill tests and other submissions must wait
             until next week.
           </p>
-          <p class="mt-4 text-sm leading-7 text-slate-500 sm:text-base">
+          <p class="mt-4 text-sm leading-7 text-slate-500 dark:text-slate-400 sm:text-base">
             Please make sure to submit your response before the cutoff date next week to ensure your
             drill test is scheduled.
           </p>
           <div
-            class="mt-8 inline-flex rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 shadow-inner shadow-slate-200/70"
+            class="mt-8 inline-flex rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 shadow-inner shadow-slate-200/70 dark:border-white/10 dark:bg-slate-950/70 dark:text-slate-200 dark:shadow-none"
           >
-            <span class="font-semibold text-slate-900">Reminder:</span>
+            <span class="font-semibold text-slate-900 dark:text-white">Reminder:</span>
             <span class="ml-2">All responses must be submitted before Sunday at 22:00.</span>
           </div>
         </div>
@@ -183,7 +212,7 @@
         "rounded-2xl",
         "border",
         "border-slate-200",
-        "bg-white",
+        "bg-slate-50/80",
         "px-4",
         "py-3",
         "text-base",
@@ -193,9 +222,16 @@
         "transition",
         "duration-200",
         "placeholder:text-slate-400",
+        "appearance-none",
         "focus:border-skyhawk-500",
         "focus:ring-4",
-        "focus:ring-skyhawk-100"
+        "focus:ring-skyhawk-100",
+        "dark:border-slate-700",
+        "dark:bg-slate-900/80",
+        "dark:text-slate-100",
+        "dark:placeholder:text-slate-500",
+        "dark:focus:border-skyhawk-400",
+        "dark:focus:ring-skyhawk-500/20"
       ];
 
       const fieldWrapperClasses = ["space-y-2"];
@@ -246,15 +282,21 @@
           "hover:bg-slate-50",
           "focus:outline-none",
           "focus:ring-4",
-          "focus:ring-slate-200"
+          "focus:ring-slate-200",
+          "dark:border-slate-700",
+          "dark:bg-slate-900/80",
+          "dark:text-slate-100",
+          "dark:hover:border-slate-600",
+          "dark:hover:bg-slate-800"
         ]
       };
 
       if (window.self !== window.top) {
-        document.body.className = "min-h-screen bg-transparent text-slate-100 antialiased";
+        document.body.className =
+          "min-h-screen bg-transparent text-slate-900 antialiased dark:text-slate-100";
         const formShell = document.getElementById("cadetForm");
         formShell.className =
-          "mx-auto w-full max-w-4xl rounded-[2rem] border border-white/20 bg-white/10 p-5 text-white shadow-none ring-1 ring-white/20 backdrop-blur-xl sm:p-8 lg:p-10";
+          "mx-auto w-full max-w-4xl rounded-[1.75rem] border border-slate-200/80 bg-white/90 p-5 text-slate-900 shadow-none ring-1 ring-white/60 backdrop-blur-xl dark:border-white/20 dark:bg-slate-950/65 dark:text-white dark:ring-white/20 sm:p-7 lg:p-8";
       }
 
       function isFormClosed() {
@@ -312,7 +354,7 @@
       function renderForm() {
         form.innerHTML = "";
 
-        formConfig.sections.forEach((section, index) => {
+        formConfig.sections.forEach((section) => {
           const sec = document.createElement("section");
           sec.dataset.step = section.step;
           sec.className = classListString([
@@ -320,9 +362,10 @@
             ...(section.step === 1 ? sectionClasses.visible : [])
           ]);
 
-          const progressLabel = `Step ${index + 1} of ${formConfig.sections.length}`;
+          const progressStep = section.step === 1 ? 1 : 2;
+          const progressLabel = `Step ${progressStep} of 2`;
           const errorBoxId = `section-${section.step}-error`;
-          const progressWidth = `${((index + 1) / formConfig.sections.length) * 100}%`;
+          const progressWidth = `${progressStep * 50}%`;
 
           sec.innerHTML = `
             <div class="space-y-6">
@@ -330,19 +373,19 @@
                 <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <p class="text-xs font-semibold uppercase tracking-[0.24em] text-skyhawk-600">${progressLabel}</p>
-                    <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">${section.title}</h2>
+                    <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-[2rem]">${section.title}</h2>
                   </div>
-                  <div class="rounded-2xl border border-skyhawk-100 bg-skyhawk-50 px-4 py-3 text-sm text-skyhawk-700 shadow-sm">
-                    Complete each section before continuing.
+                  <div class="rounded-2xl border border-skyhawk-100 bg-skyhawk-50 px-4 py-3 text-sm text-skyhawk-700 shadow-sm dark:border-skyhawk-400/20 dark:bg-skyhawk-500/10 dark:text-skyhawk-100">
+                    ${section.step === 1 ? "Choose whether you are attending to unlock step two." : "Final step — review and send your response."}
                   </div>
                 </div>
                 <div>
-                  <div class="h-2 w-full overflow-hidden rounded-full bg-slate-100">
+                  <div class="h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
                     <div class="h-full rounded-full bg-gradient-to-r from-skyhawk-500 via-skyhawk-400 to-cyan-400" style="width: ${progressWidth}"></div>
                   </div>
                 </div>
               </div>
-              <div id="${errorBoxId}" class="hidden rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 shadow-sm" role="alert"></div>
+              <div id="${errorBoxId}" class="hidden rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 shadow-sm dark:border-rose-400/20 dark:bg-rose-500/10 dark:text-rose-100" role="alert"></div>
             </div>
           `;
 
@@ -367,7 +410,7 @@
             nav.appendChild(spacer);
           }
 
-          if (section.step < formConfig.sections.length) {
+          if (section.step === 1) {
             const next = document.createElement("button");
             next.type = "button";
             next.textContent = "Continue";
@@ -390,14 +433,14 @@
         done.dataset.step = formConfig.sections.length + 1;
         done.className = classListString(sectionClasses.base);
         done.innerHTML = `
-          <div class="rounded-[2rem] border border-emerald-200 bg-emerald-50 p-6 shadow-sm sm:p-8">
-            <div class="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500 text-white shadow-lg shadow-emerald-200">
+          <div class="rounded-[1.75rem] border border-emerald-200 bg-emerald-50 p-6 shadow-sm dark:border-emerald-400/20 dark:bg-emerald-500/10 sm:p-8">
+            <div class="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500 text-white shadow-lg shadow-emerald-200 dark:shadow-none">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-7 w-7">
                 <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-2.53a.75.75 0 1 0-1.22-.88l-3.236 4.486-1.387-1.387a.75.75 0 0 0-1.06 1.06l2.012 2.013a.75.75 0 0 0 1.14-.09l3.75-5.202Z" clip-rule="evenodd" />
               </svg>
             </div>
-            <h2 class="mt-5 text-3xl font-semibold tracking-tight text-emerald-950">Submission complete</h2>
-            <p id="confirmationMessage" class="mt-3 max-w-2xl text-base leading-7 text-emerald-900"></p>
+            <h2 class="mt-5 text-3xl font-semibold tracking-tight text-emerald-950 dark:text-white">Submission complete</h2>
+            <p id="confirmationMessage" class="mt-3 max-w-2xl text-base leading-7 text-emerald-900 dark:text-emerald-50"></p>
           </div>
         `;
         form.appendChild(done);
@@ -410,47 +453,63 @@
         const fieldId = `field-${sectionStep}-${(q.name || "").replace(/\W/g, "-")}`;
         const label = document.createElement("label");
         label.setAttribute("for", fieldId);
-        label.className = "block text-sm font-semibold tracking-wide text-slate-700";
+        label.className =
+          "block text-sm font-semibold tracking-wide text-slate-700 dark:text-slate-200";
         label.textContent = q.required ? `${q.label} *` : q.label;
         wrap.appendChild(label);
 
         let el;
+        let control = null;
 
         switch (q.type) {
           case "text":
-            el = document.createElement("input");
-            el.type = "text";
-            el.className = classListString(inputBaseClasses);
+            control = document.createElement("input");
+            control.type = "text";
+            control.className = classListString(inputBaseClasses);
             if (q.name === "name") {
-              el.placeholder = "First, Last";
-              el.addEventListener("blur", () => formatName(el));
+              control.placeholder = "First, Last";
+              control.addEventListener("blur", () => formatName(control));
             }
+            el = control;
             break;
 
           case "textarea":
-            el = document.createElement("textarea");
-            el.className = `${classListString(inputBaseClasses)} min-h-28 resize-y`;
+            control = document.createElement("textarea");
+            control.className = `${classListString(inputBaseClasses)} min-h-28 resize-y`;
+            el = control;
             break;
 
           case "select": {
-            el = document.createElement("select");
-            el.className = classListString(inputBaseClasses);
+            el = document.createElement("div");
+            el.className = "relative";
+            control = document.createElement("select");
+            control.className = `${classListString(inputBaseClasses)} pr-12 font-medium`;
             const selectPlaceholder = document.createElement("option");
             selectPlaceholder.value = "";
             selectPlaceholder.textContent = "Pick one…";
-            el.appendChild(selectPlaceholder);
+            control.appendChild(selectPlaceholder);
             q.options.forEach((opt) => {
               const option = document.createElement("option");
               option.value = opt;
               option.textContent = opt;
-              el.appendChild(option);
+              control.appendChild(option);
             });
+            el.appendChild(control);
+            el.insertAdjacentHTML(
+              "beforeend",
+              `<span class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-slate-400 dark:text-slate-500">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5">
+                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.51a.75.75 0 0 1-1.08 0L5.21 8.27a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd" />
+                </svg>
+              </span>`
+            );
             break;
           }
 
           case "radio": {
             el = document.createElement("div");
             el.className = "mt-3 grid gap-3 sm:grid-cols-2";
+            el.dataset.radioGroup = q.name;
 
             q.options.forEach((opt, index) => {
               const id = `${q.name}_${String(opt).replace(/\W/g, "")}_${index}`;
@@ -461,19 +520,19 @@
               radio.id = id;
               radio.name = q.name;
               radio.value = opt;
-              radio.className = "peer sr-only";
+              radio.className = "sr-only";
               if (q.required) radio.required = true;
+              radio.addEventListener("change", () => syncRadioGroup(q.name));
 
               const radioLabel = document.createElement("label");
               radioLabel.htmlFor = id;
+              radioLabel.dataset.radioCard = "true";
               radioLabel.className =
-                "flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-4 text-sm font-medium text-slate-700 shadow-sm transition duration-200 hover:border-skyhawk-300 hover:bg-skyhawk-50 peer-checked:border-skyhawk-500 peer-checked:bg-skyhawk-50 peer-checked:text-skyhawk-900 peer-focus:ring-4 peer-focus:ring-skyhawk-100";
+                "flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-4 text-sm font-medium text-slate-700 shadow-sm transition duration-200 hover:border-skyhawk-300 hover:bg-skyhawk-50 dark:border-slate-700 dark:bg-slate-900/80 dark:text-slate-200 dark:hover:border-skyhawk-400/60 dark:hover:bg-slate-800/80";
               radioLabel.innerHTML = `
                 <span>${opt}</span>
-                <span class="inline-flex h-5 w-5 items-center justify-center rounded-full border border-slate-300 bg-white text-transparent transition peer-checked:border-skyhawk-500 peer-checked:bg-skyhawk-500 peer-checked:text-white">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-3.5 w-3.5">
-                    <path fill-rule="evenodd" d="M16.704 5.29a1 1 0 0 1 .006 1.414l-7.04 7.1a1 1 0 0 1-1.42.004L3.29 8.85a1 1 0 0 1 1.42-1.408l4.25 4.288 6.33-6.384a1 1 0 0 1 1.414-.006Z" clip-rule="evenodd" />
-                  </svg>
+                <span data-radio-dot class="inline-flex h-5 w-5 items-center justify-center rounded-full border-2 border-slate-300 bg-white transition dark:border-slate-500 dark:bg-slate-950">
+                  <span data-radio-dot-inner class="h-2.5 w-2.5 scale-0 rounded-full bg-transparent transition"></span>
                 </span>
               `;
 
@@ -485,10 +544,10 @@
           }
         }
 
-        if (el.tagName !== "DIV") {
-          el.name = q.name;
-          el.id = fieldId;
-          if (q.required) el.required = true;
+        if (control) {
+          control.name = q.name;
+          control.id = fieldId;
+          if (q.required) control.required = true;
         }
 
         wrap.appendChild(el);
@@ -500,6 +559,33 @@
           form.querySelector(`[name="${name}"]:checked`)?.value ??
           form.querySelector(`[name="${name}"]`)?.value
         );
+      }
+
+      function syncRadioGroup(name) {
+        form.querySelectorAll(`input[name="${name}"]`).forEach((radio) => {
+          const label = form.querySelector(`label[for="${radio.id}"]`);
+          const dot = label?.querySelector("[data-radio-dot]");
+          const innerDot = label?.querySelector("[data-radio-dot-inner]");
+          if (!label || !dot || !innerDot) return;
+
+          label.classList.toggle("border-skyhawk-500", radio.checked);
+          label.classList.toggle("bg-skyhawk-50", radio.checked);
+          label.classList.toggle("text-skyhawk-900", radio.checked);
+          label.classList.toggle("ring-4", radio.checked);
+          label.classList.toggle("ring-skyhawk-100", radio.checked);
+          label.classList.toggle("dark:border-skyhawk-400", radio.checked);
+          label.classList.toggle("dark:bg-skyhawk-500/10", radio.checked);
+          label.classList.toggle("dark:text-skyhawk-100", radio.checked);
+          label.classList.toggle("dark:ring-skyhawk-500/20", radio.checked);
+
+          dot.classList.toggle("border-skyhawk-500", radio.checked);
+          dot.classList.toggle("bg-skyhawk-500", radio.checked);
+          dot.classList.toggle("dark:border-skyhawk-400", radio.checked);
+          dot.classList.toggle("dark:bg-skyhawk-400", radio.checked);
+          innerDot.classList.toggle("bg-white", radio.checked);
+          innerDot.classList.toggle("scale-100", radio.checked);
+          innerDot.classList.toggle("scale-0", !radio.checked);
+        });
       }
 
       function formatName(input) {
@@ -649,7 +735,7 @@
           }
         });
 
-        section.querySelectorAll("div.mt-3.grid").forEach((group) => {
+        section.querySelectorAll("[data-radio-group]").forEach((group) => {
           const firstRadio = group.querySelector("input[type='radio']");
           const name = firstRadio?.name;
           if (!name) return;
@@ -714,6 +800,10 @@
           }
         });
 
+        form.querySelectorAll("[data-radio-group]").forEach((group) => {
+          if (group.dataset.radioGroup) syncRadioGroup(group.dataset.radioGroup);
+        });
+
         stepHistory = [];
         showStep(1);
       }
@@ -742,6 +832,7 @@
             form.querySelectorAll(`[name="${q.name}"]`).forEach((radio) => {
               radio.checked = false;
             });
+            syncRadioGroup(q.name);
           } else {
             el.value = "";
           }
