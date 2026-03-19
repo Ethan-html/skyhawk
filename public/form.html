@@ -187,6 +187,8 @@
           "items-center",
           "justify-center",
           "rounded-2xl",
+          "border",
+          "border-slate-900",
           "bg-slate-900",
           "px-5",
           "py-3",
@@ -204,7 +206,12 @@
           "focus:ring-slate-300",
           "disabled:cursor-not-allowed",
           "disabled:opacity-70",
-          "disabled:hover:translate-y-0"
+          "disabled:hover:translate-y-0",
+          "dark:border-skyhawk-300/35",
+          "dark:bg-skyhawk-400",
+          "dark:text-slate-950",
+          "dark:hover:bg-skyhawk-300",
+          "dark:focus:ring-skyhawk-500/30"
         ],
         secondary: [
           "inline-flex",
@@ -482,6 +489,16 @@
                   <span data-radio-dot-inner class="h-2.5 w-2.5 rounded-full bg-transparent opacity-0"></span>
                 </span>
               `;
+              radioLabel.addEventListener("click", (event) => {
+                event.preventDefault();
+                const changed = !radio.checked;
+                radio.checked = true;
+                syncRadioGroup(q.name);
+                saveFormData();
+                if (changed) {
+                  radio.dispatchEvent(new Event("change", { bubbles: true }));
+                }
+              });
 
               optionWrap.appendChild(radio);
               optionWrap.appendChild(radioLabel);
@@ -509,6 +526,7 @@
       }
 
       function syncRadioGroup(name) {
+        const isDarkMode = document.documentElement.classList.contains("dark");
         form.querySelectorAll(`input[name="${name}"]`).forEach((radio) => {
           const label = form.querySelector(`label[for="${radio.id}"]`);
           const dot = label?.querySelector("[data-radio-dot]");
@@ -526,10 +544,17 @@
           label.classList.toggle("dark:ring-skyhawk-500/20", radio.checked);
 
           dot.classList.toggle("border-skyhawk-500", radio.checked);
-          dot.classList.toggle("bg-skyhawk-500", radio.checked);
           dot.classList.toggle("dark:border-skyhawk-400", radio.checked);
-          dot.classList.toggle("dark:bg-skyhawk-400", radio.checked);
-          innerDot.style.backgroundColor = radio.checked ? "#ffffff" : "transparent";
+          dot.style.backgroundColor = radio.checked
+            ? isDarkMode
+              ? "rgba(14, 116, 144, 0.18)"
+              : "#ffffff"
+            : "";
+          innerDot.style.backgroundColor = radio.checked
+            ? isDarkMode
+              ? "#e2e8f0"
+              : "#5e84af"
+            : "transparent";
           innerDot.style.opacity = radio.checked ? "1" : "0";
         });
       }
