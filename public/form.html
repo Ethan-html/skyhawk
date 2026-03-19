@@ -432,11 +432,8 @@
             break;
 
           case "select": {
-            el = document.createElement("div");
-            el.className =
-              "relative overflow-hidden rounded-[1.35rem] border-2 border-slate-200 bg-white shadow-[0_12px_32px_rgba(15,23,42,0.06)] dark:border-slate-700 dark:bg-slate-900";
             control = document.createElement("select");
-            control.className = `${classListString(inputBaseClasses)} mt-0 rounded-[1.25rem] border-0 bg-transparent pr-16 shadow-none`;
+            control.className = `${classListString(inputBaseClasses)} appearance-auto border-2 bg-white pr-4 dark:bg-slate-900`;
             const selectPlaceholder = document.createElement("option");
             selectPlaceholder.value = "";
             selectPlaceholder.textContent = "Pick one…";
@@ -447,17 +444,7 @@
               option.textContent = opt;
               control.appendChild(option);
             });
-            el.appendChild(control);
-            el.insertAdjacentHTML(
-              "beforeend",
-              `<span class="pointer-events-none absolute inset-y-1.5 right-1.5 flex items-center">
-                <span class="inline-flex h-full min-h-11 w-11 items-center justify-center rounded-[1rem] border border-skyhawk-100 bg-skyhawk-50 text-skyhawk-600 shadow-sm dark:border-skyhawk-400/20 dark:bg-skyhawk-500/10 dark:text-skyhawk-200">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="h-5 w-5">
-                  <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.25 4.51a.75.75 0 0 1-1.08 0L5.21 8.27a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd" />
-                </svg>
-                </span>
-              </span>`
-            );
+            el = control;
             break;
           }
 
