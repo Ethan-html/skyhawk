@@ -1,7 +1,9 @@
 <!doctype html>
-<html lang="en-US">
+<html lang="en-US" class="bg-slate-50">
   <head>
     <title>Cadet Calldown Form</title>
+    <link href="/styles.css" rel="stylesheet">
+
     <link rel="icon" type="image/png" href="/media/website/skyhawks_logo_CAP_transparent.ico" />
     <meta
       name="description"
@@ -17,12 +19,11 @@
 
     <link rel="canonical" href="https://skyhawk-cap.org/calldown" />
 
-    <!-- Social Sharing (OG + Twitter) -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Home | Skyhawk Composite Squadron" />
     <meta
       property="og:description"
-      content="Skyhawk Composite Squadron 47 of the Civil Air Patrol transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota."
+      content="Skyhawk Composite Squadron of Civil Air Patrol transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota."
     />
     <meta property="og:image" content="https://skyhawk-cap.org/assets/images/webclip.png" />
     <meta property="og:url" content="https://skyhawk-cap.org/" />
@@ -33,11 +34,10 @@
     <meta property="twitter:title" content="Home | Skyhawk Composite Squadron" />
     <meta
       property="twitter:description"
-      content="Skyhawk Composite Squadron 47 of the Civil Air Patrol transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota."
+      content="Skyhawk Composite Squadron of Civil Air Patrol transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota."
     />
     <meta property="twitter:image" content="https://skyhawk-cap.org/assets/images/webclip.png" />
 
-    <!-- Favicon & App Icons -->
     <link rel="apple-touch-icon" href="/assets/images/webclip.png" />
     <link rel="manifest" href="/assets/manifest.json" />
     <link rel="icon" href="/media/website/skyhawks_logo_CAP_transparent.png" />
@@ -46,285 +46,197 @@
       href="/media/website/skyhawks_logo_CAP_transparent.png"
       type="image/png"
     />
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        background-color: #f5f5f5;
-        padding: 20px;
-        color: #333;
-      }
-
-      form {
-        max-width: 900px;
-        margin: 0 auto;
-        background: #fff;
-        padding: 30px 35px;
-        border-radius: 12px;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
-      }
-
-      section {
-        display: none;
-        animation: fadeIn 0.4s ease-in-out;
-      }
-
-      section.active {
-        display: block;
-      }
-
-      h2 {
-        font-size: 1.6rem;
-        margin-bottom: 20px;
-        border-bottom: 2px solid #ccc;
-        padding-bottom: 6px;
-        color: #555;
-      }
-
-      label {
-        display: block;
-        margin-bottom: 6px;
-        font-weight: 600;
-        font-size: 0.95rem;
-      }
-
-      input[type="text"],
-      select,
-      textarea {
-        width: 100%;
-        padding: 12px 14px;
-        margin-bottom: 20px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        font-size: 1rem;
-        background: #f9f9f9;
-        transition:
-          border 0.2s,
-          box-shadow 0.2s;
-      }
-
-      input[type="text"]:focus,
-      select:focus,
-      textarea:focus {
-        border-color: #aaa;
-        box-shadow: 0 0 0 2px rgba(170, 170, 170, 0.2);
-        outline: none;
-      }
-
-      textarea {
-        resize: vertical;
-        min-height: 80px;
-      }
-
-      /* Radio buttons */
-      .radio-group {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 15px;
-        margin-bottom: 20px;
-      }
-
-      .radio-group input[type="radio"] {
-        display: none;
-      }
-
-      .radio-group label {
-        position: relative;
-        padding-left: 30px;
-        cursor: pointer;
-        user-select: none;
-        font-weight: 500;
-        font-size: 0.95rem;
-      }
-
-      .radio-group label::before {
-        content: "";
-        position: absolute;
-        left: 0;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 20px;
-        height: 20px;
-        border-radius: 50%;
-        border: 2px solid #ccc;
-        background: #fff;
-        transition: all 0.2s;
-      }
-
-      .radio-group input[type="radio"]:checked + label::before {
-        background: #666;
-        border-color: #666;
-      }
-
-      button {
-        background-color: #666;
-        color: #fff;
-        padding: 14px 28px;
-        font-size: 1rem;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: background 0.3s ease;
-        margin-top: 10px;
-      }
-
-      button:hover {
-        background-color: #444;
-      }
-
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      @media (max-width: 600px) {
-        .radio-group {
-          flex-direction: column;
-        }
-
-        button {
-          width: 100%;
-        }
-      }
-
-      /* Apply border-box globally so width includes padding and border */
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-      }
-
-      /* Ensure all text fields, selects, and textareas are the same size */
-      input[type="text"],
-      select,
-      textarea {
-        width: 100%;
-        max-width: 100%;
-        padding: 12px 14px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        font-size: 1rem;
-        background: #f9f9f9;
-      }
-      .form-nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 20px;
-        gap: 10px;
-      }
-
-      .form-nav .right {
-        margin-left: auto;
-      }
-      .error-box {
-        background: #fdecea;
-        color: #b00020;
-        border: 1px solid #f5c2c7;
-        padding: 12px 14px;
-        border-radius: 8px;
-        margin-bottom: 20px;
-        font-size: 0.95rem;
-      }
-
-      .field-error {
-        border-color: #b00020 !important;
-        background: #fff5f5;
-      }
-      html.iframed,
-      html.iframed body {
-        background: transparent !important;
-      }
-
-      html.iframed form {
-        background: transparent !important; /* keep the form see-through */
-        box-shadow: none; /* remove shadow if you want */
-        border: 2px solid black; /* add a black border */
-        border-radius: 12px; /* optional: keep rounded corners */
-        padding: 30px 35px; /* keep padding inside the form */
-      }
-      button:disabled {
-        opacity: 0.7;
-        cursor: not-allowed;
-      }
-
-    </style>
-  </head>
-  <body>
-    <form id="cadetForm"><div id="formContainer"></div></form>
-
-<div id="closedMessage" style="
-  display: none;
-  max-width:900px;
-  margin:40px auto;
-  background:#ffffff;
-  padding:40px 45px;
-  border-radius:14px;
-  box-shadow:0 12px 25px rgba(0,0,0,0.08);
-  text-align:center;
-  border-top:5px solid #666;
-">
-  <h2 style="margin-bottom:10px; font-size:1.8rem; color:#333;">
-    Form Closed
-  </h2>
-
-  <p style="margin-bottom:15px; font-size:1.05rem; color:#555;">
-    This form is currently closed for the week.
-  </p>
-
-  <p style="margin-bottom:25px; font-size:1rem; color:#666;">
-    Please check back later to submit your response for the next meeting.
-  </p>
-
-  <p style="margin-bottom:-15px; font-size:1rem; color:#666;">
-    You are still welcome to attend the upcoming meeting; drill tests and other submissions must wait until next week.
-  </p>
-
-  <p style="margin-bottom:35px; font-size:1rem; color:#666;">
-    Please make sure to submit your response before the cutoff date next week to ensure your drill test is scheduled.
-  </p>
-
-  <div style="
-    display:inline-block;
-    background:#f5f5f5;
-    padding:12px 18px;
-    border-radius:8px;
-    font-size:0.95rem;
-    color:#444;
-    border:1px solid #e0e0e0;
-  ">
-    <strong>Reminder:</strong> All responses must be submitted before <strong>Sunday at 22:00</strong>.
-  </div>
-</div>
     <script>
+      const storedTheme = localStorage.getItem("theme") || "light";
+      if (storedTheme === "dark") {
+        document.documentElement.classList.add("dark");
+      }
+    </script>
+  </head>
+  <body
+    class="min-h-screen bg-slate-50 text-slate-900 antialiased transition-colors duration-200 dark:bg-slate-950 dark:text-slate-100">
+  <div class="relative isolate overflow-hidden">
+      <div
+        class="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(96,165,250,0.16),_transparent_26%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.12),_transparent_26%),linear-gradient(180deg,_#f8fafc_0%,_#eef4fb_42%,_#f8fafc_100%)] dark:bg-[radial-gradient(circle_at_top,_rgba(96,165,250,0.16),_transparent_30%),radial-gradient(circle_at_bottom_right,_rgba(14,165,233,0.14),_transparent_28%),linear-gradient(180deg,_#020617_0%,_#0f172a_45%,_#111827_100%)]"
+      ></div>
+      <div
+        class="absolute inset-x-0 top-0 -z-10 h-48 bg-gradient-to-b from-skyhawk-500/10 to-transparent blur-3xl dark:h-72"
+      ></div>
+
+      <main
+        class="mx-auto flex min-h-screen max-w-6xl flex-col justify-center px-4 py-5 sm:px-6 sm:py-6 lg:px-8"
+      >
+        <form
+          id="cadetForm"
+          class="mx-auto w-full max-w-4xl rounded-[1.75rem] border-2 border-skyhawk-200/90 bg-white/96 p-5 text-slate-900 shadow-[0_24px_80px_rgba(94,132,175,0.16)] ring-1 ring-white/70 backdrop-blur sm:p-7 lg:p-8 dark:border-skyhawk-500/30 dark:bg-slate-900/88 dark:text-slate-100 dark:shadow-glow dark:ring-white/10"
+        >
+          <div id="formContainer"></div>
+        </form>
+
+        <div
+          id="closedMessage"
+          class="mx-auto hidden w-full max-w-4xl rounded-[1.75rem] border border-amber-300/40 bg-white/95 p-6 text-center text-slate-900 shadow-xl shadow-amber-100/60 ring-1 ring-amber-200/50 backdrop-blur dark:border-amber-300/20 dark:bg-slate-900/90 dark:text-slate-100 dark:shadow-none dark:ring-white/10 sm:p-10"
+        >
+          <div
+            class="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-100 text-amber-600 shadow-lg shadow-amber-200/60 dark:bg-amber-400/15 dark:text-amber-200 dark:shadow-none"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              class="h-7 w-7"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M6.75 3a.75.75 0 0 1 .75.75V6h9V3.75a.75.75 0 0 1 1.5 0V6h.75A2.25 2.25 0 0 1 21 8.25v9.5A2.25 2.25 0 0 1 18.75 20h-13.5A2.25 2.25 0 0 1 3 17.75v-9.5A2.25 2.25 0 0 1 5.25 6H6V3.75A.75.75 0 0 1 6.75 3Zm12.75 6.75H4.5v8a.75.75 0 0 0 .75.75h13.5a.75.75 0 0 0 .75-.75v-8Z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <h2 class="mt-5 text-3xl font-semibold tracking-tight text-slate-900 dark:text-white">
+            Form Closed
+          </h2>
+          <p class="mt-3 text-base leading-7 text-slate-600 dark:text-slate-300 sm:text-lg">
+            This form is currently closed for the week.
+          </p>
+          <p class="mt-4 text-sm leading-7 text-slate-500 dark:text-slate-400 sm:text-base">
+            Please check back later to submit your response for the next meeting. You are still
+            welcome to attend the upcoming meeting; drill tests and other submissions must wait
+            until next week.
+          </p>
+          <p class="mt-4 text-sm leading-7 text-slate-500 dark:text-slate-400 sm:text-base">
+            Please make sure to submit your response before the cutoff date next week to ensure your
+            drill test is scheduled.
+          </p>
+          <div
+            class="mt-8 inline-flex rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-700 shadow-inner shadow-slate-200/70 dark:border-white/10 dark:bg-slate-950/70 dark:text-slate-200 dark:shadow-none"
+          >
+            <span class="font-semibold text-slate-900 dark:text-white">Reminder:</span>
+            <span class="ml-2">All responses must be submitted before Sunday at 22:00.</span>
+          </div>
+        </div>
+      </main>
+  </div>
+    <script>
+      const sectionClasses = {
+        base: ["hidden", "space-y-6", "duration-300"],
+        visible: ["block"]
+      };
+
+      const inputBaseClasses = [
+        "mt-2",
+        "block",
+        "w-full",
+        "rounded-2xl",
+        "border",
+        "border-slate-200",
+        "bg-slate-50/80",
+        "px-4",
+        "py-3",
+        "text-base",
+        "text-slate-900",
+        "shadow-sm",
+        "outline-none",
+        "transition",
+        "duration-200",
+        "placeholder:text-slate-400",
+        "appearance-none",
+        "focus:border-skyhawk-500",
+        "focus:ring-4",
+        "focus:ring-skyhawk-100",
+        "dark:border-slate-700",
+        "dark:bg-slate-900/80",
+        "dark:text-slate-100",
+        "dark:placeholder:text-slate-500",
+        "dark:focus:border-skyhawk-400",
+        "dark:focus:ring-skyhawk-500/20"
+      ];
+
+      const fieldWrapperClasses = ["space-y-2"];
+
+      const buttonClasses = {
+        primary: [
+          "inline-flex",
+          "items-center",
+          "justify-center",
+          "rounded-2xl",
+          "border",
+          "border-slate-900",
+          "bg-slate-900",
+          "px-5",
+          "py-3",
+          "text-sm",
+          "font-semibold",
+          "text-white",
+          "shadow-lg",
+          "shadow-slate-900/20",
+          "transition",
+          "duration-200",
+          "hover:-translate-y-0.5",
+          "hover:bg-slate-800",
+          "focus:outline-none",
+          "focus:ring-4",
+          "focus:ring-slate-300",
+          "disabled:cursor-not-allowed",
+          "disabled:opacity-70",
+          "disabled:hover:translate-y-0",
+          "dark:border-skyhawk-300/35",
+          "dark:bg-skyhawk-400",
+          "dark:text-slate-950",
+          "dark:hover:bg-skyhawk-300",
+          "dark:focus:ring-skyhawk-500/30"
+        ],
+        secondary: [
+          "inline-flex",
+          "items-center",
+          "justify-center",
+          "rounded-2xl",
+          "border",
+          "border-slate-200",
+          "bg-white",
+          "px-5",
+          "py-3",
+          "text-sm",
+          "font-semibold",
+          "text-slate-700",
+          "shadow-sm",
+          "transition",
+          "duration-200",
+          "hover:-translate-y-0.5",
+          "hover:border-slate-300",
+          "hover:bg-slate-50",
+          "focus:outline-none",
+          "focus:ring-4",
+          "focus:ring-slate-200",
+          "dark:border-slate-700",
+          "dark:bg-slate-900/80",
+          "dark:text-slate-100",
+          "dark:hover:border-slate-600",
+          "dark:hover:bg-slate-800"
+        ]
+      };
+
       if (window.self !== window.top) {
-        document.documentElement.classList.add("iframed");
+        document.body.className =
+          "min-h-screen bg-transparent text-slate-900 antialiased dark:text-slate-100";
+        const formShell = document.getElementById("cadetForm");
+        formShell.className =
+          "mx-auto w-full max-w-4xl rounded-[1.5rem] border-0 bg-transparent p-3 text-slate-900 shadow-none ring-0 backdrop-blur-none dark:text-white sm:p-4 lg:p-5";
       }
 
       function isFormClosed() {
         const now = new Date();
-
-        const day = now.getDay(); // 0 = Sunday, 1 = Monday, 2 = Tuesday
+        const day = now.getDay();
         const hours = now.getHours();
         const minutes = now.getMinutes();
-
         const currentMinutes = hours * 60 + minutes;
-
         const monday10am = 10 * 60;
         const tuesday10am = 10 * 60;
 
-        // Monday after 10:00 AM
         if (day === 1 && currentMinutes >= monday10am) {
           return true;
         }
 
-        // Tuesday before 10:00 AM
         if (day === 2 && currentMinutes < tuesday10am) {
           return true;
         }
@@ -334,8 +246,8 @@
 
       document.addEventListener("DOMContentLoaded", () => {
         if (isFormClosed()) {
-          document.getElementById("cadetForm").style.display = "none";
-          document.getElementById("closedMessage").style.display = "block";
+          document.getElementById("cadetForm").classList.add("hidden");
+          document.getElementById("closedMessage").classList.remove("hidden");
         }
       });
 
@@ -351,7 +263,6 @@
         localStorage.removeItem(COMPLETED_KEY);
       }
 
-      /* ---------- Load JSON ---------- */
       fetch("assets/json/form.json")
         .then((res) => res.json())
         .then((config) => {
@@ -361,48 +272,81 @@
         })
         .catch((err) => console.error("Failed to load form.json", err));
 
-      /* ---------- Render Form ---------- */
+      function classListString(values) {
+        return values.join(" ");
+      }
+
       function renderForm() {
         form.innerHTML = "";
 
         formConfig.sections.forEach((section) => {
           const sec = document.createElement("section");
           sec.dataset.step = section.step;
-          if (section.step === 1) sec.classList.add("active");
+          sec.className = classListString([
+            ...sectionClasses.base,
+            ...(section.step === 1 ? sectionClasses.visible : [])
+          ]);
 
+          const progressStep = section.step === 1 ? 1 : 2;
+          const progressLabel = `Step ${progressStep} of 2`;
           const errorBoxId = `section-${section.step}-error`;
+          const progressWidth = `${progressStep * 50}%`;
+
           sec.innerHTML = `
-      	  <h2>${section.title}</h2>
-      	  <div class="error-box" id="${errorBoxId}" style="display:none" role="alert"></div>
-      	`;
+            <div class="space-y-6">
+              <div class="space-y-4">
+                <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p class="text-xs font-semibold uppercase tracking-[0.24em] text-skyhawk-600">${progressLabel}</p>
+                    <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-[2rem]">${section.title}</h2>
+                  </div>
+                  <div class="rounded-2xl border border-skyhawk-100 bg-skyhawk-50 px-4 py-3 text-sm text-skyhawk-700 shadow-sm dark:border-skyhawk-400/20 dark:bg-skyhawk-500/10 dark:text-skyhawk-100">
+                    Deadline: Sunday at 22:00
+                  </div>
+                </div>
+                <div>
+                  <div class="h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+                    <div class="h-full rounded-full bg-gradient-to-r from-skyhawk-500 via-skyhawk-400 to-cyan-400" style="width: ${progressWidth}"></div>
+                  </div>
+                </div>
+              </div>
+              <div id="${errorBoxId}" class="hidden rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 shadow-sm dark:border-rose-400/20 dark:bg-rose-500/10 dark:text-rose-100" role="alert"></div>
+            </div>
+          `;
 
           section.questions.forEach((q) => {
             sec.appendChild(renderQuestion(q, section.step));
           });
 
           const nav = document.createElement("div");
-          nav.className = "form-nav";
+          nav.className =
+            "flex flex-col gap-3 border-t border-slate-200 pt-6 sm:flex-row sm:items-center sm:justify-between";
 
           if (section.step > 1) {
             const back = document.createElement("button");
             back.type = "button";
             back.textContent = "Back";
+            back.className = classListString(buttonClasses.secondary);
             back.onclick = prevStep;
             nav.appendChild(back);
+          } else {
+            const spacer = document.createElement("div");
+            spacer.className = "hidden sm:block";
+            nav.appendChild(spacer);
           }
 
-          if (section.step < formConfig.sections.length) {
+          if (section.step === 1) {
             const next = document.createElement("button");
             next.type = "button";
-            next.textContent = "Next";
-            next.className = "right";
+            next.textContent = "Continue";
+            next.className = `${classListString(buttonClasses.primary)} sm:ml-auto`;
             next.onclick = nextStep;
             nav.appendChild(next);
           } else {
             const submit = document.createElement("button");
             submit.type = "submit";
-            submit.textContent = "Submit";
-            submit.className = "right";
+            submit.textContent = "Submit response";
+            submit.className = `${classListString(buttonClasses.primary)} sm:ml-auto`;
             nav.appendChild(submit);
           }
 
@@ -410,91 +354,132 @@
           form.appendChild(sec);
         });
 
-        // confirmation section
         const done = document.createElement("section");
         done.dataset.step = formConfig.sections.length + 1;
+        done.className = classListString(sectionClasses.base);
         done.innerHTML = `
-          <h2>Submission Complete</h2>
-          <p id="confirmationMessage"></p>
+          <div class="rounded-[1.75rem] border border-emerald-200 bg-emerald-50 p-6 shadow-sm dark:border-emerald-400/20 dark:bg-emerald-500/10 sm:p-8">
+            <div class="inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-500 text-white shadow-lg shadow-emerald-200 dark:shadow-none">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-7 w-7">
+                <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-2.53a.75.75 0 1 0-1.22-.88l-3.236 4.486-1.387-1.387a.75.75 0 0 0-1.06 1.06l2.012 2.013a.75.75 0 0 0 1.14-.09l3.75-5.202Z" clip-rule="evenodd" />
+              </svg>
+            </div>
+            <h2 class="mt-5 text-3xl font-semibold tracking-tight text-emerald-950 dark:text-white">Submission complete</h2>
+            <p id="confirmationMessage" class="mt-3 max-w-2xl text-base leading-7 text-emerald-900 dark:text-emerald-50"></p>
+          </div>
         `;
         form.appendChild(done);
       }
 
       function renderQuestion(q, sectionStep) {
         const wrap = document.createElement("div");
-        const fieldId = `field-${sectionStep}-${(q.name || "").replace(/\W/g, "-")}`;
+        wrap.className = classListString(fieldWrapperClasses);
 
+        const fieldId = `field-${sectionStep}-${(q.name || "").replace(/\W/g, "-")}`;
         const label = document.createElement("label");
         label.setAttribute("for", fieldId);
-        label.textContent = q.label;
+        label.className =
+          "block text-sm font-semibold tracking-wide text-slate-700 dark:text-slate-200";
+        label.textContent = q.required ? `${q.label} *` : q.label;
         wrap.appendChild(label);
 
         let el;
+        let control = null;
 
         switch (q.type) {
           case "text":
-            el = document.createElement("input");
-            el.type = "text";
-
-            // ONLY apply to the name field
+            control = document.createElement("input");
+            control.type = "text";
+            control.className = classListString(inputBaseClasses);
             if (q.name === "name") {
-              el.placeholder = "First, Last";
-              el.addEventListener("blur", () => formatName(el));
+              control.placeholder = "First, Last";
+              control.addEventListener("blur", () => formatName(control));
             }
-
+            el = control;
             break;
 
           case "textarea":
-            el = document.createElement("textarea");
+            control = document.createElement("textarea");
+            control.className = `${classListString(inputBaseClasses)} min-h-28 resize-y`;
+            el = control;
             break;
 
           case "select": {
-            el = document.createElement("select");
+            control = document.createElement("select");
+            control.className = `${classListString(inputBaseClasses)} appearance-auto border-2 bg-white pr-4 dark:bg-slate-900`;
             const selectPlaceholder = document.createElement("option");
             selectPlaceholder.value = "";
             selectPlaceholder.textContent = "Pick one…";
-            el.appendChild(selectPlaceholder);
+            control.appendChild(selectPlaceholder);
             q.options.forEach((opt) => {
               const option = document.createElement("option");
               option.value = opt;
               option.textContent = opt;
-              el.appendChild(option);
+              control.appendChild(option);
             });
+            el = control;
             break;
           }
 
           case "radio": {
             el = document.createElement("div");
-            el.className = "radio-group";
+            el.className = "mt-3 grid gap-3 sm:grid-cols-2";
+            el.dataset.radioGroup = q.name;
 
-            q.options.forEach((opt) => {
-              const id = `${q.name}_${String(opt).replace(/\W/g, "")}`;
+            q.options.forEach((opt, index) => {
+              const id = `${q.name}_${String(opt).replace(/\W/g, "")}_${index}`;
+              const optionWrap = document.createElement("div");
+
               const radio = document.createElement("input");
               radio.type = "radio";
               radio.id = id;
               radio.name = q.name;
               radio.value = opt;
+              radio.className = "sr-only";
+              if (q.required) radio.required = true;
+              radio.addEventListener("change", () => syncRadioGroup(q.name));
+
               const radioLabel = document.createElement("label");
               radioLabel.htmlFor = id;
-              radioLabel.textContent = opt;
-              el.appendChild(radio);
-              el.appendChild(radioLabel);
+              radioLabel.dataset.radioCard = "true";
+              radioLabel.className =
+                "flex cursor-pointer items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-4 text-sm font-medium text-slate-700 shadow-sm transition duration-200 hover:border-skyhawk-300 hover:bg-skyhawk-50 dark:border-slate-700 dark:bg-slate-900/80 dark:text-slate-200 dark:hover:border-skyhawk-400/60 dark:hover:bg-slate-800/80";
+              radioLabel.innerHTML = `
+                <span>${opt}</span>
+                <span data-radio-dot class="inline-flex h-5 w-5 items-center justify-center rounded-full border-2 border-slate-300 bg-white transition dark:border-slate-500 dark:bg-slate-950">
+                  <span data-radio-dot-inner class="h-2.5 w-2.5 rounded-full bg-transparent opacity-0"></span>
+                </span>
+              `;
+              radioLabel.addEventListener("click", (event) => {
+                event.preventDefault();
+                const changed = !radio.checked;
+                const shouldClear = radio.checked;
+                radio.checked = !shouldClear;
+                syncRadioGroup(q.name);
+                saveFormData();
+                if (changed || shouldClear) {
+                  radio.dispatchEvent(new Event("change", { bubbles: true }));
+                }
+              });
+
+              optionWrap.appendChild(radio);
+              optionWrap.appendChild(radioLabel);
+              el.appendChild(optionWrap);
             });
             break;
           }
         }
 
-        if (el.tagName !== "DIV") {
-          el.name = q.name;
-          el.id = fieldId;
-          if (q.required) el.required = true;
+        if (control) {
+          control.name = q.name;
+          control.id = fieldId;
+          if (q.required) control.required = true;
         }
-        // Radio group: individual inputs already have id/label[for] from render
 
         wrap.appendChild(el);
         return wrap;
       }
-      /* ---------- Navigation ---------- */
+
       function getFieldValue(name) {
         return (
           form.querySelector(`[name="${name}"]:checked`)?.value ??
@@ -502,14 +487,45 @@
         );
       }
 
+      function syncRadioGroup(name) {
+        const isDarkMode = document.documentElement.classList.contains("dark");
+        form.querySelectorAll(`input[name="${name}"]`).forEach((radio) => {
+          const label = form.querySelector(`label[for="${radio.id}"]`);
+          const dot = label?.querySelector("[data-radio-dot]");
+          const innerDot = label?.querySelector("[data-radio-dot-inner]");
+          if (!label || !dot || !innerDot) return;
+
+          label.classList.toggle("border-skyhawk-500", radio.checked);
+          label.classList.toggle("bg-skyhawk-50", radio.checked);
+          label.classList.toggle("text-skyhawk-900", radio.checked);
+          label.classList.toggle("ring-4", radio.checked);
+          label.classList.toggle("ring-skyhawk-100", radio.checked);
+          label.classList.toggle("dark:border-skyhawk-400", radio.checked);
+          label.classList.toggle("dark:bg-skyhawk-500/10", radio.checked);
+          label.classList.toggle("dark:text-skyhawk-100", radio.checked);
+          label.classList.toggle("dark:ring-skyhawk-500/20", radio.checked);
+
+          dot.classList.toggle("border-skyhawk-500", radio.checked);
+          dot.classList.toggle("dark:border-skyhawk-400", radio.checked);
+          dot.style.backgroundColor = radio.checked
+            ? isDarkMode
+              ? "rgba(14, 116, 144, 0.18)"
+              : "#ffffff"
+            : "";
+          innerDot.style.backgroundColor = radio.checked
+            ? isDarkMode
+              ? "#e2e8f0"
+              : "#5e84af"
+            : "transparent";
+          innerDot.style.opacity = radio.checked ? "1" : "0";
+        });
+      }
+
       function formatName(input) {
         let value = input.value.trim();
         if (!value) return;
 
-        // Remove extra spaces
         value = value.replace(/\s+/g, " ");
-
-        // Normalize commas (remove spaces around)
         value = value.replace(/\s*,\s*/g, ",");
 
         let first = "";
@@ -518,11 +534,9 @@
         if (value.includes(",")) {
           const parts = value.split(",");
           if (parts.length === 2) {
-            // Check if it’s already "First, Last"
             const firstCap = parts[0].charAt(0).toUpperCase() + parts[0].slice(1).toLowerCase();
             const lastCap = parts[1].charAt(0).toUpperCase() + parts[1].slice(1).toLowerCase();
-            // If first part looks like a last name, swap
-            if (firstCap === parts[1].charAt(0).toUpperCase() + parts[1].slice(1).toLowerCase()) {
+            if (firstCap === lastCap) {
               first = parts[1].trim();
               last = parts[0].trim();
             } else {
@@ -538,7 +552,6 @@
           }
         }
 
-        // Capitalize properly
         const cap = (str) =>
           str
             .toLowerCase()
@@ -549,14 +562,13 @@
         first = cap(first);
         last = cap(last);
 
-        // ✅ Only set if both parts exist
         if (first && last) {
           input.value = `${first}, ${last}`;
         }
       }
 
       function resolveNextStep() {
-        const section = formConfig.sections.find(s => s.step === currentStep);
+        const section = formConfig.sections.find((s) => s.step === currentStep);
         if (!section?.navigation) return currentStep + 1;
 
         for (const rule of section.navigation) {
@@ -570,8 +582,16 @@
       }
 
       function showStep(step) {
-        document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
-        document.querySelector(`section[data-step="${step}"]`)?.classList.add("active");
+        document.querySelectorAll("section").forEach((section) => {
+          section.classList.add(...sectionClasses.base);
+          section.classList.remove(...sectionClasses.visible);
+        });
+
+        const activeSection = document.querySelector(`section[data-step="${step}"]`);
+        if (activeSection) {
+          activeSection.classList.remove(...sectionClasses.base);
+          activeSection.classList.add(...sectionClasses.visible, "space-y-6");
+        }
 
         currentStep = step;
         saveFormData();
@@ -601,101 +621,122 @@
         }
       }
 
+      function setFieldErrorState(field, hasError) {
+        if (!field) return;
+        field.classList.toggle("border-rose-300", hasError);
+        field.classList.toggle("bg-rose-50", hasError);
+        field.classList.toggle("ring-4", hasError);
+        field.classList.toggle("ring-rose-100", hasError);
+      }
+
       function validateCurrentSection() {
         const section = document.querySelector(`section[data-step="${currentStep}"]`);
-        const errorBox = section.querySelector(".error-box");
+        const errorBox = section.querySelector("[role='alert']");
         let valid = true;
 
-        errorBox.style.display = "none";
+        errorBox.classList.add("hidden");
         errorBox.textContent = "";
 
-        // clear old field errors
-        section.querySelectorAll(".field-error").forEach((el) => {
-          el.classList.remove("field-error");
-          el.removeAttribute("aria-invalid");
-          el.removeAttribute("aria-describedby");
-        });
         section
           .querySelectorAll("input[aria-invalid], select[aria-invalid], textarea[aria-invalid]")
           .forEach((el) => {
             el.removeAttribute("aria-invalid");
             el.removeAttribute("aria-describedby");
+            setFieldErrorState(el, false);
           });
 
-        // validate inputs
+        section.querySelectorAll(".radio-option-error").forEach((label) => {
+          label.classList.remove(
+            "radio-option-error",
+            "border-rose-300",
+            "bg-rose-50",
+            "text-rose-700"
+          );
+        });
+
         const requiredFields = section.querySelectorAll(
-          "input[required], textarea[required], select[required]"
+          "input[required]:not([type='radio']), textarea[required], select[required]"
         );
 
         const errorBoxId = errorBox.id || `section-${currentStep}-error`;
         requiredFields.forEach((field) => {
           if (!field.value.trim()) {
-            field.classList.add("field-error");
+            setFieldErrorState(field, true);
             field.setAttribute("aria-invalid", "true");
             field.setAttribute("aria-describedby", errorBoxId);
             valid = false;
-          } else {
-            field.removeAttribute("aria-invalid");
-            field.removeAttribute("aria-describedby");
           }
         });
 
-        // validate radio groups
-        section.querySelectorAll(".radio-group").forEach((group) => {
-          const name = group.querySelector("input")?.name;
+        section.querySelectorAll("[data-radio-group]").forEach((group) => {
+          const firstRadio = group.querySelector("input[type='radio']");
+          const name = firstRadio?.name;
           if (!name) return;
 
+          const radioSet = section.querySelectorAll(`input[name="${name}"]`);
+          const isRequired = Array.from(radioSet).some((radio) => radio.required);
+          if (!isRequired) return;
+
           if (!section.querySelector(`input[name="${name}"]:checked`)) {
-            group.querySelectorAll("label").forEach((l) => l.classList.add("field-error"));
-            const firstRadio = group.querySelector("input");
+            group.querySelectorAll("label").forEach((label) => {
+              label.classList.add(
+                "radio-option-error",
+                "border-rose-300",
+                "bg-rose-50",
+                "text-rose-700"
+              );
+            });
             if (firstRadio) {
               firstRadio.setAttribute("aria-invalid", "true");
               firstRadio.setAttribute("aria-describedby", errorBoxId);
             }
             valid = false;
           } else {
-            group.querySelectorAll("input").forEach((inp) => {
-              inp.removeAttribute("aria-invalid");
-              inp.removeAttribute("aria-describedby");
+            radioSet.forEach((radio) => {
+              radio.removeAttribute("aria-invalid");
+              radio.removeAttribute("aria-describedby");
             });
           }
         });
 
         if (!valid) {
           errorBox.textContent = "Please complete all required fields before continuing.";
-          errorBox.style.display = "block";
+          errorBox.classList.remove("hidden");
         }
 
         return valid;
       }
 
-      /* ---------- Storage ---------- */
       function saveFormData() {
         if (localStorage.getItem(COMPLETED_KEY) === "true") return;
 
         const data = {};
-        new FormData(form).forEach((v, k) => (data[k] = v));
+        new FormData(form).forEach((value, key) => {
+          data[key] = value;
+        });
         localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
       }
 
       function loadFormData() {
         const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
 
-        // restore field values ONLY
-        Object.entries(saved).forEach(([k, v]) => {
-          if (k === "_step") return; // ❌ ignore saved step
+        Object.entries(saved).forEach(([key, value]) => {
+          if (key === "_step") return;
 
-          const el = form.querySelector(`[name="${k}"]`);
+          const el = form.querySelector(`[name="${key}"]`);
           if (!el) return;
 
           if (el.type === "radio") {
-            form.querySelector(`[name="${k}"][value="${v}"]`)?.click();
+            form.querySelector(`[name="${key}"][value="${value}"]`)?.click();
           } else {
-            el.value = v;
+            el.value = value;
           }
         });
 
-        // ✅ ALWAYS start at step 1 on reload
+        form.querySelectorAll("[data-radio-group]").forEach((group) => {
+          if (group.dataset.radioGroup) syncRadioGroup(group.dataset.radioGroup);
+        });
+
         stepHistory = [];
         showStep(1);
       }
@@ -711,16 +752,20 @@
 
         stepHistory = [1];
       });
+
       function clearSection(step) {
-        const section = formConfig.sections.find(s => s.step === step);
+        const section = formConfig.sections.find((s) => s.step === step);
         if (!section) return;
 
-        section.questions.forEach(q => {
+        section.questions.forEach((q) => {
           const el = form[q.name];
           if (!el) return;
 
           if (el.type === "radio") {
-            form.querySelectorAll(`[name="${q.name}"]`).forEach(r => r.checked = false);
+            form.querySelectorAll(`[name="${q.name}"]`).forEach((radio) => {
+              radio.checked = false;
+            });
+            syncRadioGroup(q.name);
           } else {
             el.value = "";
           }
@@ -738,7 +783,7 @@
       form.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        if (submitting) return; // stop double submits
+        if (submitting) return;
         submitting = true;
 
         const submitBtn = form.querySelector('button[type="submit"]');
@@ -770,29 +815,27 @@
           },
           body: params
         })
-        .then(() => {
-          document.getElementById("confirmationMessage").textContent =
-            getAttend() === "Yes"
-              ? formConfig.confirmationMessages.attendYes
-              : formConfig.confirmationMessages.attendNo;
+          .then(() => {
+            document.getElementById("confirmationMessage").textContent =
+              getAttend() === "Yes"
+                ? formConfig.confirmationMessages.attendYes
+                : formConfig.confirmationMessages.attendNo;
 
-          localStorage.setItem(COMPLETED_KEY, "true");
-          localStorage.removeItem(STORAGE_KEY);
+            localStorage.setItem(COMPLETED_KEY, "true");
+            localStorage.removeItem(STORAGE_KEY);
 
-          form.reset();
-          showStep(4);
-        })
-        .catch(() => {
-          submitting = false;
-          if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.textContent = "Submit";
-          }
-          alert("Submission failed. Please try again.");
-        });
+            form.reset();
+            showStep(4);
+          })
+          .catch(() => {
+            submitting = false;
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.textContent = "Submit response";
+            }
+            alert("Submission failed. Please try again.");
+          });
       });
-
-
     </script>
   </body>
 </html>

@@ -6,7 +6,8 @@
 <link rel="shortcut icon" href="/favicon.ico" />
 <title>Member Login | Skyhawk Squadron</title>
 
-<script src="https://cdn.tailwindcss.com"></script>
+<link href="/styles.css" rel="stylesheet">
+
 <meta name="description" content="Skyhawk Composite Squadron builds youth leadership through Civil Air Patrol cadet programs, service, and aerospace education in Delano, MN."/>
 <link rel="canonical" href="https://skyhawk-cap.org/login" />
 
@@ -28,21 +29,6 @@
 <meta name="twitter:description" content="Secure member login for Skyhawk Composite Squadron."/>
 <meta name="twitter:image" content="https://skyhawk-cap.org/assets/images/webclip.png" />
 
-<script>
-tailwind.config = {
-  darkMode: 'class',
-  theme: {
-    extend: {
-      colors: {
-        primary: "#001489",
-        accent: "#ba0c2f",
-        bgLight: "#f4f6f8",
-        bgDark: "#0f1115"
-      }
-    }
-  }
-}
-</script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
