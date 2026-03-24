@@ -26,31 +26,25 @@ function renderBoxes(boxes) {
   if (!container) return;
 
   const fragment = document.createDocumentFragment();
-  let counter = 0;
 
   for (const box of boxes) {
-
     const a = document.createElement("a");
     a.href = box.url || "#";
     a.target = box.target || "_self";
-    a.className = `custom-link cb ${box.position || "left"}`;
+
+    // Tailwind classes for hover pop
+    a.className = "block transform transition-transform duration-300 hover:scale-105";
 
     const img = document.createElement("img");
     img.src = IMG_BASE_PATH + (box.img || "");
     img.alt = "";
     img.loading = "lazy";
-    img.className = "cb-image";
+
+    // Keep natural size, scale width to column, no cropping
+    img.className = "w-full h-auto";
 
     a.appendChild(img);
     fragment.appendChild(a);
-
-    counter++;
-
-    if (counter % 3 === 0) {
-      const clearDiv = document.createElement("div");
-      clearDiv.className = "w--mehiddendium w-hidden-small w-hidden-tiny clearBoth";
-      fragment.appendChild(clearDiv);
-    }
   }
 
   container.innerHTML = "";

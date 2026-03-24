@@ -24,13 +24,4 @@ window.SITE_CONFIG = {
   },
   /** Google Analytics / gtag ID (optional; leave empty to disable) */
   measurementId: "G-M2RSE2BRK2",
-
-  /** GitHub repo for photos page and homepage slideshow (https://github.com/Ethan-html/skyhawk-photos) */
-  github: {
-    owner: "Ethan-html",
-    repo: "skyhawk-photos",
-    branch: "main",
-    /** Folder inside the repo that contains slideshow.json and slide images */
-    slideshowFolder: "slideshow photos"
-  }
 };

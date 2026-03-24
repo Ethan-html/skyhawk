@@ -114,25 +114,17 @@ function loadAssets(urls) {
 // Logout button helper
 // ==============================
 function initLogout() {
-  const logoutBtn = document.getElementById("logoutBtn");
-  const mobileLogoutIcon = document.querySelector(".mobile-logout-btn");
+  document.addEventListener("click", async (e) => {
+    const btn = e.target.closest("#mobile-logout-btn, #desktop-logout-btn");
+    if (!btn) return;
 
-  async function handleLogout() {
     try {
       await signOut(auth);
       window.location.replace("/");
     } catch (err) {
       console.error("Logout failed:", err);
     }
-  }
-
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", handleLogout);
-  }
-
-  if (mobileLogoutIcon) {
-    mobileLogoutIcon.addEventListener("click", handleLogout);
-  }
+  });
 }
 
 // ==============================
@@ -272,7 +264,7 @@ export async function initPage() {
     // ==============================
     // TIER 0 — Critical CSS (needed for maintenance page and layout)
     // ==============================
-    await loadAssets([withVersion("/assets/stylesheets/main.css")]);
+    //await loadAssets([withVersion("/assets/stylesheets/main.css")]);
 
     // ==============================
     // Public settings (maintenance + announcement banner) — check before loading rest
@@ -336,7 +328,8 @@ export async function initPage() {
     const pageConfigs = buildPageConfigs(mods);
 
     // Show page immediately
-    document.body.style.display = "block";
+    const loader = document.getElementById('pageLoader');
+    loader?.classList.add('hidden');
 
     initShareLinks();
     setCanonicalIfNeeded();
