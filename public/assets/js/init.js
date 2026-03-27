@@ -198,7 +198,7 @@ function buildPageConfigs(mods) {
       modules: [
         announcementBanner,
         mods.initHeaderFooter,
-        mods.initMemberMenu,
+        mods.initMemberPageMenu,
         mods.initContentBoxes
       ],
       requiresAuth: true,
@@ -209,7 +209,7 @@ function buildPageConfigs(mods) {
       modules: [
         announcementBanner,
         mods.initHeaderFooter,
-        mods.initMemberMenu,
+        mods.initMemberPageMenu,
         loadSection(mods.loadMemberPage, mods.renderMemberPage)
       ],
       requiresAuth: true,
@@ -295,6 +295,7 @@ export async function initPage() {
     // ==============================
     const [
       memberMenuMod,
+      memberPageMenuMod,
       contentBoxesMod,
       headerFooterMod,
       loadMemberPageMod,
@@ -303,6 +304,7 @@ export async function initPage() {
       statsMod
     ] = await Promise.all([
       import(/* @v */ withVersion("/assets/js/member-menu.js")),
+      import(/* @v */ withVersion("/assets/js/menu.js")),
       import(/* @v */ withVersion("/assets/js/content-boxes.js")),
       import(/* @v */ withVersion("/assets/js/header-footer.js")),
       import(/* @v */ withVersion("/assets/js/load-member-page.js")),
@@ -313,6 +315,7 @@ export async function initPage() {
 
     const mods = {
       initMemberMenu: memberMenuMod.initMemberMenu,
+      initMemberPageMenu: memberPageMenuMod.initMemberPageMenu,
       initContentBoxes: contentBoxesMod.initContentBoxes,
       initHeaderFooter: headerFooterMod.initHeaderFooter,
       loadMemberPage: loadMemberPageMod.loadMemberPage,
@@ -326,10 +329,6 @@ export async function initPage() {
     };
 
     const pageConfigs = buildPageConfigs(mods);
-
-    // Show page immediately
-    const loader = document.getElementById('pageLoader');
-    loader?.classList.add('hidden');
 
     initShareLinks();
     setCanonicalIfNeeded();
@@ -386,6 +385,10 @@ export async function initPage() {
 
       // Run page modules in parallel
       await runParallel(config.modules.map((fn) => fn(db)));
+      // Show page immediately
+      const loader = document.getElementById('pageLoader');
+      loader?.classList.add('hidden');
+
 
       mods.initMobileMenuA11y();
 

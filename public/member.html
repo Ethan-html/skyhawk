@@ -63,11 +63,9 @@
     <link rel="dns-prefetch" href="https://firestore.googleapis.com" />
     <link rel="dns-prefetch" href="https://www.googleapis.com" />
     <link rel="dns-prefetch" href="https://securetoken.googleapis.com" />
+    <script src="https://cdn.tailwindcss.com"></script>
 
-
-<script src="https://cdn.tailwindcss.com"></script>
-
-<script>
+    <script>
       tailwind.config = {
         darkMode: "class",
         theme: {
@@ -104,300 +102,95 @@
       document.head.appendChild(script);
     </script>
   </head>
-<body class="h-full overflow-x-hidden bg-bgLight text-slate-800 dark:bg-bgDark dark:text-slate-100 font-sans" style="display: none">  <div id="pageLoader" class="fixed inset-0 z-50 bg-white dark:bg-bgDark flex items-center justify-center"></div>
-<div id="header"></div>
-<!-- Navigation -->
-<nav class="relative z-30 border-b border-capBorder/30 bg-gradient-to-r from-capNavy via-capBlue to-primary text-white shadow-nav">
-  <div class="mx-auto max-w-[1680px] px-4 lg:px-8">
+  <body class="flex min-h-screen flex-col overflow-x-hidden bg-bgLight font-sans text-slate-800 dark:bg-bgDark dark:text-slate-100" style="display: none">
+    <div id="pageLoader" class="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-bgDark"></div>
+    <div id="header"></div>
+    <!-- Navigation -->
+    <nav class="relative z-30 border-b border-capBorder/30 bg-gradient-to-r from-capNavy via-capBlue to-primary text-white shadow-nav">
+      <div class="mx-auto max-w-[1680px] px-4 lg:px-8">
 
-    <!-- Mobile header -->
-    <div class="flex h-16 items-center justify-between md:hidden">
-      <button id="mobileMenuToggle" class="flex items-center gap-2.5 px-3 py-2 rounded text-white/95 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-accent/60">
-        <span class="text-xl">☰</span>
-        <span>Menu</span>
-      </button>
-      <div class="hidden max-[998px]:flex absolute right-4 top-1/2 -translate-y-1/2 items-center justify-center">
-        <svg
-          id="mobile-logout-btn"
-          class="h-[42px] w-[42px] fill-white cursor-pointer transition-transform duration-200 active:scale-95 hover:scale-110 [webkit-tap-highlight-color:transparent]"
-          viewBox="10 0 135 135"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            class="transition-all duration-300 hover:fill-transparent hover:stroke-white hover:stroke-[4]"
-            d="M 39.505192,111.30078 c -21.4583,-2.79124 -23.89267,-5.62556 -17.65467,-20.555208 5.05191,-12.09091 24.60982,-21.91257 31.64435,-15.89127 8.58597,7.34927 18.3949,7.0997 26.42544,-0.67236 5.29381,-5.12343 6.8403,-3.12538 3.00035,3.87642 -4.63016,8.44269 -4.63279,19.17593 -0.007,28.145378 3.18813,6.18166 -16.91934,8.54268 -43.40858,5.09704 z m 19.23103,-36.796438 c -3.92227,-2.42276 -6.08556,-4.92942 -7.91909,-9.17604 -0.82246,-1.90487 -2.41893,-4.8134 -3.54772,-6.4634 -3.38391,-4.94639 -4.35576,-9.99382 -2.64965,-13.76126 0.80667,-1.78131 1.63077,-6.22222 1.83132,-9.8687 1.40895,-25.6179098 37.81394,-23.37365 40.42447,2.49205 0.2852,2.82585 0.9959,6.1258 1.57933,7.33323 2.0526,4.24795 -1.59671,13.63061 -9.77578,25.13429 -4.23698,5.95921 -13.89402,8.04618 -19.94288,4.30983 z"
-          />
-          <path
-            class="transition-colors duration-300 hover:fill-[tomato]"
-            d="M 100.596,117.28386 C 85.437922,111.45435 79.069222,92.988412 87.266572,78.635392 100.83776,54.873142 137.36852,64.439322 137.52514,91.796422 137.63626,111.20715 118.72801,124.25708 100.596,117.28386 Z m 19.74032,-8.09538 c 10.45724,-5.87729 13.21598,-22.797628 4.93837,-30.288768 -4.29393,-3.88595 -7.80157,0.40831 -4.13793,5.06588 4.88957,6.21607 2.72738,16.449868 -4.16671,19.721318 -12.86051,6.10272 -25.040138,-7.223638 -17.183378,-18.801218 4.823328,-7.10758 0.0206,-10.75821 -5.18116,-3.93831 -12.22103,16.0226 7.993958,38.209768 25.730808,28.241098 z m -7.13528,-20.757838 c 1.59283,-2.97623 1.30167,-16.32461 -0.40625,-18.62461 -3.03513,-4.08731 -5.02522,-0.73384 -5.34895,9.01342 -0.35021,10.54513 2.60982,15.48839 5.7552,9.61119 z"
-          />
-        </svg>
-      </div>
-    </div>
+        <!-- Mobile header -->
+        <div class="flex h-16 items-center justify-between md:hidden">
+          <button id="mobileMenuToggle" class="flex items-center gap-2.5 px-3 py-2 rounded text-white/95 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-accent/60">
+            <span class="text-xl">☰</span>
+            <span>Menu</span>
+          </button>
+          <div class="hidden max-[998px]:flex absolute right-4 top-1/2 -translate-y-1/2 items-center justify-center">
+            <svg
+              id="mobile-logout-btn"
+              class="h-[42px] w-[42px] fill-white cursor-pointer transition-transform duration-200 active:scale-95 hover:scale-110 [webkit-tap-highlight-color:transparent]"
+              viewBox="10 0 135 135"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                class="transition-all duration-300 hover:fill-transparent hover:stroke-white hover:stroke-[4]"
+                d="M 39.505192,111.30078 c -21.4583,-2.79124 -23.89267,-5.62556 -17.65467,-20.555208 5.05191,-12.09091 24.60982,-21.91257 31.64435,-15.89127 8.58597,7.34927 18.3949,7.0997 26.42544,-0.67236 5.29381,-5.12343 6.8403,-3.12538 3.00035,3.87642 -4.63016,8.44269 -4.63279,19.17593 -0.007,28.145378 3.18813,6.18166 -16.91934,8.54268 -43.40858,5.09704 z m 19.23103,-36.796438 c -3.92227,-2.42276 -6.08556,-4.92942 -7.91909,-9.17604 -0.82246,-1.90487 -2.41893,-4.8134 -3.54772,-6.4634 -3.38391,-4.94639 -4.35576,-9.99382 -2.64965,-13.76126 0.80667,-1.78131 1.63077,-6.22222 1.83132,-9.8687 1.40895,-25.6179098 37.81394,-23.37365 40.42447,2.49205 0.2852,2.82585 0.9959,6.1258 1.57933,7.33323 2.0526,4.24795 -1.59671,13.63061 -9.77578,25.13429 -4.23698,5.95921 -13.89402,8.04618 -19.94288,4.30983 z"
+              />
+              <path
+                class="transition-colors duration-300 hover:fill-[tomato]"
+                d="M 100.596,117.28386 C 85.437922,111.45435 79.069222,92.988412 87.266572,78.635392 100.83776,54.873142 137.36852,64.439322 137.52514,91.796422 137.63626,111.20715 118.72801,124.25708 100.596,117.28386 Z m 19.74032,-8.09538 c 10.45724,-5.87729 13.21598,-22.797628 4.93837,-30.288768 -4.29393,-3.88595 -7.80157,0.40831 -4.13793,5.06588 4.88957,6.21607 2.72738,16.449868 -4.16671,19.721318 -12.86051,6.10272 -25.040138,-7.223638 -17.183378,-18.801218 4.823328,-7.10758 0.0206,-10.75821 -5.18116,-3.93831 -12.22103,16.0226 7.993958,38.209768 25.730808,28.241098 z m -7.13528,-20.757838 c 1.59283,-2.97623 1.30167,-16.32461 -0.40625,-18.62461 -3.03513,-4.08731 -5.02522,-0.73384 -5.34895,9.01342 -0.35021,10.54513 2.60982,15.48839 5.7552,9.61119 z"
+              />
+            </svg>
+          </div>
+        </div>
 
-    <!-- Desktop menu -->
-    <div class="hidden md:flex justify-center w-full">
-      <div class="flex items-center gap-2">
-        <!-- Menu items -->
-        <ul id="desktopMenu" class="flex h-12 items-stretch gap-2"></ul>
-        <div>
-          <svg
-            id="desktop-logout-btn"
-            class="groop h-[42px] w-[42px] fill-white cursor-pointer transition-transform duration-200 active:scale-95 hover:scale-110"
-            viewBox="10 0 135 135"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              class="transition-all duration-300 group-hover:fill-transparent group-hover:stroke-white group-hover:stroke-[4]"
-              d="M 39.505192,111.30078 c -21.4583,-2.79124 -23.89267,-5.62556 -17.65467,-20.555208 5.05191,-12.09091 24.60982,-21.91257 31.64435,-15.89127 8.58597,7.34927 18.3949,7.0997 26.42544,-0.67236 5.29381,-5.12343 6.8403,-3.12538 3.00035,3.87642 -4.63016,8.44269 -4.63279,19.17593 -0.007,28.145378 3.18813,6.18166 -16.91934,8.54268 -43.40858,5.09704 z m 19.23103,-36.796438 c -3.92227,-2.42276 -6.08556,-4.92942 -7.91909,-9.17604 -0.82246,-1.90487 -2.41893,-4.8134 -3.54772,-6.4634 -3.38391,-4.94639 -4.35576,-9.99382 -2.64965,-13.76126 0.80667,-1.78131 1.63077,-6.22222 1.83132,-9.8687 1.40895,-25.6179098 37.81394,-23.37365 40.42447,2.49205 0.2852,2.82585 0.9959,6.1258 1.57933,7.33323 2.0526,4.24795 -1.59671,13.63061 -9.77578,25.13429 -4.23698,5.95921 -13.89402,8.04618 -19.94288,4.30983 z"
-            />
-            <path
-              class="transition-colors duration-300 group-hover:fill-[tomato]"
-              d="M 100.596,117.28386 C 85.437922,111.45435 79.069222,92.988412 87.266572,78.635392 100.83776,54.873142 137.36852,64.439322 137.52514,91.796422 137.63626,111.20715 118.72801,124.25708 100.596,117.28386 Z m 19.74032,-8.09538 c 10.45724,-5.87729 13.21598,-22.797628 4.93837,-30.288768 -4.29393,-3.88595 -7.80157,0.40831 -4.13793,5.06588 4.88957,6.21607 2.72738,16.449868 -4.16671,19.721318 -12.86051,6.10272 -25.040138,-7.223638 -17.183378,-18.801218 4.823328,-7.10758 0.0206,-10.75821 -5.18116,-3.93831 -12.22103,16.0226 7.993958,38.209768 25.730808,28.241098 z m -7.13528,-20.757838 c 1.59283,-2.97623 1.30167,-16.32461 -0.40625,-18.62461 -3.03513,-4.08731 -5.02522,-0.73384 -5.34895,9.01342 -0.35021,10.54513 2.60982,15.48839 5.7552,9.61119 z"
-            />
-          </svg>
+        <!-- Desktop menu -->
+        <div class="hidden md:flex justify-center w-full">
+          <div class="flex items-center gap-2">
+            <!-- Menu items -->
+            <ul id="desktopMenu" class="flex h-12 items-stretch gap-2"></ul>
+            <div>
+              <svg
+                id="desktop-logout-btn"
+                class="groop h-[42px] w-[42px] fill-white cursor-pointer transition-transform duration-200 active:scale-95 hover:scale-110"
+                viewBox="10 0 135 135"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  class="transition-all duration-300 group-hover:fill-transparent group-hover:stroke-white group-hover:stroke-[4]"
+                  d="M 39.505192,111.30078 c -21.4583,-2.79124 -23.89267,-5.62556 -17.65467,-20.555208 5.05191,-12.09091 24.60982,-21.91257 31.64435,-15.89127 8.58597,7.34927 18.3949,7.0997 26.42544,-0.67236 5.29381,-5.12343 6.8403,-3.12538 3.00035,3.87642 -4.63016,8.44269 -4.63279,19.17593 -0.007,28.145378 3.18813,6.18166 -16.91934,8.54268 -43.40858,5.09704 z m 19.23103,-36.796438 c -3.92227,-2.42276 -6.08556,-4.92942 -7.91909,-9.17604 -0.82246,-1.90487 -2.41893,-4.8134 -3.54772,-6.4634 -3.38391,-4.94639 -4.35576,-9.99382 -2.64965,-13.76126 0.80667,-1.78131 1.63077,-6.22222 1.83132,-9.8687 1.40895,-25.6179098 37.81394,-23.37365 40.42447,2.49205 0.2852,2.82585 0.9959,6.1258 1.57933,7.33323 2.0526,4.24795 -1.59671,13.63061 -9.77578,25.13429 -4.23698,5.95921 -13.89402,8.04618 -19.94288,4.30983 z"
+                />
+                <path
+                  class="transition-colors duration-300 group-hover:fill-[tomato]"
+                  d="M 100.596,117.28386 C 85.437922,111.45435 79.069222,92.988412 87.266572,78.635392 100.83776,54.873142 137.36852,64.439322 137.52514,91.796422 137.63626,111.20715 118.72801,124.25708 100.596,117.28386 Z m 19.74032,-8.09538 c 10.45724,-5.87729 13.21598,-22.797628 4.93837,-30.288768 -4.29393,-3.88595 -7.80157,0.40831 -4.13793,5.06588 4.88957,6.21607 2.72738,16.449868 -4.16671,19.721318 -12.86051,6.10272 -25.040138,-7.223638 -17.183378,-18.801218 4.823328,-7.10758 0.0206,-10.75821 -5.18116,-3.93831 -12.22103,16.0226 7.993958,38.209768 25.730808,28.241098 z m -7.13528,-20.757838 c 1.59283,-2.97623 1.30167,-16.32461 -0.40625,-18.62461 -3.03513,-4.08731 -5.02522,-0.73384 -5.34895,9.01342 -0.35021,10.54513 2.60982,15.48839 5.7552,9.61119 z"
+                />
+              </svg>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</nav>
+    </nav>
 
-<!-- Mobile backdrop -->
-<div id="mobileBackdrop" class="fixed inset-0 z-40 hidden bg-black/20 backdrop-blur-sm md:hidden"></div>
+    <!-- Mobile backdrop -->
+    <div id="mobileBackdrop" class="fixed inset-0 z-40 hidden bg-black/20 backdrop-blur-sm md:hidden"></div>
 
-<!-- Mobile drawer -->
-<aside id="mobileDrawer" class="fixed inset-y-0 left-0 z-50 w-[85vw] max-w-sm -translate-x-full bg-gradient-to-b from-capNavy via-capBlue to-capSurface shadow-drawer transition-transform duration-300 ease-in-out md:hidden">
-  <div class="flex h-full flex-col">
-    <div class="flex h-16 items-center justify-between border-b border-white/10 px-5">
-      <span class="text-lg font-semibold">Menu</span>
-      <button id="mobileCloseBtn" class="text-2xl text-white/80 hover:text-white">×</button>
-    </div>
-    <div id="mobilePanelRoot" class="flex-1 overflow-y-auto px-2 py-4"></div>
-  </div>
-</aside>
+    <!-- Mobile drawer -->
+    <aside id="mobileDrawer" class="fixed inset-y-0 left-0 z-50 w-full -translate-x-full bg-[#1e3a8a] shadow-drawer transition-transform duration-300 ease-in-out md:hidden">
+      <div id="mobilePanelRoot" class="h-full w-full overflow-hidden"></div>
+    </aside>
 
-<div id="main-page-content" role="main">
+    <main id="main-page-content" class="flex-1" role="main">
+      <section class="main-section relative py-8 bg-slate-100 dark:bg-slate-950">
+        <!-- Background image for desktop only -->
+        <div class="hidden lg:block absolute inset-0">
+          <img 
+            src="https://skyhawk-cap.org/assets/images/content-box-straight.webp" 
+            alt="Background" 
+            class="w-full h-full object-cover"
+          />
+          <!-- Overlay with blur -->
+          <div class="absolute inset-0 bg-white/45 dark:bg-slate-950/70 backdrop-blur-sm"></div>
+        </div>
 
-  <section class="main-section py-8 relative bg-gray-100 dark:bg-gray-900">
-  <!-- Background image for desktop only -->
-  <div class="hidden lg:block absolute inset-0">
-    <img 
-      src="https://skyhawk-cap.org/assets/images/content-box-straight.webp" 
-      alt="Background" 
-      class="w-full h-full object-cover"
-    />
-    <!-- Overlay with blur -->
-    <div class="absolute inset-0 bg-white/30 dark:bg-gray-800/30 backdrop-blur-sm"></div>
-  </div>
-
-  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- This is the box containing cards -->
-    <div class="bg-white/70 dark:bg-gray-900/70 backdrop-blur-md rounded-lg p-6 lg:p-10">
-      <div id="content-boxes-wrapper" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      </div>
-    </div>
-  </div>
-</section>
-</div>
-<div id="footer"></div>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-app.js";
-import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-firestore.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.3.1/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyBk_ikYB1PzkgHx4zJY73pe3EfzQRpZvqw",
-  authDomain: "skyhawk-web.firebaseapp.com",
-  projectId: "skyhawk-web",
-  storageBucket: "skyhawk-web.firebasestorage.app",
-  messagingSenderId: "340655139001",
-  appId: "1:340655139001:web:7923a1fe83ac4a4c689368",
-  measurementId: "G-M2RSE2BRK2"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth();
-
-function sortByOptionalOrderId(items) {
-  return items.sort((a, b) => (Number(a.orderid) || 9999) - (Number(b.orderid) || 9999));
-}
-
-function createChevron() {
-  const svg = document.createElementNS("http://www.w3.org/2000/svg","svg");
-  svg.setAttribute("viewBox","0 0 20 20");
-  svg.setAttribute("fill","currentColor");
-  svg.classList.add("ml-2","h-4","w-4","transition-transform");
-  svg.innerHTML = `<path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"/>`;
-  return svg;
-}
-
-async function fetchMenuFromFirebase() {
-  try {
-    const pagesCol = collection(db, "member","menu","pages");
-    const pagesSnap = await getDocs(pagesCol);
-    return Promise.all(
-      pagesSnap.docs.map(async doc => {
-        const childrenSnap = await getDocs(collection(doc.ref,"children"));
-        return { page: doc.data(), children: childrenSnap.docs.map(d=>d.data()) };
-      })
-    );
-  } catch(err){ console.warn("Menu fetch failed:",err); return []; }
-}
-
-// Desktop
-function buildDesktopMenu(menuData) {
-  const container = document.getElementById("desktopMenu");
-  container.replaceChildren();
-
-  menuData.forEach(item => {
-    const li = document.createElement("li");
-    li.className = "relative flex items-stretch h-full";
-
-    const hasChildren = item.children?.length > 0;
-    const trigger = document.createElement(hasChildren ? "button" : "a");
-    trigger.className =
-      "flex items-center px-6 max-[1250px]:px-4 max-[1165px]:px-3 max-[840px]:px-2 h-full text-lg max-[1250px]:text-base max-[1165px]:text-sm max-[840px]:text-xs font-semibold uppercase tracking-wide text-white/95 border-t-2 border-transparent hover:bg-white/10 hover:text-white hover:border-accent focus:outline-none focus:ring-2 focus:ring-accent/70";
-    trigger.textContent = item.page.title || "Untitled";
-
-    if (!hasChildren) {
-      trigger.href = item.page.url || "#";
-    } else {
-      trigger.type = "button";
-      trigger.setAttribute("aria-expanded", "false");
-      trigger.appendChild(createChevron());
-    }
-
-    li.appendChild(trigger);
-
-    if (hasChildren) {
-      const submenu = document.createElement("div");
-      submenu.className =
-        "absolute left-0 top-full min-w-full w-max opacity-0 pointer-events-none transition-opacity duration-150";
-
-      const inner = document.createElement("div");
-      inner.className =
-        "bg-slate-900/95 backdrop-blur-sm border border-white/10 rounded-b-xl overflow-hidden text-sm";
-
-      const ul = document.createElement("ul");
-      sortByOptionalOrderId(item.children).forEach(child => {
-        const li = document.createElement("li");
-        const a = document.createElement("a");
-        a.href = child.url || "#";
-        a.textContent = child.title || "—";
-        a.className =
-          "block px-6 py-3 text-white/90 hover:bg-white/10 hover:text-white transition-colors";
-        li.appendChild(a);
-        ul.appendChild(li);
-      });
-
-      inner.appendChild(ul);
-      submenu.appendChild(inner);
-      li.appendChild(submenu);
-
-      // Explicit JS hover show/hide
-      let timeout;
-      li.addEventListener("mouseenter", () => {
-        clearTimeout(timeout);
-
-        // 🔥 CLOSE ALL OTHER MENUS FIRST
-        document.querySelectorAll("#desktopMenu [aria-expanded='true']").forEach(btn => {
-          if (btn !== trigger) {
-            btn.setAttribute("aria-expanded", "false");
-            const parent = btn.closest("li");
-            const menu = parent?.querySelector("div");
-            if (menu) {
-              menu.style.opacity = "0";
-              menu.style.pointerEvents = "none";
-              submenu.style.transform = "none";
-            }
-          }
-        });
-
-        // OPEN THIS ONE
-        submenu.style.opacity = "1";
-        submenu.style.pointerEvents = "auto";
-        submenu.style.transform = "none";
-        trigger.setAttribute("aria-expanded", "true");
-      });
-      li.addEventListener("mouseleave", () => {
-        timeout = setTimeout(() => {
-          submenu.style.opacity = "0";
-          submenu.style.pointerEvents = "none";
-          submenu.style.transform = "translateY(5px)";
-          trigger.setAttribute("aria-expanded", "false");
-        }, 150);
-      });
-    }
-
-    container.appendChild(li);
-  });
-}
-
-// Mobile
-function buildMobileMenu(menuData){
-  const root=document.getElementById("mobilePanelRoot"); root.replaceChildren();
-  const ul=document.createElement("ul"); ul.className="space-y-1 px-2";
-
-  menuData.forEach(({page,children})=>{
-    const li=document.createElement("li");
-    const a=document.createElement("a"); a.href=page.url||"#"; a.textContent=page.title||"—";
-    a.className="flex justify-between items-center px-5 py-3.5 font-medium text-white rounded-lg hover:bg-white/10 transition-colors";
-
-    if(children?.length){
-      const chevron=createChevron(); chevron.classList.add("h-4","w-4"); a.appendChild(chevron);
-      const subUl=document.createElement("ul"); subUl.className="hidden pl-4 mt-1 space-y-1";
-
-      sortByOptionalOrderId(children).forEach(child=>{
-        const subLi=document.createElement("li");
-        const subA=document.createElement("a"); subA.href=child.url||"#"; subA.textContent=child.title||"—";
-        subA.className="block px-6 py-2.5 text-white/85 rounded hover:bg-white/10 transition-colors";
-        subLi.appendChild(subA); subUl.appendChild(subLi);
-      });
-
-      li.append(a,subUl);
-      a.addEventListener("click",e=>{
-        e.preventDefault();
-        const open=!subUl.classList.contains("hidden");
-        root.querySelectorAll("ul ul").forEach(ul=>{ul.classList.add("hidden"); ul.previousElementSibling?.querySelector("svg")?.classList.remove("rotate-180");});
-        if(!open){ subUl.classList.remove("hidden"); chevron.classList.add("rotate-180"); }
-      });
-    } else li.appendChild(a);
-
-    ul.appendChild(li);
-  });
-  root.appendChild(ul);
-}
-
-// Mobile toggle
-const toggleBtn=document.getElementById("mobileMenuToggle");
-const closeBtn=document.getElementById("mobileCloseBtn");
-const drawer=document.getElementById("mobileDrawer");
-const backdrop=document.getElementById("mobileBackdrop");
-const body=document.body;
-
-function openMobile(){
-  drawer.classList.remove("-translate-x-full");
-  backdrop.classList.remove("hidden");
-  body.classList.add("mobile-menu-open");
-}
-function closeMobile(){
-  drawer.classList.add("-translate-x-full");
-  backdrop.classList.add("hidden");
-  body.classList.remove("mobile-menu-open");
-}
-
-toggleBtn.addEventListener("click",()=>{ drawer.classList.contains("-translate-x-full")?openMobile():closeMobile(); });
-closeBtn.addEventListener("click",closeMobile);
-backdrop.addEventListener("click",closeMobile);
-
-// Init
-(async()=>{
-  const data=await fetchMenuFromFirebase();
-  if(data.length===0)return;
-  buildDesktopMenu(data);
-  buildMobileMenu(data);
-})();
-</script>
-</body>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <!-- Content card container -->
+          <div class="rounded-2xl border border-slate-200/80 bg-white/90 p-6 shadow-xl shadow-slate-900/5 backdrop-blur-md lg:p-10 dark:border-slate-700/80 dark:bg-slate-900/80 dark:shadow-black/30">
+            <div id="content-boxes-wrapper" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <div id="footer"></div>
+  </body>
 </html>

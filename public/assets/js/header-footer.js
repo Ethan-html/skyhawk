@@ -17,7 +17,7 @@ export function initHeaderFooter() {
     <!-- Left Logo & Title -->
     <div class="flex flex-col items-start">
       <img src="https://skyhawk-cap.org/assets/images/CAP-2017-logo-horizontal-optimized.webp"
-           class="w-[280px]"
+           class="w-[350px] dark:filter dark:brightness-200 dark:contrast-150 dark:saturate-200 dark:hue-rotate-200"
            alt="Civil Air Patrol">
 
       <div class="ml-8 text-lg font-semibold text-primary dark:text-blue-400/80 tracking-wide">
@@ -43,10 +43,9 @@ export function initHeaderFooter() {
     <!-- Left Logo -->
     <a href="/member">
       <img src="/assets/images/CAP-2017-logo-horizontal-optimized.webp"
-           class="w-[350px]"
+           class="w-[350px] dark:filter dark:brightness-200 dark:contrast-150 dark:saturate-200 dark:hue-rotate-200"
            alt="Civil Air Patrol">
     </a>
-
     <!-- Right Squadron Logo -->
     <img src="/media/website/skyhawk-optimized.webp"
          class="w-[300px] object-contain"

@@ -32,16 +32,15 @@ function renderBoxes(boxes) {
     a.href = box.url || "#";
     a.target = box.target || "_self";
 
-    // Tailwind classes for hover pop
-    a.className = "block transform transition-transform duration-300 hover:scale-105";
+    a.className =
+      "group block overflow-hidden rounded-xl bg-white/90 shadow-sm shadow-slate-900/5 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-slate-900/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 dark:border-slate-700 dark:bg-slate-900/85 dark:shadow-black/20 dark:hover:border-slate-500";
 
     const img = document.createElement("img");
     img.src = IMG_BASE_PATH + (box.img || "");
-    img.alt = "";
+    img.alt = box.title || "Member resource";
     img.loading = "lazy";
 
-    // Keep natural size, scale width to column, no cropping
-    img.className = "w-full h-auto";
+    img.className = "h-auto w-full transition-transform duration-300 group-hover:scale-[1.01]";
 
     a.appendChild(img);
     fragment.appendChild(a);
