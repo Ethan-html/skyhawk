@@ -52,7 +52,7 @@
     ></script>
   </head>
   <body class="flex min-h-screen flex-col overflow-x-hidden bg-bgLight font-sans text-slate-800 dark:bg-bgDark dark:text-slate-100">
-    <div id="pageLoader" class="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-bgDark"></div>
+    <div id="pageLoader" class="fixed inset-0 z-50 bg-slate-100/95 backdrop-blur-sm dark:bg-slate-950/95"></div>
     <div id="header"></div>
     <!-- Navigation -->
     <nav class="relative z-30 border-b border-capBorder/30 bg-gradient-to-r from-capNavy via-capBlue to-primary text-white shadow-nav">
@@ -142,29 +142,30 @@
             </aside>
 
             <!-- MAIN CONTENT -->
-            <div id="mainContent">
-              <div class="rounded-2xl border border-slate-200/80 bg-white/90 p-6 shadow-xl shadow-slate-900/5 backdrop-blur-md lg:p-10 dark:border-slate-700/80 dark:bg-slate-900/80 dark:shadow-black/30">
-                <!-- BREADCRUMBS -->
-                <nav aria-label="Breadcrumb" class="text-sm text-slate-600 dark:text-slate-300/90">
-                  <ol id="breadcrumbList" class="flex flex-wrap items-center gap-x-2 gap-y-1"></ol>
-                </nav>
-                <!-- FULL-WIDTH FLAT RED BAR - Skyhawk Calendar (Dynamic & Clean) -->
-                <div class="mb-8 -mx-4 sm:-mx-6 lg:-mx-8 xl:-mx-10">
-                  <div class="bg-[#ba0c2f] h-12 flex items-center px-6 sm:px-8 shadow-sm border-b border-red-800/80 dark:border-red-900/80">
-                    <div class="mx-auto max-w-7xl flex items-center gap-4">
-                      <h1 
-                        id="pageTitle"
-                        class="text-3xl sm:text-4xl font-bold tracking-tight text-white"
-                      ></h1>
-                    </div>
-                  </div>
-                </div>
-                <!-- PAGE CONTENT -->
-                <div
-                  id="pageContent"
-                  class="prose prose-slate mt-6 max-w-none dark:prose-invert prose-a:text-capBlue dark:prose-a:text-sky-300"
-                ></div>
-              </div>
+            <div id="mainContentWrap" class="customStyles lg:col-span-9 min-w-0">
+              <div id="mainContent" class="lg:col-span-9 min-w-0">
+    <div class="rounded-2xl border border-slate-200/80 bg-white/90 p-6 shadow-xl shadow-slate-900/5 backdrop-blur-md lg:p-10 dark:border-slate-700/80 dark:bg-slate-900/80 dark:shadow-black/30">
+      <!-- BREADCRUMBS -->
+      <nav aria-label="Breadcrumb" class="text-sm text-slate-600 dark:text-slate-300/90">
+        <ol id="breadcrumbList" class="flex flex-wrap items-center gap-x-2 gap-y-1"></ol>
+      </nav>
+      <!-- FULL-WIDTH FLAT RED BAR - Skyhawk Calendar (Dynamic & Clean) -->
+      <div class="mb-8 -mx-4 sm:-mx-6 lg:-mx-8 xl:-mx-10">
+        <div class="bg-[#ba0c2f] h-12 flex items-center px-4 sm:px-6 shadow-sm border-b border-red-800/80 dark:border-red-900/80">
+          <div class="w-full flex items-center gap-4">
+            <h1 
+              id="pageTitle"
+              class="text-3xl sm:text-4xl font-bold tracking-tight text-white"
+            ></h1>
+          </div>
+        </div>
+      </div>
+      <!-- PAGE CONTENT -->
+      <div
+        id="pageContent"
+        class="prose prose-slate mt-6 max-w-none dark:prose-invert prose-a:text-capBlue dark:prose-a:text-sky-300"
+      ></div>
+    </div>
             </div>
           </div>
         </div>

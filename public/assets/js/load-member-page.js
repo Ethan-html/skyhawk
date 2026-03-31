@@ -121,7 +121,7 @@ export function renderMemberPage(pageData) {
   const active = children.find((c) => c.slug === childSlug) || children[0];
 
   const leftNav = document.getElementById("leftNav");
-  const mainContent = document.getElementById("mainContent");
+  const mainContent = document.getElementById("mainContentWrap");
   if (pageData.id === "page") {
     leftNav?.classList.add("lg:hidden");
     mainContent?.classList.remove("lg:col-span-9");
@@ -148,15 +148,26 @@ export function renderMemberPage(pageData) {
     li.className = "";
     const a = document.createElement("a");
     a.className =
-      "block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-white";
+      "relative block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-white";
     a.href = `/memberpage?page=${pageData.id}/${c.slug}`;
     a.textContent = c.title;
     if (c.slug === active.slug) {
       a.classList.add(
-        "bg-slate-100",
-        "text-slate-900",
+        "bg-blue-50",
+        "text-blue-950",
+        "ring-1",
+        "ring-blue-200",
+        "before:absolute",
+        "before:content-['']",
+        "before:inset-y-1",
+        "before:left-0",
+        "before:w-1",
+        "before:rounded-r",
+        "before:bg-capBlue",
         "dark:bg-white/10",
-        "dark:text-white"
+        "dark:text-white",
+        "dark:ring-0",
+        "dark:before:bg-sky-300"
       );
       a.setAttribute("aria-current", "page");
     }
