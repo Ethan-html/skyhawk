@@ -43,6 +43,23 @@ export async function loadMemberPage(db, sectionId, onUpdate) {
   const cacheKey = `memberPageData_${sectionId}`;
   const cachedRaw = localStorage.getItem(cacheKey);
 
+  // Minimal loading UI (only if nothing cached)
+  if (!cachedRaw) {
+    const pageTitleEl = document.getElementById("pageTitle");
+    const pageContentEl = document.getElementById("pageContent");
+    if (pageTitleEl) pageTitleEl.textContent = "Loading…";
+    if (pageContentEl) {
+      pageContentEl.innerHTML = `
+        <div class="not-prose space-y-4">
+          <div class="h-4 w-3/4 rounded bg-slate-200/80 dark:bg-slate-700/60 animate-pulse"></div>
+          <div class="h-4 w-full rounded bg-slate-200/80 dark:bg-slate-700/60 animate-pulse"></div>
+          <div class="h-4 w-11/12 rounded bg-slate-200/80 dark:bg-slate-700/60 animate-pulse"></div>
+          <div class="h-4 w-2/3 rounded bg-slate-200/80 dark:bg-slate-700/60 animate-pulse"></div>
+        </div>
+      `;
+    }
+  }
+
   // 1️⃣ Instant render from cache
   if (cachedRaw) {
     try {
@@ -103,45 +120,57 @@ export function renderMemberPage(pageData) {
   const children = Object.values(pageData.children);
   const active = children.find((c) => c.slug === childSlug) || children[0];
 
-  const leftNav = document.querySelector(".left-nav-column");
-  const mainContent = document.querySelector(".main-content-column");
+  const leftNav = document.getElementById("leftNav");
+  const mainContent = document.getElementById("mainContent");
   if (pageData.id === "page") {
-    leftNav.style.display = "none";
-    mainContent.style.width = "100%";
-    mainContent.style.marginLeft = "0";
+    leftNav?.classList.add("lg:hidden");
+    mainContent?.classList.remove("lg:col-span-9");
+    mainContent?.classList.add("lg:col-span-12");
   } else {
-    leftNav.style.display = "";
-    mainContent.style.width = "";
-    mainContent.style.marginLeft = "";
+    leftNav?.classList.remove("lg:hidden");
+    mainContent?.classList.remove("lg:col-span-12");
+    mainContent?.classList.add("lg:col-span-9");
   }
   const sideList = document.getElementById("sideNavList");
   const sideTitle = document.getElementById("sideNavTitleLink");
   const pageTitleEl = document.getElementById("pageTitle");
   const pageContentEl = document.getElementById("pageContent");
 
-  sideTitle.textContent = pageData.title;
-  sideTitle.href = `/memberpage?page=${pageData.id}`;
+  if (sideTitle) {
+    sideTitle.textContent = pageData.title;
+    sideTitle.href = `/memberpage?page=${pageData.id}`;
+  }
   sideList.innerHTML = "";
 
   const navFragment = document.createDocumentFragment();
   for (const c of children) {
     const li = document.createElement("li");
-    li.className = "left-nav-list-item";
+    li.className = "";
     const a = document.createElement("a");
-    a.className = "left-nav-list-link";
+    a.className =
+      "block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-white";
     a.href = `/memberpage?page=${pageData.id}/${c.slug}`;
     a.textContent = c.title;
-    if (c.slug === active.slug) a.classList.add("selected");
-    li.append(a, document.createElement("div"));
+    if (c.slug === active.slug) {
+  a.classList.add(
+    "bg-[#001489]/10",
+    "text-[#001489]",
+    "font-semibold",
+    "border-l-4",
+    "border-[#001489]"
+  );
+  a.setAttribute("aria-current", "page");
+}
+    li.appendChild(a);
     navFragment.appendChild(li);
   }
   sideList.appendChild(navFragment);
 
-  pageTitleEl.textContent = active.title;
+  if (pageTitleEl) pageTitleEl.textContent = active.title;
   if (active.externalUrl) {
     location.href = active.externalUrl;
   } else {
-    pageContentEl.innerHTML = sanitizeHtml(active.content);
+    if (pageContentEl) pageContentEl.innerHTML = sanitizeHtml(active.content);
   }
 
   // -------------------------------------------

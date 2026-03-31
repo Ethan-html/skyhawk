@@ -241,15 +241,16 @@ async function authGate(pageConfigs, callback) {
   const protectedPaths = pageConfigs.filter((p) => p.requiresAuth).map((p) => p.match);
 
   const isProtected = protectedPaths.some((fn) => fn(location.pathname));
-  if (isProtected) document.body.style.display = "none";
+  const shell = document.getElementById("main-page-content");
+  if (isProtected && shell) shell.classList.add("opacity-0", "pointer-events-none");
 
   return new Promise((resolve) => {
     onAuthStateChanged(auth, async (user) => {
       if (isProtected && !user) {
         window.location.replace("/login");
       } else {
-        document.body.style.display = "block";
         if (callback) await callback(user);
+        if (shell) shell.classList.remove("opacity-0", "pointer-events-none");
         resolve();
       }
     });
@@ -264,7 +265,7 @@ export async function initPage() {
     // ==============================
     // TIER 0 — Critical CSS (needed for maintenance page and layout)
     // ==============================
-    //await loadAssets([withVersion("/assets/stylesheets/main.css")]);
+    await loadAssets([withVersion("/styles.css")]);
 
     // ==============================
     // Public settings (maintenance + announcement banner) — check before loading rest
@@ -385,10 +386,6 @@ export async function initPage() {
 
       // Run page modules in parallel
       await runParallel(config.modules.map((fn) => fn(db)));
-      // Show page immediately
-      const loader = document.getElementById('pageLoader');
-      loader?.classList.add('hidden');
-
 
       mods.initMobileMenuA11y();
 
@@ -407,6 +404,9 @@ export async function initPage() {
       if (config.requiresAuth && config.logout) {
         initLogout();
       }
+
+      const loader = document.getElementById("pageLoader");
+      loader?.classList.add("hidden");
     });
   });
 }

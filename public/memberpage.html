@@ -1,100 +1,57 @@
 <!doctype html>
 <html lang="en-US">
   <head>
-    <title>Skyhawk Member Page</title>
-    <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <meta
-      name="description"
-      content="Skyhawk Composite Squadron builds youth leadership through Civil Air Patrol cadet programs, service, and aerospace education in Delano, MN."
-    />
-
+    <!-- Basic Meta -->
     <meta charset="utf-8" />
-    <meta name="language" content="en-US" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="index,follow" />
-    <meta name="googlebot" content="index,follow" />
-    <meta name="msnbot" content="index,follow" />
+    <meta name="description" content="Skyhawk Composite Squadron builds youth leadership through Civil Air Patrol cadet programs, service, and aerospace education in Delano, MN." />
+    <meta name="robots" content="index, follow" />
 
-    <link id="canonical-link" rel="canonical" href="" />
+    <title>Skyhawk Member Page</title>
 
-    <!-- Social Sharing (OG + Twitter) -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Home | Skyhawk Composite Squadron" />
-    <meta
-      property="og:description"
-      content="Skyhawk Composite Squadron transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota."
-    />
-    <meta property="og:image" content="https://skyhawk-cap.org/assets/images/webclip.png" />
-    <meta property="og:url" content="https://skyhawk-cap.org/" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="article:author" content="https://www.facebook.com/capnhq/" />
+    <!-- Canonical -->
+    <link rel="canonical" href="https://skyhawk-cap.org/member" />
 
-    <meta property="twitter:card" content="summary" />
-    <meta property="twitter:title" content="Home | Skyhawk Composite Squadron" />
-    <meta
-      property="twitter:description"
-      content="Skyhawk Composite Squadron transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota."
-    />
-    <meta property="twitter:image" content="https://skyhawk-cap.org/assets/images/webclip.png" />
-
-    <!-- Favicon & App Icons -->
+    <!-- Favicon & Icons -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/assets/images/webclip.png" />
     <link rel="manifest" href="/assets/manifest.json" />
-    <link rel="icon" href="/media/website/skyhawks_logo_CAP_transparent.png" />
-    <link
-      rel="shortcut icon"
-      href="/media/website/skyhawks_logo_CAP_transparent.png"
-      type="image/png"
-    />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Skyhawk Member Page" />
+    <meta property="og:description" content="Skyhawk Composite Squadron transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota." />
+    <meta property="og:image" content="https://skyhawk-cap.org/assets/images/webclip.png" />
+    <meta property="og:url" content="https://skyhawk-cap.org/member" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Skyhawk Member Page" />
+    <meta name="twitter:description" content="Skyhawk Composite Squadron transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota." />
+    <meta name="twitter:image" content="https://skyhawk-cap.org/assets/images/webclip.png" />
 
     <script>
-      var script = document.createElement("script");
-      script.src = "/assets/js/config.js?t=" + new Date().getTime();
+      const script = document.createElement("script");
+      script.src = "/assets/js/config.js?t=" + Date.now();
 
-      script.onload = function () {
+      script.onload = () => {
         import(
-          "/assets/js/init.js" + (window.ASSET_VERSION ? "?v=" + window.ASSET_VERSION : "")
+          "/assets/js/init.js" +
+            (window.ASSET_VERSION ? `?v=${window.ASSET_VERSION}` : "")
         ).then((m) => m.initPage());
       };
 
       document.head.appendChild(script);
     </script>
 
+    <!-- External Libraries -->
     <script
       src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"
       crossorigin="anonymous"
     ></script>
-
-
-    <script src="https://cdn.tailwindcss.com"></script>
-
-    <script>
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              primary: "#001489",
-              accent: "#ba0c2f",
-              bgLight: "#f4f6f8",
-              bgDark: "#0f1115",
-              capNavy: "#0B1E6D",
-              capBlue: "#1238A8",
-              capBlueSoft: "#1E4BC2",
-              capSurface: "#0F2F92",
-              capBorder: "#335BBE"
-            },
-            boxShadow: {
-              nav: "0 12px 28px -18px rgba(6, 17, 61, 0.65)",
-              drawer: "8px 0 32px -18px rgba(4, 9, 32, 0.75)"
-            }
-          }
-        }
-      };
-    </script>
   </head>
-  <body style="display: none">
+  <body class="flex min-h-screen flex-col overflow-x-hidden bg-bgLight font-sans text-slate-800 dark:bg-bgDark dark:text-slate-100">
     <div id="pageLoader" class="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-bgDark"></div>
     <div id="header"></div>
     <!-- Navigation -->
@@ -103,10 +60,7 @@
 
         <!-- Mobile header -->
         <div class="flex h-16 items-center justify-between md:hidden">
-          <button id="mobileMenuToggle" class="flex items-center gap-2.5 px-3 py-2 rounded text-white/95 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-accent/60">
-            <span class="text-xl">☰</span>
-            <span>Menu</span>
-          </button>
+          <button id="mobileMenuToggle" class="flex items-center gap-2.5 px-3 py-2 rounded text-white/95 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-accent/60"><span class="text-xl">☰</span><span>Menu</span></button>
           <div class="hidden max-[998px]:flex absolute right-4 top-1/2 -translate-y-1/2 items-center justify-center">
             <svg
               id="mobile-logout-btn"
@@ -158,48 +112,64 @@
     <aside id="mobileDrawer" class="fixed inset-y-0 left-0 z-50 w-full -translate-x-full bg-[#1e3a8a] shadow-drawer transition-transform duration-300 ease-in-out md:hidden">
       <div id="mobilePanelRoot" class="h-full w-full overflow-hidden"></div>
     </aside>
+    <main id="main-page-content" class="flex-1" role="main">
+      <section class="relative bg-slate-100 py-8 dark:bg-slate-950">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div id="memberPageLayout" class="grid grid-cols-1 gap-8 lg:grid-cols-12">
+            <!-- LEFT NAV - CAP-style Sidebar (Minimal left padding) -->
+            <aside id="leftNav" class="hidden lg:block lg:col-span-3 mt-6">
+              <div class="sticky top-16 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
+                
+                <!-- Top thin blue border -->
+                <div class="h-3 bg-[#001489] w-full"></div>
 
+                <!-- Light gray background area -->
+                <div class="bg-[#f4f4f4] dark:bg-slate-800 py-6">
+                  
+                  <!-- Sidebar Title -->
+                  <h2 class="px-5 text-lg font-semibold tracking-tight text-slate-900 dark:text-slate-100 mb-5">
+                    <a id="sideNavTitleLink" class="hover:text-accent transition-colors"></a>
+                  </h2>
 
-    <div id="page">
-      <div class="inside-content-section section-wrap">
-        <div class="inside-content-background">
-          <div class="inside-row w-row">
-            <!-- LEFT NAV -->
-            <div
-              class="left-nav-column w-col w-col-3 w-col-stack w-hidden-medium w-hidden-small w-hidden-tiny"
-            >
-              <div class="left-nav-list-content-wrap">
-                <h2 class="section-title">
-                  <a id="sideNavTitleLink"></a>
-                </h2>
-                <nav>
-                  <ul id="sideNavList" class="left-nav-list w-list-unstyled"></ul>
-                </nav>
-              </div>
-            </div>
-            <!-- MAIN CONTENT -->
-            <div class="main-content-column w-col w-col-9 w-col-stack">
-              <!-- BREADCRUMBS -->
-              <div class="inside-page-header-content-wrap">
-                <nav>
-                  <ol id="breadcrumbList" class="breadcrumb-list w-clearfix w-list-unstyled"></ol>
-                </nav>
-              </div>
-              <!-- PAGE TITLE -->
-              <div class="landing-page-title-wrapper">
-                <h1 id="pageTitle" class="h1-heading"></h1>
-              </div>
-              <!-- PAGE CONTENT (structure template: edit.html) -->
-              <div class="inside-row-nested w-row">
-                <div class="main-content-column-nested w-col w-col-12 w-col-stack">
-                  <div id="pageContent" class="main-content-wrap nested-content-wrap"></div>
+                  <!-- Navigation - Very small left padding -->
+                  <nav class="px-2">   <!-- Reduced padding -->
+                    <ul id="sideNavList" class="space-y-0.5 text-[15px] font-medium text-slate-800 dark:text-slate-200">
+                      <!-- Items populated by JS -->
+                    </ul>
+                  </nav>
                 </div>
+              </div>
+            </aside>
+
+            <!-- MAIN CONTENT -->
+            <div id="mainContent">
+              <div class="rounded-2xl border border-slate-200/80 bg-white/90 p-6 shadow-xl shadow-slate-900/5 backdrop-blur-md lg:p-10 dark:border-slate-700/80 dark:bg-slate-900/80 dark:shadow-black/30">
+                <!-- BREADCRUMBS -->
+                <nav aria-label="Breadcrumb" class="text-sm text-slate-600 dark:text-slate-300/90">
+                  <ol id="breadcrumbList" class="flex flex-wrap items-center gap-x-2 gap-y-1"></ol>
+                </nav>
+                <!-- FULL-WIDTH FLAT RED BAR - Skyhawk Calendar (Dynamic & Clean) -->
+                <div class="mb-8 -mx-4 sm:-mx-6 lg:-mx-8 xl:-mx-10">
+                  <div class="bg-[#ba0c2f] h-12 flex items-center px-6 sm:px-8 shadow-sm border-b border-red-800/80 dark:border-red-900/80">
+                    <div class="mx-auto max-w-7xl flex items-center gap-4">
+                      <h1 
+                        id="pageTitle"
+                        class="text-3xl sm:text-4xl font-bold tracking-tight text-white"
+                      ></h1>
+                    </div>
+                  </div>
+                </div>
+                <!-- PAGE CONTENT -->
+                <div
+                  id="pageContent"
+                  class="prose prose-slate mt-6 max-w-none dark:prose-invert prose-a:text-capBlue dark:prose-a:text-sky-300"
+                ></div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
     <div id="footer"></div>
   </body>
 </html>

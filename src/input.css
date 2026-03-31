@@ -1,3 +1,117 @@
 @tailwind base;
+
+@layer base {
+  .customStyles #mainContent h1:not(#pageTitle),
+  .customStyles #mainContent h2,
+  .customStyles #mainContent h3,
+  .customStyles #mainContent h4,
+  .customStyles #mainContent h5,
+  .customStyles #mainContent h6 {
+    @apply m-0 p-0 text-inherit;
+  }
+
+  .customStyles #mainContent h1:not(#pageTitle) a
+  .customStyles #mainContent h2 a,
+  .customStyles #mainContent h3 a,
+  .customStyles #mainContent h4 a,
+  .customStyles #mainContent h5 a,
+  .customStyles #mainContent h6 a {
+    @apply text-inherit;
+    font: inherit;
+  }
+
+  .customStyles #mainContent h1:not(#pageTitle) {
+    @apply mt-6 mb-4 text-4xl font-bold tracking-tightish font-heading text-primary dark:text-gray-100;
+  }
+
+  .customStyles #mainContent h2 {
+    @apply mt-5 mb-3 text-3xl font-semibold tracking-tightish font-heading text-primary dark:text-gray-100;
+  }
+
+  .customStyles #mainContent h3 {
+    @apply mt-4 mb-3 text-2xl font-semibold tracking-tightish font-heading text-primary dark:text-gray-200;
+  }
+
+  .customStyles #mainContent h4 {
+    @apply mt-4 mb-2 text-h4 font-semibold tracking-tightish font-heading text-primary dark:text-gray-200;
+  }
+
+  .customStyles #mainContent h5 {
+    @apply mt-3 mb-2 text-base font-semibold tracking-tightish font-heading text-primary dark:text-gray-300;
+  }
+
+  .customStyles #mainContent h6 {
+    @apply mt-3 mb-2 text-sm font-semibold tracking-tightish font-heading text-primary dark:text-gray-400;
+  }
+
+  .customStyles #mainContent p {
+    @apply mt-0 mb-4 text-base leading-relaxed text-gray-700 dark:text-gray-300;
+  }
+
+  .customStyles #mainContent a {
+    @apply text-accent underline underline-offset-2 transition-colors duration-200;
+  }
+
+  .customStyles #mainContent a:hover {
+    @apply text-primary dark:text-blue-400;
+  }
+
+  .customStyles #mainContent ul {
+    @apply mb-4 pl-6 list-disc text-gray-700 dark:text-gray-300;
+  }
+
+  .customStyles #mainContent ol {
+    @apply mb-4 pl-6 list-decimal text-gray-700 dark:text-gray-300;
+  }
+
+  .customStyles #mainContent li {
+    @apply mb-1;
+  }
+
+  .customStyles #mainContent blockquote {
+    @apply mb-4 pl-4 border-l-4 border-capBorder italic text-gray-600 dark:text-gray-400;
+  }
+
+  .customStyles #mainContent hr {
+    @apply my-6 border-t border-capBorder dark:border-gray-700;
+  }
+
+  .customStyles #mainContent strong {
+    @apply font-semibold text-gray-900 dark:text-white;
+  }
+
+  .customStyles #mainContent em {
+    @apply italic;
+  }
+
+  .customStyles #mainContent code {
+    @apply px-1 py-0.5 rounded bg-gray-100 text-sm font-mono text-capNavy dark:bg-gray-800 dark:text-gray-200;
+  }
+
+  .customStyles #mainContent pre {
+    @apply mb-4 p-4 overflow-x-auto rounded-lg bg-gray-100 text-sm text-gray-800 dark:bg-gray-900 dark:text-gray-200;
+  }
+
+  .customStyles #mainContent pre code {
+    @apply bg-transparent p-0;
+  }
+
+  .customStyles #mainContent img {
+    @apply max-w-full h-auto rounded-md;
+  }
+
+  .customStyles #mainContent table {
+    @apply w-full mb-4 border-collapse text-left text-sm;
+  }
+
+  .customStyles #mainContent th {
+    @apply border-b border-capBorder pb-2 font-semibold text-gray-900 dark:text-white;
+  }
+
+  .customStyles #mainContent td {
+    @apply py-2 border-b border-gray-200 dark:border-gray-700;
+  }
+}
+
 @tailwind components;
 @tailwind utilities;

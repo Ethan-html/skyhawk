@@ -1,120 +1,66 @@
 <!doctype html>
 <html lang="en-US">
   <head>
-    <title>Skyhawk Squadron</title>
-    <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <meta
-      name="description"
-      content="Skyhawk Composite Squadron builds youth leadership through Civil Air Patrol cadet programs, service, and aerospace education in Delano, MN."
-    />
+      <!-- Basic Meta -->
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <meta name="description" content="Skyhawk Composite Squadron builds youth leadership through Civil Air Patrol cadet programs, service, and aerospace education in Delano, MN." />
+      <meta name="robots" content="index, follow" />
 
-    <meta charset="utf-8" />
-    <meta name="language" content="en-US" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="index,follow" />
-    <meta name="googlebot" content="index,follow" />
-    <meta name="msnbot" content="index,follow" />
+      <title>Skyhawk Composite Squadron</title>
 
-    <!-- Social Sharing (OG + Twitter) -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Home | Skyhawk Composite Squadron" />
-    <meta
-      property="og:description"
-      content="Skyhawk Composite Squadron transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota."
-    />
-    <meta
-      property="og:image"
-      content="https://skyhawk-cap.org/media/website/skyhawks_logo_CAP_transparent.png"
-    />
-    <meta property="og:url" content="https://skyhawk-cap.org/" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="article:author" content="https://www.facebook.com/capnhq/" />
+      <!-- Favicon & Icons -->
+      <link rel="icon" href="/favicon.ico" sizes="any" />
+      <link rel="apple-touch-icon" href="/media/website/skyhawks_logo_CAP_transparent.png" />
+      <link rel="manifest" href="/assets/manifest.json" />
 
-    <meta property="twitter:card" content="summary" />
-    <meta property="twitter:title" content="Home | Skyhawk Composite Squadron" />
-    <meta
-      property="twitter:description"
-      content="Skyhawk Composite Squadron transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota."
-    />
-    <meta
-      property="twitter:image"
-      content="https://skyhawk-cap.org/media/website/skyhawks_logo_CAP_transparent.png"
-    />
+      <!-- Open Graph -->
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content="Skyhawk Composite Squadron" />
+      <meta property="og:description" content="Skyhawk Composite Squadron transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota." />
+      <meta property="og:image" content="https://skyhawk-cap.org/media/website/skyhawks_logo_CAP_transparent.png" />
+      <meta property="og:url" content="https://skyhawk-cap.org/" />
+      <meta property="og:locale" content="en_US" />
 
-    <!-- Favicon & App Icons -->
-    <link rel="apple-touch-icon" href="/media/website/skyhawks_logo_CAP_transparent" />
-    <link rel="manifest" href="/assets/manifest.json" />
-    <link rel="icon" href="/media/website/skyhawks_logo_CAP_transparent.png" />
-    <link
-      rel="shortcut icon"
-      href="/media/website/skyhawks_logo_CAP_transparent.png"
-      type="image/png"
-    />
+      <!-- Twitter -->
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:title" content="Skyhawk Composite Squadron" />
+      <meta name="twitter:description" content="Skyhawk Composite Squadron transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota." />
+      <meta name="twitter:image" content="https://skyhawk-cap.org/media/website/skyhawks_logo_CAP_transparent.png" />
 
-    <!-- Preconnect for faster loads -->
-    <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin />
-    <link rel="preconnect" href="https://www.googleapis.com" crossorigin />
-    <link rel="preconnect" href="https://securetoken.googleapis.com" crossorigin />
+      <!-- Performance: Preconnect -->
+      <link rel="preconnect" href="https://www.gstatic.com" crossorigin />
+      <link rel="preconnect" href="https://firestore.googleapis.com" crossorigin />
+      <link rel="preconnect" href="https://www.googleapis.com" crossorigin />
+      <link rel="preconnect" href="https://securetoken.googleapis.com" crossorigin />
 
-    <!-- Optional: DNS Prefetch as fallback -->
-    <link rel="dns-prefetch" href="https://www.gstatic.com" />
-    <link rel="dns-prefetch" href="https://firestore.googleapis.com" />
-    <link rel="dns-prefetch" href="https://www.googleapis.com" />
-    <link rel="dns-prefetch" href="https://securetoken.googleapis.com" />
-    <script src="https://cdn.tailwindcss.com"></script>
+      <!-- DNS Prefetch Fallback -->
+      <link rel="dns-prefetch" href="//www.gstatic.com" />
+      <link rel="dns-prefetch" href="//firestore.googleapis.com" />
+      <link rel="dns-prefetch" href="//www.googleapis.com" />
+      <link rel="dns-prefetch" href="//securetoken.googleapis.com" />
+      <script>
+        var script = document.createElement("script");
+        script.src = "/assets/js/config.js?t=" + new Date().getTime();
 
-    <script>
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              primary: "#001489",
-              accent: "#ba0c2f",
-              bgLight: "#f4f6f8",
-              bgDark: "#0f1115",
-              capNavy: "#0B1E6D",
-              capBlue: "#1238A8",
-              capBlueSoft: "#1E4BC2",
-              capSurface: "#0F2F92",
-              capBorder: "#335BBE"
-            },
-            boxShadow: {
-              nav: "0 12px 28px -18px rgba(6, 17, 61, 0.65)",
-              drawer: "8px 0 32px -18px rgba(4, 9, 32, 0.75)"
-            }
-          }
-        }
-      };
-    </script>
-    <script>
-      var script = document.createElement("script");
-      script.src = "/assets/js/config.js?t=" + new Date().getTime();
+        script.onload = function () {
+          import(
+            "/assets/js/init.js" + (window.ASSET_VERSION ? "?v=" + window.ASSET_VERSION : "")
+          ).then((m) => m.initPage());
+        };
 
-      script.onload = function () {
-        import(
-          "/assets/js/init.js" + (window.ASSET_VERSION ? "?v=" + window.ASSET_VERSION : "")
-        ).then((m) => m.initPage());
-      };
-
-      document.head.appendChild(script);
-    </script>
+        document.head.appendChild(script);
+      </script>
   </head>
-  <body class="flex min-h-screen flex-col overflow-x-hidden bg-bgLight font-sans text-slate-800 dark:bg-bgDark dark:text-slate-100" style="display: none">
-    <div id="pageLoader" class="fixed inset-0 z-50 flex items-center justify-center bg-white dark:bg-bgDark"></div>
+  <body class="flex min-h-screen flex-col overflow-x-hidden bg-bgLight font-sans text-slate-800 dark:bg-bgDark dark:text-slate-100">
+    <div id="pageLoader" class="fixed inset-0 z-50 bg-slate-100/95 backdrop-blur-sm dark:bg-slate-950/95"></div>
     <div id="header"></div>
     <!-- Navigation -->
     <nav class="relative z-30 border-b border-capBorder/30 bg-gradient-to-r from-capNavy via-capBlue to-primary text-white shadow-nav">
       <div class="mx-auto max-w-[1680px] px-4 lg:px-8">
-
         <!-- Mobile header -->
         <div class="flex h-16 items-center justify-between md:hidden">
-          <button id="mobileMenuToggle" class="flex items-center gap-2.5 px-3 py-2 rounded text-white/95 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-accent/60">
-            <span class="text-xl">☰</span>
-            <span>Menu</span>
-          </button>
+          <button id="mobileMenuToggle" class="flex items-center gap-2.5 px-3 py-2 rounded text-white/95 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-accent/60"><span class="text-xl">☰</span><span>Menu</span></button>
           <div class="hidden max-[998px]:flex absolute right-4 top-1/2 -translate-y-1/2 items-center justify-center">
             <svg
               id="mobile-logout-btn"
@@ -133,7 +79,6 @@
             </svg>
           </div>
         </div>
-
         <!-- Desktop menu -->
         <div class="hidden md:flex justify-center w-full">
           <div class="flex items-center gap-2">
@@ -165,9 +110,7 @@
     <div id="mobileBackdrop" class="fixed inset-0 z-40 hidden bg-black/20 backdrop-blur-sm md:hidden"></div>
 
     <!-- Mobile drawer -->
-    <aside id="mobileDrawer" class="fixed inset-y-0 left-0 z-50 w-full -translate-x-full bg-[#1e3a8a] shadow-drawer transition-transform duration-300 ease-in-out md:hidden">
-      <div id="mobilePanelRoot" class="h-full w-full overflow-hidden"></div>
-    </aside>
+    <aside id="mobileDrawer" class="fixed inset-y-0 left-0 z-50 w-full -translate-x-full bg-[#1e3a8a] shadow-drawer transition-transform duration-300 ease-in-out md:hidden"><div id="mobilePanelRoot" class="h-full w-full overflow-hidden"></div></aside>
 
     <main id="main-page-content" class="flex-1" role="main">
       <section class="main-section relative py-8 bg-slate-100 dark:bg-slate-950">
@@ -184,10 +127,7 @@
 
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <!-- Content card container -->
-          <div class="rounded-2xl border border-slate-200/80 bg-white/90 p-6 shadow-xl shadow-slate-900/5 backdrop-blur-md lg:p-10 dark:border-slate-700/80 dark:bg-slate-900/80 dark:shadow-black/30">
-            <div id="content-boxes-wrapper" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            </div>
-          </div>
+          <div class="rounded-2xl border border-slate-200/80 bg-white/90 p-6 shadow-xl shadow-slate-900/5 backdrop-blur-md lg:p-10 dark:border-slate-700/80 dark:bg-slate-900/80 dark:shadow-black/30"><div id="content-boxes-wrapper" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"></div></div>
         </div>
       </section>
     </main>
