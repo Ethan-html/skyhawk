@@ -310,10 +310,10 @@ function initMobileDrawer() {
   };
 
   toggleBtn.addEventListener("click", () => {
-    if (drawer.classList.contains("-translate-x-full")) openMobile();
-    else closeMobile();
+    if (drawer.classList.contains("-translate-x-full")) window.openMobile?.();
+    else window.closeMobile?.();
   });
-  backdrop.addEventListener("click", closeMobile);
+  backdrop.addEventListener("click", () => window.closeMobile?.());
 }
 
 export async function initMemberPageMenu(db) {

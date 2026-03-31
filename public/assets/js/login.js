@@ -51,6 +51,7 @@ function formatTime(ms) {
 // Initialize Login
 // ==============================
 export async function initLogin(db) {
+  void db;
   const auth = getAuth();
 
   const form = document.getElementById("loginForm");

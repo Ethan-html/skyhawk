@@ -7,6 +7,29 @@
       <meta name="description" content="Skyhawk Composite Squadron builds youth leadership through Civil Air Patrol cadet programs, service, and aerospace education in Delano, MN." />
       <meta name="robots" content="index, follow" />
 
+      <script>
+        // Prevent flash of unstyled content (FOUC) before CSS loads.
+        document.documentElement.classList.add("js-loading");
+      </script>
+      <style>
+        /* Critical loader styles: must work before Tailwind/styles.css load */
+        #pageLoader {
+          position: fixed;
+          inset: 0;
+          z-index: 9999;
+          background: rgba(241, 245, 249, 0.95);
+          backdrop-filter: blur(6px);
+          -webkit-backdrop-filter: blur(6px);
+        }
+        html.dark #pageLoader {
+          background: rgba(2, 6, 23, 0.95);
+        }
+        /* Hide page chrome until loader is dismissed */
+        html.js-loading body > :not(#pageLoader) {
+          visibility: hidden;
+        }
+      </style>
+
       <title>Skyhawk Composite Squadron</title>
 
       <!-- Favicon & Icons -->
@@ -51,6 +74,7 @@
 
         document.head.appendChild(script);
       </script>
+      <link rel="stylesheet" href="/styles.css">
   </head>
   <body class="flex min-h-screen flex-col overflow-x-hidden bg-bgLight font-sans text-slate-800 dark:bg-bgDark dark:text-slate-100">
     <div id="pageLoader" class="fixed inset-0 z-50 bg-slate-100/95 backdrop-blur-sm dark:bg-slate-950/95"></div>

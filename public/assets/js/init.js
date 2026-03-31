@@ -288,6 +288,9 @@ export async function initPage() {
     }
     if (publicSettings.maintenanceMode) {
       publicSettingsMod.renderMaintenancePage();
+      document.documentElement.classList.remove("js-loading");
+      const loader = document.getElementById("pageLoader");
+      loader?.classList.add("hidden");
       return;
     }
 
@@ -407,6 +410,7 @@ export async function initPage() {
 
       const loader = document.getElementById("pageLoader");
       loader?.classList.add("hidden");
+      document.documentElement.classList.remove("js-loading");
     });
   });
 }

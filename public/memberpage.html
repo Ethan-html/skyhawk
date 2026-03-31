@@ -30,6 +30,29 @@
     <meta name="twitter:title" content="Skyhawk Member Page" />
     <meta name="twitter:description" content="Skyhawk Composite Squadron transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota." />
     <meta name="twitter:image" content="https://skyhawk-cap.org/assets/images/webclip.png" />
+    
+    <script>
+      // Prevent flash of unstyled content (FOUC) before CSS loads.
+      document.documentElement.classList.add("js-loading");
+    </script>
+    <style>
+      /* Critical loader styles: must work before Tailwind/styles.css load */
+      #pageLoader {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: rgba(241, 245, 249, 0.95);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+      }
+      html.dark #pageLoader {
+        background: rgba(2, 6, 23, 0.95);
+      }
+      /* Hide page chrome until loader is dismissed */
+      html.js-loading body > :not(#pageLoader) {
+        visibility: hidden;
+      }
+    </style>
 
     <script>
       const script = document.createElement("script");
@@ -44,6 +67,8 @@
 
       document.head.appendChild(script);
     </script>
+
+    <link rel="stylesheet" href="/styles.css" />
 
     <!-- External Libraries -->
     <script

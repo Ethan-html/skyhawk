@@ -63,5 +63,5 @@ function saveVisitState(state) {
 }
 
 function encodeId(str) {
-  return String(str).replace(/[\/#?[\]]/g, "_");
+  return String(str).replace(/[/#?[\]]/g, "_");
 }
