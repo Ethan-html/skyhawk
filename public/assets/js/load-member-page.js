@@ -152,15 +152,14 @@ export function renderMemberPage(pageData) {
     a.href = `/memberpage?page=${pageData.id}/${c.slug}`;
     a.textContent = c.title;
     if (c.slug === active.slug) {
-  a.classList.add(
-    "bg-[#001489]/10",
-    "text-[#001489]",
-    "font-semibold",
-    "border-l-4",
-    "border-[#001489]"
-  );
-  a.setAttribute("aria-current", "page");
-}
+      a.classList.add(
+        "bg-slate-100",
+        "text-slate-900",
+        "dark:bg-white/10",
+        "dark:text-white"
+      );
+      a.setAttribute("aria-current", "page");
+    }
     li.appendChild(a);
     navFragment.appendChild(li);
   }

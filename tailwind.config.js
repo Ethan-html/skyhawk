@@ -16,8 +16,8 @@ export default {
         bgDark: "#0f1115",
 
         // merged + resolved
-        capNavy: "#0B1E38",        // from newer config
-        capBlue: "#003366",        // from newer config
+        capNavy: "#0B1E6D",
+        capBlue: "#1238A8",
         capBlueSoft: "#1E4BC2",
         capSurface: "#0F2F92",
         capBorder: "#335BBE",
