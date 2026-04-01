@@ -10,7 +10,7 @@
     @apply m-0 p-0 text-inherit;
   }
 
-  .customStyles #mainContent h1:not(#pageTitle) a
+  .customStyles #mainContent h1:not(#pageTitle) a,
   .customStyles #mainContent h2 a,
   .customStyles #mainContent h3 a,
   .customStyles #mainContent h4 a,

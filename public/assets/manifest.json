@@ -12,9 +12,9 @@
   "categories": ["education", "government", "nonprofit"],
   "icons": [
     {
-      "src": "/media/website/skyhawks_logo_CAP_transparent.png",
-      "sizes": "192x192",
-      "type": "image/png"
+      "src": "/favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
     }
   ],
   "shortcuts": [
@@ -36,9 +36,9 @@
       "url": "/page?page=events/Squadron-calendar/",
       "icons": [
         {
-          "src": "https://skyhawk-cap.org/media/website/calendar.webp",
+          "src": "https://skyhawk-cap.org/media/website/form.svg",
           "sizes": "96x96",
-          "type": "image/webp"
+          "type": "image/svg+xml"
         }
       ]
     }

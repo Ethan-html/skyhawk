@@ -97,7 +97,7 @@ At a high level, the site works as follows:
   - Firebase Hosting (`firebase.json` defines hosting config)
 - **Frontend**
   - HTML5
-  - CSS (primarily `public/assets/stylesheets/main.css`)
+  - Tailwind CSS (compiled output at `public/styles.css`)
   - Vanilla JavaScript modules (`type="module"`)
 - **JavaScript Libraries**
   - Firebase SDK v12 (via ES modules from `https://www.gstatic.com/firebasejs/12.7.0/`):
@@ -127,7 +127,7 @@ At a high level, the site works as follows:
   - For protected routes (`/member`, `/memberpage`, `/photos`), hides the `<body>` until `onAuthStateChanged` resolves.
   - If user is not logged in, redirects to `/`.
 - Handles **asset loading tiers**:
-  - Tier 0: Immediately loads critical CSS (`/assets/stylesheets/main.css`) to avoid FOUC.
+  - Tier 0: Immediately loads critical CSS (`/styles.css`) to avoid FOUC.
   - Tier 1: Asynchronously loads jQuery and jQuery Cycle.
   - Tier 2/3: Non-critical assets, including `main-*.js`, `admin.js`, and an easter-egg boot script.
 - Lazily initializes **Google Analytics** using `gtag`, only when the browser is idle.

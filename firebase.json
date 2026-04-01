@@ -48,7 +48,7 @@
         ]
       },
       {
-        "source": "/assets/stylesheets/main*.css",
+        "source": "/styles.css",
         "headers": [
           {
             "key": "Cache-Control",

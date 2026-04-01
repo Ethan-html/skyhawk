@@ -27,7 +27,6 @@
         ).then((m) => m.initPage());
       });
     </script>
-    <script src="/assets/js/main.js"></script>
     <script type="text/javascript">
       let type = "generic";
       let grade_type = "Senior";
@@ -208,8 +207,9 @@
       }
 
       function updateOutput() {
-        $("#output").val(template[type]);
-        $("#preview").html(template[type]);
+        const output = template[type]();
+        $("#output").val(output);
+        $("#preview").html(output);
       }
     </script>
     <script src="https://cdn.tailwindcss.com"></script>
