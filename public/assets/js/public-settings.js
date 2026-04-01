@@ -48,19 +48,27 @@ export async function fetchPublicSettings(db) {
  * Replace the page with a full-screen maintenance message. No way to bypass.
  */
 export function renderMaintenancePage() {
-  document.documentElement.style.overflow = "hidden";
-  document.body.style.display = "block";
-  document.body.style.margin = "0";
-  document.body.style.padding = "0";
-  document.body.style.overflow = "hidden";
-  document.body.className = "maintenance-page";
+  // Lock scrolling
+  document.documentElement.classList.add("overflow-hidden");
+  document.body.className = "m-0 p-0 overflow-hidden";
+
   document.body.innerHTML = `
-    <div class="maintenance-page-backdrop">
-      <div class="maintenance-page-card">
-        <div class="maintenance-page-icon" aria-hidden="true">&#9881;</div>
-        <h1 class="maintenance-page-title">We'll be right back</h1>
-        <p class="maintenance-page-text">This site is currently under maintenance. Please check back soon.</p>
-        <p class="maintenance-page-subtext">Thank you for your patience.</p>
+    <div class="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900">
+      <div class="w-[90%] max-w-md rounded-2xl bg-slate-800 p-8 text-center text-slate-100 shadow-2xl">
+        
+        <div class="mb-4 text-4xl">⚙</div>
+        
+        <h1 class="mb-3 text-2xl font-semibold">
+          We'll be right back
+        </h1>
+        
+        <p class="mb-2 text-base text-slate-300">
+          This site is currently under maintenance. Please check back soon.
+        </p>
+        
+        <p class="text-sm text-slate-400">
+          Thank you for your patience.
+        </p>
       </div>
     </div>
   `;
@@ -75,39 +83,44 @@ export function initAnnouncementBanner(text) {
   const trimmed = typeof text === "string" ? text.trim() : "";
   if (!trimmed) return;
 
-  const existing = document.getElementById("announcement-banner-root");
-  if (existing) return;
+  if (document.getElementById("announcement-banner-root")) return;
 
   const root = document.createElement("div");
   root.id = "announcement-banner-root";
 
   const box = document.createElement("div");
-  box.className = "special-notice-alert-box";
-  box.style.display = "block";
+  box.className = "w-full text-white border-b border-black/40";
+  box.style.backgroundColor = "#001489";
+
   box.setAttribute("role", "region");
   box.setAttribute("aria-label", "Announcement");
 
   box.innerHTML = `
-    <div class="special-notice-container-2">
-      <div class="special-notice-title-holder-2">
-        <div class="special-notice-title-2">Special Notice</div>
+    <div class="relative flex items-center h-14">
+
+      <!-- LEFT RED LABEL (BIGGER + STRONGER) -->
+      <div class="bg-red-700 h-full flex items-center px-2 text-base md:text-lg font-bold tracking-wide">
+        SPECIAL NOTICE
       </div>
-      <div class="special-notice-text-holder-2">
-        <div class="slider-alert">
-          <div class="div-block-10">
-            <div class="div-block-8">
-              <div class="text-block-9">
-                <div class="bold-text-2">
-                  <p class="announcement-banner-message"></p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+
+      <!-- CENTER TEXT -->
+      <div class="absolute inset-0 flex items-center justify-center pointer-events-none px-24">
+        <p class="announcement-banner-message text-sm md:text-base font-semibold text-center">
+        </p>
       </div>
-      <button type="button" class="special-notice-close-2" id="close-alert-btn" aria-label="Close announcement">
-        <span aria-hidden="true">&times;</span>
-      </button>
+
+      <!-- RIGHT CLOSE BUTTON (BIGGER BOX) -->
+      <div class="ml-auto pr-4 flex items-center h-full">
+        <button
+          type="button"
+          id="close-alert-btn"
+          class="flex items-center justify-center h-10 w-10 border-2 border-white hover:bg-white/10 transition"
+          aria-label="Close announcement"
+        >
+          <span class="text-2xl leading-none">&times;</span>
+        </button>
+      </div>
+
     </div>
   `;
 
