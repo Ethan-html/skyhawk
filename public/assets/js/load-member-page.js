@@ -153,22 +153,23 @@ export function renderMemberPage(pageData) {
     a.textContent = c.title;
     if (c.slug === active.slug) {
       a.classList.add(
-        "bg-blue-50",
-        "text-blue-950",
-        "ring-1",
-        "ring-blue-200",
-        "before:absolute",
-        "before:content-['']",
-        "before:inset-y-1",
-        "before:left-0",
-        "before:w-1",
-        "before:rounded-r",
-        "before:bg-capBlue",
-        "dark:bg-white/10",
+        "relative",
+        "pl-4",
+
+        // background
+        "bg-slate-200/70",
+        "text-slate-900",
+        "dark:bg-slate-700/50",
         "dark:text-white",
-        "dark:ring-0",
-        "dark:before:bg-sky-300"
+
+        "rounded-lg",
+
       );
+
+      // 👇 REAL LEFT BAR (not pseudo)
+      const bar = document.createElement("span");
+      bar.className = "absolute left-0 top-0 h-full w-[4px] bg-capBlue rounded-l-lg";
+      a.appendChild(bar);
       a.setAttribute("aria-current", "page");
     }
     li.appendChild(a);
