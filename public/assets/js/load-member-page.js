@@ -148,7 +148,7 @@ export function renderMemberPage(pageData) {
     li.className = "";
     const a = document.createElement("a");
     a.className =
-      "relative block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-white";
+      "relative block rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-300 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 dark:text-slate-200 dark:hover:bg-white/10 dark:hover:text-white";
     a.href = `/memberpage?page=${pageData.id}/${c.slug}`;
     a.textContent = c.title;
     if (c.slug === active.slug) {

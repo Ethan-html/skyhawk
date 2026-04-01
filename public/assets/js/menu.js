@@ -62,7 +62,7 @@ function buildDesktopMenu(menuData) {
     if (hasChildren) {
       const submenu = document.createElement("div");
       submenu.className =
-        "pointer-events-none absolute left-0 top-full min-w-full w-max translate-y-[5px] opacity-0 transition-all duration-150";
+        "pointer-events-none absolute left-0 top-full min-w-full w-max opacity-0 transition-opacity duration-100";
 
       const inner = document.createElement("div");
       inner.className =
@@ -94,13 +94,11 @@ function buildDesktopMenu(menuData) {
           if (otherMenu) {
             otherMenu.style.opacity = "0";
             otherMenu.style.pointerEvents = "none";
-            otherMenu.style.transform = "translateY(5px)";
           }
         });
 
         submenu.style.opacity = "1";
         submenu.style.pointerEvents = "auto";
-        submenu.style.transform = "translateY(0)";
         trigger.setAttribute("aria-expanded", "true");
       });
 
@@ -108,7 +106,6 @@ function buildDesktopMenu(menuData) {
         timeout = setTimeout(() => {
           submenu.style.opacity = "0";
           submenu.style.pointerEvents = "none";
-          submenu.style.transform = "translateY(5px)";
           trigger.setAttribute("aria-expanded", "false");
         }, 150);
       });
