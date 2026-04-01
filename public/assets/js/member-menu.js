@@ -24,7 +24,12 @@ function buildMenu(pagesWithChildren, menuRoot) {
     if (children?.length) {
       li.classList.add("has-dropdown");
       const dropdown = document.createElement("div");
-      dropdown.className = "dropdown-container";
+      dropdown.className = `
+        dropdown-container
+        absolute left-0 top-full
+        opacity-0 pointer-events-none
+        transition-opacity duration-100 ease-out
+      `;
 
       const ul = document.createElement("ul");
       ul.className = "dropdown-list";
