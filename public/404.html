@@ -50,6 +50,58 @@
       href="/media/website/skyhawks_logo_CAP_transparent.png"
       type="image/png"
     />
+    <link rel="preconnect" href="https://admin.skyhawk-cap.org">
+<style>
+  html {
+    visibility: hidden;
+  }
+
+  html.visible {
+    visibility: visible;
+  }
+</style>
+
+<script>
+(async () => {
+  const slug = window.location.pathname
+    .replace(/^\/+|\/+$/g, "")
+    .toLowerCase();
+
+  if (!slug || slug === "404") {
+    document.documentElement.classList.add("visible");
+    return;
+  }
+  if (!/^[a-z0-9-]+$/.test(slug)) {
+    document.documentElement.classList.add("visible");
+    return;
+  }
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 3000);
+
+  try {
+    const res = await fetch(
+      `https://admin.skyhawk-cap.org/api/v1/links/${slug}`,
+      { signal: controller.signal }
+    );
+
+    clearTimeout(timeout);
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const data = await res.json();
+
+    if (data?.url) {
+      window.location.replace(data.url);
+      return;
+    }
+
+  } catch (err) {
+    console.error("Redirect error:", err);
+  }
+
+  document.documentElement.classList.add("visible");
+})();
+</script>
   </head>
   <body
     class="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-capNavy text-white"
