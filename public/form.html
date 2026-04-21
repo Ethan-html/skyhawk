@@ -395,7 +395,7 @@
         label.setAttribute("for", fieldId);
         label.className =
           "block text-sm font-semibold tracking-wide text-slate-700 dark:text-slate-200";
-        label.textContent = q.required ? `${q.label} *` : q.label;
+        label.innerHTML = q.required ? `${q.label} <span class="text-red-500">*</span>` : q.label;
         wrap.appendChild(label);
 
         let el;

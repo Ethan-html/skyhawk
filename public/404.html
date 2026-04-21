@@ -52,29 +52,61 @@
     />
     <link rel="preconnect" href="https://admin.skyhawk-cap.org">
 <style>
-  html {
-    visibility: hidden;
+  #page-overlay {
+    position: fixed;
+    inset: 0;
+    background: white;
+    z-index: 9999;
+    transition: opacity 0.3s ease;
   }
 
-  html.visible {
-    visibility: visible;
+  #page-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .loader {
+    width: 40px;
+    height: 40px;
+    border: 4px solid #ccc;
+    border-top-color: #1e3a8a;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  @keyframes spin {
+    to { transform: translate(-50%, -50%) rotate(360deg); }
   }
 </style>
 
 <script>
 (async () => {
+  const getOverlay = () => document.getElementById("page-overlay");
+
+  const hideOverlay = () => {
+    const el = getOverlay();
+    if (el) el.classList.add("hidden");
+  };
+
   const slug = window.location.pathname
     .replace(/^\/+|\/+$/g, "")
     .toLowerCase();
 
+  // Allow normal page load for root or 404
   if (!slug || slug === "404") {
-    document.documentElement.classList.add("visible");
+    hideOverlay();
     return;
   }
+
+  // Invalid slug → show page
   if (!/^[a-z0-9-]+$/.test(slug)) {
-    document.documentElement.classList.add("visible");
+    hideOverlay();
     return;
   }
+
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 3000);
 
@@ -99,13 +131,15 @@
     console.error("Redirect error:", err);
   }
 
-  document.documentElement.classList.add("visible");
+  // No redirect → reveal page
+  hideOverlay();
 })();
 </script>
   </head>
   <body
     class="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-capNavy text-white"
   >
+  <div id="page-overlay"><div class="loader"></div></div>
     <div
       aria-hidden="true"
       class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08)_1px,transparent_1px),radial-gradient(circle_at_center,rgba(255,255,255,0.04)_2px,transparent_2px)] bg-[length:40px_40px,80px_80px] opacity-60"

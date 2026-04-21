@@ -98,7 +98,7 @@
         {
           "name": "drill_test",
           "type": "select",
-          "label": "Request a Drill Test (Optional)",
+          "label": "Request a Drill Test (Optional)<br><span class='block mt-1 text-sm text-slate-600'><span class='text-red-500 font-semibold'>Please Note:</span> Each drill test is different and covers a variety of drill topics. Cadets are expected to study and prepare in advance. <a href='https://skyhawk-cap.org/drilltests' target='_blank' class='text-skyhawk-600 underline hover:text-skyhawk-500'>View drill tests</a>.</span>",
           "required": false,
           "googleId": "1662692645",
           "options": [
