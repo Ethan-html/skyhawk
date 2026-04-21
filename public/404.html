@@ -1,145 +1,102 @@
 <!doctype html>
-<html lang="en-US">
+<html lang="en-US" style="visibility:hidden; background:white;">
   <head>
     <title>404 - Caution: Uncharted Airspace</title>
     <link href="/styles.css" rel="stylesheet">
 
-    
-    <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="shortcut icon" href="/favicon.ico" />
-    <meta
-      name="description"
-      content="Skyhawk Composite Squadron builds youth leadership through Civil Air Patrol cadet programs, service, and aerospace education in Delano, MN."
-    />
-
     <meta charset="utf-8" />
-    <meta name="language" content="en-US" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="index,follow" />
-    <meta name="googlebot" content="index,follow" />
-    <meta name="msnbot" content="index,follow" />
 
-    <link rel="canonical" href="https://skyhawk-cap.org/404" />
+    <style>
+      #page-overlay {
+        position: fixed;
+        inset: 0;
+        background: white;
+        z-index: 9999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
-    <!-- Social Sharing (OG + Twitter) -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="Home | Skyhawk Composite Squadron" />
-    <meta
-      property="og:description"
-      content="Skyhawk Composite Squadron transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota."
-    />
-    <meta property="og:image" content="https://skyhawk-cap.org/favicon.ico" />
-    <meta property="og:url" content="https://skyhawk-cap.org/" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="article:author" content="https://www.facebook.com/capnhq/" />
+      #page-overlay.hidden {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+      }
 
-    <meta property="twitter:card" content="summary" />
-    <meta property="twitter:title" content="Home | Skyhawk Composite Squadron" />
-    <meta
-      property="twitter:description"
-      content="Skyhawk Composite Squadron Civil Air Patrol transforms youth into strong leaders through cadet programs, community service, and aerospace education in Delano, Minnesota."
-    />
-    <meta property="twitter:image" content="https://skyhawk-cap.org/favicon.ico" />
+      .loader {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #ccc;
+        border-top-color: #1e3a8a;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
 
-    <!-- Favicon & App Icons -->
-    <link rel="apple-touch-icon" href="/favicon.ico" />
-    <link rel="manifest" href="/assets/manifest.json" />
-    <link rel="icon" href="/media/website/skyhawks_logo_CAP_transparent.png" />
-    <link
-      rel="shortcut icon"
-      href="/media/website/skyhawks_logo_CAP_transparent.png"
-      type="image/png"
-    />
-    <link rel="preconnect" href="https://admin.skyhawk-cap.org">
-<style>
-  #page-overlay {
-    position: fixed;
-    inset: 0;
-    background: white;
-    z-index: 9999;
-    transition: opacity 0.3s ease;
-  }
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+    </style>
 
-  #page-overlay.hidden {
-    opacity: 0;
-    pointer-events: none;
-  }
-  .loader {
-    width: 40px;
-    height: 40px;
-    border: 4px solid #ccc;
-    border-top-color: #1e3a8a;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
+    <script>
+      (async () => {
+        const slug = window.location.pathname
+          .replace(/^\/+|\/+$/g, "")
+          .toLowerCase();
 
-  @keyframes spin {
-    to { transform: translate(-50%, -50%) rotate(360deg); }
-  }
-</style>
+        const showPage = () => {
+          document.documentElement.style.visibility = "visible";
+          const overlay = document.getElementById("page-overlay");
+          if (overlay) overlay.classList.add("hidden");
+        };
 
-<script>
-(async () => {
-  const getOverlay = () => document.getElementById("page-overlay");
+        const goRedirect = (url) => {
+          window.location.replace(url);
+        };
 
-  const hideOverlay = () => {
-    const el = getOverlay();
-    if (el) el.classList.add("hidden");
-  };
+        // Always allow base / invalid / 404 paths
+        if (!slug || slug === "404" || !/^[a-z0-9-]+$/.test(slug)) {
+          showPage();
+          return;
+        }
 
-  const slug = window.location.pathname
-    .replace(/^\/+|\/+$/g, "")
-    .toLowerCase();
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 3000);
 
-  // Allow normal page load for root or 404
-  if (!slug || slug === "404") {
-    hideOverlay();
-    return;
-  }
+        try {
+          const res = await fetch(
+            `https://admin.skyhawk-cap.org/api/v1/links/${slug}`,
+            { signal: controller.signal }
+          );
 
-  // Invalid slug → show page
-  if (!/^[a-z0-9-]+$/.test(slug)) {
-    hideOverlay();
-    return;
-  }
+          clearTimeout(timeout);
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 3000);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-  try {
-    const res = await fetch(
-      `https://admin.skyhawk-cap.org/api/v1/links/${slug}`,
-      { signal: controller.signal }
-    );
+          const data = await res.json();
 
-    clearTimeout(timeout);
+          if (data?.url) {
+            goRedirect(data.url);
+            return;
+          }
 
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        } catch (err) {
+          console.error("Redirect error:", err);
+        }
 
-    const data = await res.json();
-
-    if (data?.url) {
-      window.location.replace(data.url);
-      return;
-    }
-
-  } catch (err) {
-    console.error("Redirect error:", err);
-  }
-
-  // No redirect → reveal page
-  hideOverlay();
-})();
-</script>
+        // No redirect → reveal page
+        showPage();
+      })();
+    </script>
   </head>
+
   <body
     class="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-capNavy text-white"
   >
-  <div id="page-overlay"><div class="loader"></div></div>
+    <div id="page-overlay">
+      <div class="loader"></div>
+    </div>
+
     <div
       aria-hidden="true"
       class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08)_1px,transparent_1px),radial-gradient(circle_at_center,rgba(255,255,255,0.04)_2px,transparent_2px)] bg-[length:40px_40px,80px_80px] opacity-60"
@@ -149,16 +106,19 @@
       <p class="mb-3 text-sm font-semibold uppercase tracking-[0.25em] text-capGold/90">
         Caution: Uncharted Airspace
       </p>
+
       <h1 class="mb-4 text-6xl font-extrabold tracking-tight text-capGold drop-shadow lg:text-7xl">
         404
       </h1>
+
       <p class="mb-8 text-lg text-slate-100/90">
         The page you’re looking for has flown outside the charted area.<br />
         Please return to a known heading.
       </p>
+
       <a
         href="/"
-        class="inline-flex items-center justify-center rounded-lg border-2 border-capGold bg-capBlue px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-md transition hover:-translate-y-0.5 hover:bg-blue-700 hover:text-capGold hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-capGold focus-visible:ring-offset-2 focus-visible:ring-offset-capNavy"
+        class="inline-flex items-center justify-center rounded-lg border-2 border-capGold bg-capBlue px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-white shadow-md transition hover:-translate-y-0.5 hover:bg-blue-700 hover:text-capGold"
       >
         Return to Base
       </a>
