@@ -38,56 +38,72 @@
       }
     </style>
 
-    <script>
-      (async () => {
-        const slug = window.location.pathname
-          .replace(/^\/+|\/+$/g, "")
-          .toLowerCase();
+<script>
+(async () => {
+  const overlay = document.getElementById("page-overlay");
 
-        const showPage = () => {
-          document.documentElement.style.visibility = "visible";
-          const overlay = document.getElementById("page-overlay");
-          if (overlay) overlay.classList.add("hidden");
-        };
+  const showPage = () => {
+    document.documentElement.style.visibility = "visible";
+    if (overlay) overlay.classList.add("hidden");
+  };
 
-        const goRedirect = (url) => {
-          window.location.replace(url);
-        };
+  const redirect = (url) => {
+    window.location.replace(url);
+  };
 
-        // Always allow base / invalid / 404 paths
-        if (!slug || slug === "404" || !/^[a-z0-9-]+$/.test(slug)) {
-          showPage();
-          return;
-        }
+  const path = window.location.pathname
+    .replace(/^\/+|\/+$/g, "")
+    .toLowerCase();
 
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 3000);
+  // 🚫 Instant bypass for non-slug routes (IMPORTANT)
+  if (!path || path === "404" || !/^[a-z0-9-]+$/.test(path)) {
+    showPage();
+    return;
+  }
 
-        try {
-          const res = await fetch(
-            `https://admin.skyhawk-cap.org/api/v1/links/${slug}`,
-            { signal: controller.signal }
-          );
+  let finished = false;
 
-          clearTimeout(timeout);
+  // ⏱ HARD FALLBACK (4 seconds max)
+  const fallbackTimer = setTimeout(() => {
+    if (!finished) {
+      finished = true;
+      console.warn("Fallback triggered: showing page");
+      showPage();
+    }
+  }, 4000);
 
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  const controller = new AbortController();
 
-          const data = await res.json();
+  try {
+    const res = await fetch(
+      `https://admin.skyhawk-cap.org/api/v1/links/${path}`,
+      {
+        signal: controller.signal
+      }
+    );
 
-          if (data?.url) {
-            goRedirect(data.url);
-            return;
-          }
+    if (!finished && res.ok) {
+      const data = await res.json();
 
-        } catch (err) {
-          console.error("Redirect error:", err);
-        }
+      if (data?.url) {
+        finished = true;
+        clearTimeout(fallbackTimer);
+        redirect(data.url);
+        return;
+      }
+    }
+  } catch (err) {
+    console.warn("Redirect check failed:", err);
+  }
 
-        // No redirect → reveal page
-        showPage();
-      })();
-    </script>
+  // 🔁 Final fallback (if fetch finishes early but no redirect)
+  if (!finished) {
+    finished = true;
+    clearTimeout(fallbackTimer);
+    showPage();
+  }
+})();
+</script>
   </head>
 
   <body
