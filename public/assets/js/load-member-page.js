@@ -13,10 +13,11 @@ function sanitizeHtml(html) {
       USE_PROFILES: { html: true },
       ADD_TAGS: ["iframe"],
       ADD_ATTR: [
+        "href",
+        "target",
+        "rel",
         "src",
         "width",
-        "href",
-        "rel",
         "height",
         "frameborder",
         "allow",
@@ -26,7 +27,7 @@ function sanitizeHtml(html) {
         "loading",
         "referrerpolicy"
       ],
-      ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|tel|data):|[^a-z]|[a-z+.-]+(?:[^-a-z+.:]|$))/i
+      ALLOWED_URI_REGEXP: /^(?:(?:https?|mailto|tel|data|webcal):|[^a-z]|[a-z+.-]+(?:[^-a-z+.:]|$))/i
     });
   }
   const div = document.createElement("div");
