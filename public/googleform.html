@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Form</title>
+
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            background-color: #FAE3E1;
+        }
+
+        iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <iframe id="formFrame"></iframe>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        let input = params.get("id");
+
+        const iframe = document.getElementById("formFrame");
+
+        if (!input) {
+            window.location.href = "/404";
+        } else {
+            let formId = input;
+
+            if (input.includes("docs.google.com")) {
+                const match = input.match(/\/d\/e\/([^/]+)/);
+                if (match) {
+                    formId = match[1];
+                } else {
+                    window.location.href = "/404";
+                }
+            }
+
+            if (!formId || formId.length < 10) {
+                window.location.href = "/404";
+            } else {
+                iframe.src = `https://docs.google.com/forms/d/e/${formId}/viewform?embedded=true`;
+            }
+        }
+    </script>
+</body>
+</html>
