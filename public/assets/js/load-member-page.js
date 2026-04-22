@@ -15,7 +15,8 @@ function sanitizeHtml(html) {
       ADD_ATTR: [
         "src",
         "width",
-        "herf",
+        "href",
+        "rel",
         "height",
         "frameborder",
         "allow",

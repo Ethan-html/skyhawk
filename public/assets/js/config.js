@@ -6,7 +6,7 @@
 // --- Asset version (cache-busting) ---
 // Bump on deploy. Format: MAJOR.MINOR.PATCH
 // MAJOR = breaking; MINOR = new features; PATCH = fixes only
-window.ASSET_VERSION = "6.0.6";
+window.ASSET_VERSION = "6.0.7";
 
 // V5.0.0 First official release to Cadets!
 
