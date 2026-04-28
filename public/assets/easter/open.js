@@ -40,7 +40,7 @@
 
     // Create iframe underneath video
     const iframe = document.createElement("iframe");
-    iframe.src = "/page?page=page/noah";
+    iframe.src = "/memberpage?page=page/noah";
     iframe.style.position = "absolute";
     iframe.style.top = "100%"; // start below the screen
     iframe.style.left = "0";
