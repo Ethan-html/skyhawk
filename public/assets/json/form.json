@@ -58,7 +58,7 @@
           "label": "Flight",
           "required": true,
           "googleId": "1167956420",
-          "options": ["Alpha", "Bravo", "I don't know"]
+          "options": ["Alpha", "Bravo", "Charlie", "I don't know"]
         },
         {
           "name": "attend",
@@ -122,6 +122,7 @@
             "Wright Brothers written test",
             "Mitchell Aerospace written test",
             "Mitchell Leadership written test",
+            "Mitchell Aerospace &  Leadership written test",
             "Earhart Leadership written test"
           ]
         },
