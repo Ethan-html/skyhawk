@@ -72,7 +72,7 @@ export function initHeaderFooter() {
     </div>
     <div class="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
       Website Developed by
-      <a href="https://techduck.com/codered" target="_blank" class="underline hover:text-primary ml-1 normal-case">C/TSgt Larson</a>
+      <a href="https://techduck.com/codered" target="_blank" class="underline hover:text-primary ml-1 normal-case">C/MSgt Larson</a>
 
       <!-- Minimal Dark Mode Toggle -->
 <div id="footerThemeSwitcher"
