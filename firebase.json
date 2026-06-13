@@ -69,6 +69,8 @@
       { "source": "/signature", "destination": "/signature.html" },
       { "source": "/ribbon", "destination": "/ribbon.html" },
       { "source": "/googleform", "destination": "/googleform.html" },
+      { "source": "/app-info", "destination": "/app-info.html" },
+      { "source": "/privacy-policy", "destination": "/privacy-policy.html" },
       { "source": "**", "destination": "/404" }
     ]
   }
