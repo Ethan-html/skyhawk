@@ -8,7 +8,7 @@
 
 <link href="/styles.css" rel="stylesheet">
 
-<meta name="description" content="Information about this automation script application used to support administrative workflows and data processing tasks." />
+<meta name="description" content="App information and data usage details for the Automation Script system." />
 <link rel="canonical" href="https://skyhawk-cap.org/app-info" />
 
 </head>
@@ -20,10 +20,9 @@
   <div class="max-w-7xl mx-auto py-4 flex items-center justify-between px-6">
 
     <h1 class="text-xl font-bold text-primary dark:text-blue-400">
-      Automation Script Information
+      Automation Script – App Information
     </h1>
 
-    <!-- Privacy Policy Button -->
     <a href="/privacy-policy"
        class="px-4 py-2 rounded-lg bg-primary text-white dark:bg-blue-600 hover:opacity-90 transition">
       Privacy Policy
@@ -36,36 +35,58 @@
 <!-- MAIN -->
 <main class="flex-grow max-w-4xl mx-auto px-6 py-12 space-y-8">
 
+  <!-- PURPOSE -->
   <section class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow border border-gray-200 dark:border-gray-700">
-    <h2 class="text-lg font-semibold mb-2">Purpose of This Application</h2>
+    <h2 class="text-lg font-semibold mb-2">Application Purpose</h2>
     <p>
-      This automation script is a web-based tool designed to support administrative workflows,
-      data organization, and process automation for structured organizational systems.
+      This application is a web-based automation tool designed for organizational administrative workflows.
+      It is used to view, process, and manage structured records for operational tracking and reporting.
     </p>
   </section>
 
+  <!-- FUNCTIONALITY -->
   <section class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow border border-gray-200 dark:border-gray-700">
-    <h2 class="text-lg font-semibold mb-2">What the App Does</h2>
+    <h2 class="text-lg font-semibold mb-2">What This Application Does</h2>
     <ul class="list-disc ml-6 space-y-1">
-      <li>Retrieves and organizes authorized system data</li>
-      <li>Processes records for eligibility, tracking, or reporting purposes</li>
-      <li>Automates repetitive administrative workflows</li>
-      <li>Displays structured information for authorized users</li>
+      <li>Reads and processes data stored in Google Sheets used by the organization</li>
+      <li>Creates, updates, and organizes structured records for administrative tracking</li>
+      <li>Automates repetitive workflows to reduce manual data entry</li>
+      <li>Displays processed results to authorized users through a web interface</li>
     </ul>
   </section>
 
+  <!-- DATA ACCESS -->
   <section class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow border border-gray-200 dark:border-gray-700">
-    <h2 class="text-lg font-semibold mb-2">Data Usage</h2>
+    <h2 class="text-lg font-semibold mb-2">Data Access & Usage</h2>
     <p>
-      This application only accesses data required for its intended administrative functions.
-      No personal data is sold, shared externally, or used for advertising purposes.
+      This application accesses only the data required to perform its core functions.
+      This includes Google Sheets data used for storing and retrieving records relevant to the application’s workflow.
+    </p>
+    <p class="mt-2">
+      The application may also use the user's Google account email address for authentication and identification purposes.
+    </p>
+    <p class="mt-2">
+      No data is sold, shared with third parties, or used for advertising purposes.
     </p>
   </section>
 
+  <!-- OAUTH SCOPE TRANSPARENCY -->
+  <section class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow border border-gray-200 dark:border-gray-700">
+    <h2 class="text-lg font-semibold mb-2">Google API Access</h2>
+    <p>
+      This application uses Google API access to interact with Google Sheets.
+      External requests are used only to read and update spreadsheet data required for application functionality.
+    </p>
+    <p class="mt-2">
+      These permissions are necessary for saving, loading, and processing organizational records.
+    </p>
+  </section>
+
+  <!-- CONTACT -->
   <section class="bg-white/80 dark:bg-gray-900/80 p-6 rounded-2xl shadow border border-gray-200 dark:border-gray-700">
     <h2 class="text-lg font-semibold mb-2">Contact</h2>
     <p>
-      For questions regarding this application, contact the system administrator or responsible organizational team.
+      For questions about this application or its data usage, please contact the system administrator or responsible organizational team.
     </p>
   </section>
 
