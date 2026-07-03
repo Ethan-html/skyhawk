@@ -71,6 +71,7 @@
       { "source": "/googleform", "destination": "/googleform.html" },
       { "source": "/app-info", "destination": "/app-info.html" },
       { "source": "/privacy-policy", "destination": "/privacy-policy.html" },
+      { "source": "/CyberPatriot", "destination": "/cyber/index.html" },
       { "source": "**", "destination": "/404" }
     ]
   }

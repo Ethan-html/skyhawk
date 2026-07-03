@@ -123,24 +123,83 @@
       </main>
   </div>
     <script>
-      // FORM SETTINGS - FORM QUESTIONS ARE IN FORM.JSON
+      // ============================================================
+      // FORM SETTINGS
+      // ============================================================
+      // Heads up - the actual questions (name, email, radio options, etc.)
+      // live in assets/json/form.json, NOT here. This block only controls
+      // WHEN the form is open and what text shows up when it's closed.
+      //
+      // If you just need to change a deadline or flip the form open/closed,
+      // this is the only section you should have to touch. Everything below
+      // "LEAVE THIS ALONE" further down the file is the actual logic and
+      // you shouldn't need to mess with it.
+      //
+      // -----------------------------------------------------------------
+      // schedule.type - pick ONE of these four:
+      // -----------------------------------------------------------------
+      //
+      //   "weekly"
+      //     This is what the form used to do by default - it opens and
+      //     closes on the same day/time every single week, forever, no
+      //     manual work needed. Good for a weekly calldown form.
+      //     Uses the "open" and "close" day/time settings below.
+      //
+      //   "date"
+      //     Form is open right now and stays open until whatever date/time
+      //     you put in closeDate, then closes. Use this If you need to extend
+      //     the open date of the calldown a week or two out
+      //
+      //   "close-only"
+      //     Basically the same as "date" - open now, closes at closeDate -
+      //     but the name makes it clearer that there's no weekly reopening
+      //     tied to it.
+      //
+      //   "always-open"
+      //     Ignores every date/time setting entirely. The form is just
+      //     always available.
+      //
+      // Whichever type you pick, the "open"/"close" day-time fields don't
+      // hurt anything if you leave them filled in - they're just ignored
+      // unless type is "weekly". So you can switch back and forth without
+      // having to delete anything.
+      // -----------------------------------------------------------------
 
       const FORM_SETTINGS = {
-        // TOGGLE MODE
-        // "close" = fully close form
-        // "skip" = keep form open but skip step 3 + auto submit
-        mode: "skip",
+        schedule: {
+          type: "date",
 
-        // OPEN / CLOSE WINDOW
-        // Days: 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
-        // Time format: military time (e.g., 200 = 2:00 AM, 2230 = 10:30 PM)
-        open: {
-          day: 1,
-          time: 200
-        },
-        close: {
-          day: 6,
-          time: 0
+          // --- Only matters if type is "weekly" ---
+          // Days of the week: Sunday = 0, Monday = 1, Tuesday = 2, ... Saturday = 6
+          // Time is 24-hour/military format, so 200 means 2:00 AM and
+          // 2230 means 10:30 PM. Midnight is just 0.
+          open: {
+            day: 1,   // Monday
+            time: 200 // 2:00 AM
+          },
+          close: {
+            day: 6,   // Saturday
+            time: 0   // midnight
+          },
+
+          // --- Only matters if type is "date" or "close-only" ---
+          // This is a normal date/time. Format is YYYY-MM-DDTHH:MM:SS,
+          // using 24-hour time.
+          closeDate: "2026-07-11T00:00:00",
+
+          // What should happen once the form counts as "closed"
+          // (i.e. we're outside the open window, or we're past closeDate):
+          //
+          //   "close" - the whole form disappears and visitors just see
+          //             the "Form Closed" message.
+          //
+          //   "skip"  - the form stays visible and usable, but step 3
+          //             (the drill test scheduling stuff) gets skipped
+          //             and the response auto-submits without it. This
+          //             is what we want for the normal weekly cutoff so
+          //             people can still say yes/no to attending late,
+          //             they just can't book a drill test slot anymore.
+          closedBehavior: "skip"
         },
 
         // TEXT (auto used everywhere)
@@ -148,7 +207,7 @@
         closedMessage: "This form is currently closed for the week."
       };
       const FORM_CONFIG_VERSION = 2; // UPDATE THIS WHEN YOU UPDATE FORM.JSON
-      const TEST_MODE = false; // THIS FORCES CURRENT TIME TO SATERDAY @ 10:00
+      const TEST_MODE = false; // If TRUE THIS FORCES THE CURRENT TIME TO SATERDAY @ 10:00
 
 
       //-------------------- LEAVE THIS ALONE --------------------
@@ -291,14 +350,28 @@
       }
 
       function isFormInOpenWindow() {
-        const openAt = toWeekMinutes(FORM_SETTINGS.open.day, FORM_SETTINGS.open.time);
-        const closeAt = toWeekMinutes(FORM_SETTINGS.close.day, FORM_SETTINGS.close.time);
-        const nowAt = getCurrentWeekMinutes();
+        const schedule = FORM_SETTINGS.schedule;
 
-        if (openAt === closeAt) return true;
-        if (openAt < closeAt) return nowAt >= openAt && nowAt < closeAt;
+        switch (schedule.type) {
+          case "always-open":
+            return true;
 
-        return nowAt >= openAt || nowAt < closeAt;
+          case "date":
+          case "close-only":
+            return now < new Date(schedule.closeDate);
+
+          case "weekly":
+          default: {
+            const openAt = toWeekMinutes(schedule.open.day, schedule.open.time);
+            const closeAt = toWeekMinutes(schedule.close.day, schedule.close.time);
+            const nowAt = getCurrentWeekMinutes();
+
+            if (openAt === closeAt) return true;
+            if (openAt < closeAt) return nowAt >= openAt && nowAt < closeAt;
+
+            return nowAt >= openAt || nowAt < closeAt;
+          }
+        }
       }
 
       function isFormClosed() {
@@ -306,11 +379,11 @@
       }
 
       function shouldCloseFormNow() {
-        return isFormClosed() && FORM_SETTINGS.mode === "close";
+        return isFormClosed() && FORM_SETTINGS.schedule.closedBehavior === "close";
       }
 
       function shouldSkipStepThreeNow() {
-        return isFormClosed() && FORM_SETTINGS.mode === "skip";
+        return isFormClosed() && FORM_SETTINGS.schedule.closedBehavior === "skip";
       }
 
       function applyFormScheduleText() {
@@ -343,14 +416,41 @@
       }
 
       fetch(`assets/json/form.json?V=${FORM_CONFIG_VERSION}`)
-        .then((res) => res.json())
+        .then((res) => {
+          // If the path is wrong, most servers don't give you a clean
+          // 404 - they just hand back their regular index.html page
+          // instead (that's the "<!DOCTYPE ..." you see in the console
+          // error). Checking res.ok here catches that before we try to
+          // parse HTML as JSON and get a confusing crash.
+          if (!res.ok) {
+            throw new Error(
+              `Couldn't find form.json (server responded with ${res.status}). ` +
+              `Double check that assets/json/form.json actually exists relative ` +
+              `to this page, and that the path/casing matches exactly.`
+            );
+          }
+          return res.json();
+        })
         .then((config) => {
           formConfig = config;
           renderForm();
           applyFormScheduleText();
           loadFormData();
         })
-        .catch((err) => console.error("Failed to load form.json", err));
+        .catch((err) => {
+          console.error("Failed to load form.json:", err.message);
+          // Let people actually see something went wrong instead of a
+          // blank form with no explanation.
+          const container = document.getElementById("formContainer");
+          if (container) {
+            container.innerHTML =
+              '<p class="text-sm font-medium text-rose-600">' +
+              "This form couldn't load its questions. If you're the site owner, " +
+              "check the browser console for details - it's almost always a " +
+              "wrong file path for form.json." +
+              "</p>";
+          }
+        });
 
       function classListString(values) {
         return values.join(" ");
