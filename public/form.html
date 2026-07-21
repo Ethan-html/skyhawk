@@ -167,7 +167,7 @@
 
       const FORM_SETTINGS = {
         schedule: {
-          type: "weekly",
+          type: "always-open",
 
           // --- Only matters if type is "weekly" ---
           // Days of the week: Sunday = 0, Monday = 1, Tuesday = 2, ... Saturday = 6
@@ -393,6 +393,10 @@
         document.querySelectorAll("[data-closed-message]").forEach((el) => {
           el.textContent = FORM_SETTINGS.closedMessage;
         });
+        const isAlwaysOpen = FORM_SETTINGS.schedule.type === "always-open";
+          document.querySelectorAll("[data-deadline-badge]").forEach((el) => {
+            el.classList.toggle("hidden", isAlwaysOpen);
+          });
       }
 
       document.addEventListener("DOMContentLoaded", () => {
@@ -480,7 +484,7 @@
                     <p class="text-xs font-semibold uppercase tracking-[0.24em] text-skyhawk-600">${progressLabel}</p>
                     <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-[2rem]">${section.title}</h2>
                   </div>
-                  <div class="rounded-2xl border border-skyhawk-100 bg-skyhawk-50 px-4 py-3 text-sm text-skyhawk-700 shadow-sm dark:border-skyhawk-400/20 dark:bg-skyhawk-500/10 dark:text-skyhawk-100">
+                  <div data-deadline-badge class="rounded-2xl border border-skyhawk-100 bg-skyhawk-50 px-4 py-3 text-sm text-skyhawk-700 shadow-sm dark:border-skyhawk-400/20 dark:bg-skyhawk-500/10 dark:text-skyhawk-100">
                     Deadline: <span data-deadline-text></span>
                   </div>
                 </div>
