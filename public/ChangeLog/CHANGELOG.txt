@@ -1,0 +1,6 @@
+Version: 6.0.16
+Date: Aug 6 2026
+
+Added NEW Release Page
+Updated Signature builder to a more modern version (More work still planed) {https://skyhawk-cap.org/signature}
+Updated Staff.SVG to new staff file
