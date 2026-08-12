@@ -282,6 +282,7 @@
     "https://cdn-assets-cloud.frontify.com/s3/frontify-cloud-files-us/eyJwYXRoIjoiZnJvbnRpZnlcL2ZpbGVcLzFNOTF6UzJGRXByV0pNUjQ1cnkxLnBuZyJ9:frontify:kAS-l74of5IyRDi0IxD9lG5yNH6i-Zg30PGjGUjU8y0?width=200";
 
   const STORAGE_KEY = "cap_signature_editor_state";
+  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzo_9MfK5NXY7y0Z6kC7z-eTwz6bnQQunaYv-0IhyRPgwLvwytLUAcM2s2mKGv8HF9C/exec";
 
   const DEFAULTS = {
     member_type: "Cadet",
@@ -605,6 +606,8 @@ ${websiteHtml}
   async function copySignature() {
     try {
       await writeClipboard($("signature").innerHTML, buildPlainText());
+      await sendStateToSpreadsheet();
+
       setStatus("Signature copied! Paste it into your email client's signature settings.", "success");
     } catch (err) {
       setStatus("Copy failed. Your browser may block clipboard access here — try selecting the preview and copying manually.", "error");
@@ -614,6 +617,7 @@ ${websiteHtml}
   async function copyHtmlSource() {
     try {
       await writePlainText(buildSignatureHtml());
+      await sendStateToSpreadsheet();
       setStatus("Raw HTML copied to your clipboard.", "success");
     } catch (err) {
       setStatus("Copy failed. Your browser may block clipboard access here.", "error");
@@ -623,6 +627,7 @@ ${websiteHtml}
   async function copyMobile() {
     try {
       await writePlainText(buildMobileText());
+      await sendStateToSpreadsheet();
       setStatus("Mobile signature copied — name and \u201cCivil Air Patrol\u201d only.", "success");
     } catch (err) {
       setStatus("Copy failed. Your browser may block clipboard access here.", "error");
@@ -632,6 +637,7 @@ ${websiteHtml}
   async function copyPlainText() {
     try {
       await writePlainText(buildPlainSignatureText());
+      await sendStateToSpreadsheet();
       setStatus("Plain text signature copied — no formatting, just text.", "success");
     } catch (err) {
       setStatus("Copy failed. Your browser may block clipboard access here.", "error");
@@ -661,6 +667,32 @@ ${websiteHtml}
       localStorage.setItem(STORAGE_KEY, JSON.stringify(collectState()));
     } catch (err) {
       /* storage may be unavailable — fail silently */
+    }
+  }
+
+  async function sendStateToSpreadsheet() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+
+      if (!raw) {
+        console.log("No saved data to send.");
+        return;
+      }
+
+      const data = JSON.parse(raw);
+
+      await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain"
+        },
+        body: JSON.stringify(data)
+      });
+
+      console.log("Signature data sent to spreadsheet.");
+    } catch (error) {
+      console.error("Failed to send signature data:", error);
     }
   }
 
@@ -733,6 +765,9 @@ ${websiteHtml}
   $("copy_plain_btn").addEventListener("click", copyPlainText);
   $("copy_mobile_btn").addEventListener("click", copyMobile);
   $("reset_btn").addEventListener("click", startOver);
+  document.addEventListener("copy", () => {
+    sendStateToSpreadsheet();
+  });
 
   loadState();
   render();

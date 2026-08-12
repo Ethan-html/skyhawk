@@ -4,3 +4,8 @@ Date: Aug 6 2026
 Added NEW Release Page
 Updated Signature builder to a more modern version (More work still planed) {https://skyhawk-cap.org/signature}
 Updated Staff.SVG to new staff file
+
+Version 6.0.17
+Date Aug 12 2026
+
+Added Font Awesome Support the Member page
