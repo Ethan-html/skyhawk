@@ -456,7 +456,7 @@
 
     const titleHtml = titleLines
       .map(
-        (line) => `<div style="font-size:12px; line-height:53%; color:#000000; font-weight:normal; margin:0 0 5px 0;">
+        (line) => `<div style="font-size:12px; line-height:normal; color:#000000; font-weight:normal; margin:0 0 2px 0;">
     ${escapeHtml(line)}
 </div>`
       )
@@ -482,15 +482,15 @@
         : "";
 
     return `<div style="font-family:Arial, Helvetica, sans-serif;">
-<div style="font-size:12px; line-height:39%; color:#001871; font-weight:bold; margin:0 0 5px 0;">
+<div style="font-size:12px; line-height:normal; color:#001871; font-weight:bold; margin:0 0 2px 0;">
     ${escapeHtml(nameLine)}
 </div>
 ${titleHtml}
-<div style="font-size:12px; line-height:53%; color:#000000; font-weight:bold; margin:0 0 15pt 0;">
+<div style="font-size:12px; line-height:normal; color:#000000; font-weight:bold; margin:0 0 15pt 0;">
     Civil Air Patrol, U.S. Air Force Auxiliary
 </div>
 ${phoneHtml}
-<div style="font-size:12px; line-height:0.82; margin:0 0 4px 0; font-weight:normal; font-style:normal;">
+<div style="font-size:12px; line-height:0.82; margin:0 0 5px 0; font-weight:normal; font-style:normal;">
     <a href="https://www.gocivilairpatrol.com/"
        target="_blank"
        style="color:#000000; text-decoration:underline; font-weight:normal; font-style:normal;">

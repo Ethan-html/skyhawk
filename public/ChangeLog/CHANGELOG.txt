@@ -9,3 +9,8 @@ Version 6.0.17
 Date Aug 12 2026
 
 Added Font Awesome Support the Member page
+
+Version 6.0.18
+Date Aug 18 2026
+
+Updated Signature builder Spaceing for top 3 lines
