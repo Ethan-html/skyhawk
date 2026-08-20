@@ -1,16 +1,39 @@
+Version: 0.0.0
+Date: Aug 18 2026
+Name: Demo Change
+
+Added	New Features
+Updated	Updates
+Fixed	Bug Fixes
+Changed	Changes
+Removed	Removed Features
+Security	Security
+Improved	Improvements
+Deprecated	Deprecated
+Known	Known Issues
+Note Notes
+
 Version: 6.0.16
 Date: Aug 6 2026
+Name: NEW Page + BIG Signature builder update
 
 Added NEW Release Page
 Updated Signature builder to a more modern version (More work still planed) {https://skyhawk-cap.org/signature}
 Updated Staff.SVG to new staff file
 
-Version 6.0.17
-Date Aug 12 2026
+Version: 6.0.17
+Date: Aug 12 2026
 
 Added Font Awesome Support the Member page
 
-Version 6.0.18
-Date Aug 18 2026
+Version: 6.0.18
+Date: Aug 18 2026
+Name: Signature builder Formating
 
 Updated Signature builder Spaceing for top 3 lines
+
+Version: 6.0.19
+Date: Aug 18 2026
+Name: ChangeLog Viewer Pushed
+
+Added a new page found at /changelog and /dev Which shows the most recent changes and Dev logs for this application

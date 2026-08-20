@@ -62,6 +62,8 @@
       { "source": "/login", "destination": "/login.html" },
       { "source": "/member", "destination": "/member.html" },
       { "source": "/memberpage", "destination": "/memberpage.html" },
+      { "source": "/changelog", "destination": "/changelog/index.html" },
+      { "source": "/dev", "destination": "/changelog/index.html" },
       { "source": "/form", "destination": "/form.html" },
       { "source": "/calldown", "destination": "/form.html" },
       { "source": "/404", "destination": "/404.html" },
