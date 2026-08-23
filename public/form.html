@@ -167,7 +167,7 @@
 
       const FORM_SETTINGS = {
         schedule: {
-          type: "always-open",
+          type: "weekly",
 
           // --- Only matters if type is "weekly" ---
           // Days of the week: Sunday = 0, Monday = 1, Tuesday = 2, ... Saturday = 6
@@ -178,7 +178,7 @@
             time: 200 // 2:00 AM
           },
           close: {
-            day: 6,   // Saturday
+            day: 7,   // Sunday
             time: 0   // midnight
           },
 
@@ -203,7 +203,7 @@
         },
 
         // TEXT (auto used everywhere)
-        deadlineText: "Friday at 24:00",
+        deadlineText: "Saturday at 24:00",
         closedMessage: "This form is currently closed for the week."
       };
       const FORM_CONFIG_VERSION = 2; // UPDATE THIS WHEN YOU UPDATE FORM.JSON

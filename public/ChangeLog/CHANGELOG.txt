@@ -37,3 +37,10 @@ Date: Aug 18 2026
 Name: ChangeLog Viewer Pushed
 
 Added a new page found at /changelog and /dev Which shows the most recent changes and Dev logs for this application
+
+Version: 6.0.20
+Date: Aug 22 2026
+Name: Updated Calldown & Staff.SVG
+
+Updated the Calldown following the New staff term to relock each week on Saturday Night
+Updated Staff.SVG with new flight staff for the Fall Term
