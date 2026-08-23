@@ -44,3 +44,8 @@ Name: Updated Calldown & Staff.SVG
 
 Updated the Calldown following the New staff term to relock each week on Saturday Night
 Updated Staff.SVG with new flight staff for the Fall Term
+
+Version: 6.0.21
+Date: Aug 22 2026
+
+Updated Staff.SVG
