@@ -54,3 +54,10 @@ Version: 6.0.22
 Date: Sep 4 2026
 
 Updated Calldown Form close date to Sunday night
+
+Version: 6.0.23
+Date: Sep 30 2026
+
+Added automated deployment script with build checks
+Updated Staff.svg
+Updated footer ranks
