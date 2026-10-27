@@ -67,6 +67,7 @@
       { "source": "/form", "destination": "/form.html" },
       { "source": "/calldown", "destination": "/form.html" },
       { "source": "/404", "destination": "/404.html" },
+      { "source": "/cpt", "destination": "/cpt.html" },
       { "source": "/admin", "destination": "https://admin.skyhawk-cap.org/" },
       { "source": "/signature", "destination": "/signature.html" },
       { "source": "/ribbon", "destination": "/ribbon.html" },

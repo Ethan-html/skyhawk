@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CyberPatriot Competition Display</title>
+<style>
+  :root {
+    --bg: #0a111f;
+    --panel: #111a2b;
+    --panel-2: #0d1524;
+    --line: #25344f;
+    --text: #f1f4f9;
+    --muted: #8896b0;
+    --steel: #4a6bb5;
+    --warn: #f0a93a;
+    --danger: #e5484d;
+    --flag-blue: #284b9a;
+    --flag-red: #c8283f;
+    --clock: "Bahnschrift", "DIN Alternate", "Segoe UI", system-ui, sans-serif;
+    --sans: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    --mono: "Cascadia Mono", "SF Mono", Consolas, "Liberation Mono", monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: radial-gradient(ellipse at 0% 0%, rgba(74,107,181,.18), transparent 55%), var(--bg);
+    color: var(--text); font-family: var(--sans); overflow: hidden;
+  }
+  [hidden] { display: none !important; }
+  :focus-visible { outline: 3px solid var(--steel); outline-offset: 3px; }
+
+  /* ---------- Display ---------- */
+  #display { height: 100%; display: flex; flex-direction: column; gap: clamp(12px, 2vh, 24px); padding: clamp(18px, 3vh, 36px) clamp(16px, 2.6vw, 44px) clamp(14px, 2.4vh, 30px); }
+
+  .topbar {
+    position: relative; display: grid; grid-template-columns: 1fr auto; align-items: stretch;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
+  }
+  .meet {
+    margin: 0; align-self: center; padding: 0 clamp(18px, 2.6vw, 44px);
+    font-size: clamp(1.6rem, min(4.2vw, 7vh), 4.2rem); font-weight: 700; line-height: 1.12; letter-spacing: -.01em;
+    overflow-wrap: anywhere;
+  }
+  .clockbox {
+    background: transparent; border-left: 1px solid var(--line);
+    padding: clamp(14px, 2.4vh, 28px) clamp(20px, 3vw, 52px) clamp(18px, 2.8vh, 32px);
+    text-align: right;
+  }
+  #clock {
+    font-family: var(--clock); font-weight: 600; line-height: 1; white-space: nowrap;
+    font-size: clamp(4rem, min(10.5vw, 17vh), 11rem);
+    font-variant-numeric: tabular-nums; letter-spacing: .01em; color: var(--text);
+    transition: color .4s;
+  }
+  #clock .sep { color: var(--muted); padding: 0 .04em; position: relative; top: -.05em; }
+  #clock.warn { color: var(--warn); }
+  #clock.danger { color: var(--danger); }
+  #clock.done { animation: blink 1.2s ease-in-out infinite; }
+  @keyframes blink { 50% { opacity: .35; } }
+  #status { margin-top: .5rem; font-size: clamp(.9rem, 1.5vw, 1.3rem); color: var(--muted); }
+
+  .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 5px; background: var(--panel-2); }
+  #barfill { height: 100%; width: 100%; background: #b8c4dc; transition: width 1s linear, background-color .4s; }
+  #barfill.warn { background: var(--warn); }
+  #barfill.danger { background: var(--danger); }
+
+  .fields { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: clamp(12px, 2vh, 24px); }
+  .field {
+    flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: center; gap: .6vh;
+    padding: 0 clamp(18px, 3vw, 52px);
+    background: var(--panel); border: 1px solid var(--line); border-left: 6px solid var(--steel); border-radius: 14px;
+  }
+  .field .label { font-size: clamp(1rem, min(1.8vw, 3vh), 1.8rem); color: var(--muted); font-weight: 600; }
+  .field .value {
+    display: block; white-space: nowrap; overflow: hidden;
+    font-family: var(--mono); font-weight: 700; letter-spacing: .02em; line-height: 1.15; user-select: all;
+  }
+
+  #hint { position: fixed; left: 50%; bottom: 14px; transform: translateX(-50%); color: var(--muted); font-size: .95rem; opacity: 0; transition: opacity .4s; white-space: nowrap; }
+  body.active #hint { opacity: 1; }
+  body.nohints #hint { display: none; }   /* H key: hide the hints for good */
+  body.idle { cursor: none; }
+  kbd { font-family: var(--mono); font-size: .9em; background: var(--panel-2); border: 1px solid var(--line); border-radius: 5px; padding: .05em .45em; color: var(--text); }
+
+  #toast {
+    position: fixed; left: 50%; top: 22px; transform: translate(-50%, -160%); z-index: 10;
+    background: var(--panel); border: 1px solid var(--steel); border-radius: 12px; padding: .8em 1.4em; font-size: 1.1rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,.5); transition: transform .4s; text-align: center;
+  }
+  #toast.show { transform: translate(-50%, 0); }
+
+  /* Hold-to-confirm pill */
+  #holdPill {
+    position: fixed; left: 50%; bottom: 7vh; transform: translateX(-50%); z-index: 10; min-width: 300px;
+    background: var(--panel); border: 1px solid var(--steel); border-radius: 14px; padding: 14px 22px 16px; text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,.55); font-size: 1.15rem;
+  }
+  #holdPill .track { margin-top: 10px; height: 6px; background: var(--panel-2); border-radius: 3px; overflow: hidden; }
+  #holdFill { display: block; height: 100%; width: 0; background: var(--text); }
+
+  /* ---------- Setup ---------- */
+  #setup { height: 100%; overflow: auto; display: grid; place-items: center; padding: 28px 24px; }
+  .card { width: min(660px, 100%); padding: clamp(20px, 4vw, 40px); background: var(--panel); border: 1px solid var(--line); border-radius: 16px; }
+  .card h1 { margin: 0 0 .3em; font-size: 1.8rem; }
+  .card .intro { margin: 0 0 1.4em; color: var(--muted); }
+  .row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+  .inline { display: flex; gap: 10px; }
+  .inline > * { flex: 1; min-width: 0; }
+  fieldset { border: 0; padding: 0; margin: 0 0 16px; }
+  legend, label { font-weight: 600; padding: 0; margin-bottom: 6px; }
+  input, select {
+    width: 100%; padding: .75em .9em; font: inherit; color: var(--text);
+    background: var(--panel-2); border: 1px solid var(--line); border-radius: 10px;
+  }
+  input.seg { font-family: var(--mono); text-transform: uppercase; letter-spacing: .08em; text-align: center; }
+  input:focus, select:focus { border-color: var(--steel); outline: 2px solid rgba(74,107,181,.5); }
+  [aria-invalid="true"] { border-color: var(--danger); }
+  .err { color: var(--danger); font-size: .9rem; min-height: 1.1em; margin-top: 4px; }
+  .help { color: var(--muted); font-size: .9rem; margin-top: 4px; }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  button { font: inherit; cursor: pointer; border-radius: 10px; padding: .8em 1.6em; }
+  .primary { background: var(--text); color: var(--bg); border: 0; font-weight: 700; }
+  .primary:hover { background: #fff; }
+  .secondary { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+  .secondary:hover { color: var(--text); border-color: var(--steel); }
+  .note { margin-top: 14px; color: var(--warn); font-size: .9rem; }
+
+  @media (max-width: 760px) { .topbar { grid-template-columns: 1fr; } .meet { padding: 16px 18px 0; } .clockbox { border-left: 0; text-align: left; background: transparent; } }
+  @media (prefers-reduced-motion: reduce) { #clock.done { animation: none; } #toast, #barfill { transition: none; } }
+</style>
+</head>
+<body>
+
+<!-- ============ SETUP FORM ============ -->
+<main id="setup" hidden>
+  <form class="card" id="setupForm" novalidate>
+    <h1>Competition setup</h1>
+    <p class="intro">Fill this in once. It is saved in this browser and loads automatically next time.</p>
+
+    <div class="row">
+      <label for="meetName">Meet / challenge name</label>
+      <input id="meetName" type="text" autocomplete="off">
+      <div class="err" id="err-meetName"></div>
+    </div>
+
+    <fieldset>
+      <legend>Competition ID</legend>
+      <div class="row">
+        <select id="idFormat" aria-label="ID version"></select>
+      </div>
+      <div class="inline">
+        <input class="seg" id="idPart0" type="text" autocomplete="off" spellcheck="false" aria-label="ID part 1">
+        <input class="seg" id="idPart1" type="text" autocomplete="off" spellcheck="false" aria-label="ID part 2">
+        <input class="seg" id="idPart2" type="text" autocomplete="off" spellcheck="false" aria-label="ID part 3">
+      </div>
+      <div class="help">Paste the whole ID into any box and it splits itself up.</div>
+      <div class="err" id="err-idParts"></div>
+    </fieldset>
+
+    <div class="row">
+      <label for="zipKey">ZIP extraction key</label>
+      <input id="zipKey" type="text" autocomplete="off" spellcheck="false">
+      <div class="err" id="err-zipKey"></div>
+    </div>
+    <div class="row">
+      <label for="coachEmail">Coach email</label>
+      <input id="coachEmail" type="email" autocomplete="off">
+      <div class="err" id="err-coachEmail"></div>
+    </div>
+    <div class="row">
+      <label for="durationValue">Timer duration</label>
+      <div class="inline">
+        <input id="durationValue" type="number" min="0" step="any" inputmode="decimal">
+        <select id="durationUnit" aria-label="Duration unit">
+          <option value="hours">hours</option>
+          <option value="minutes">minutes</option>
+        </select>
+      </div>
+      <div class="err" id="err-durationValue"></div>
+    </div>
+
+    <div class="actions">
+      <button class="primary" type="submit">Save &amp; open display</button>
+      <button class="secondary" type="button" id="cancelBtn" hidden>Back to display</button>
+    </div>
+    <div class="note" id="storageNote" hidden>Browser storage is unavailable, so settings will not be remembered after you close this page.</div>
+  </form>
+</main>
+
+<!-- ============ COMPETITION DISPLAY (no buttons: keyboard only) ============ -->
+<main id="display" hidden>
+  <header class="topbar">
+    <h1 class="meet" id="outMeet"></h1>
+    <div class="clockbox">
+      <div id="clock" role="timer"><span id="cH">00</span><span class="sep">:</span><span id="cM">00</span><span class="sep">:</span><span id="cS">00</span></div>
+      <div id="status"></div>
+    </div>
+    <div class="bar" aria-hidden="true"><div id="barfill"></div></div>
+  </header>
+
+  <section class="fields" aria-label="Competition details">
+    <div class="field"><span class="label" id="outIdLabel">Competition ID</span><span class="value" id="outId"></span></div>
+    <div class="field"><span class="label">ZIP extraction key</span><span class="value" id="outKey"></span></div>
+    <div class="field"><span class="label">Coach email</span><span class="value" id="outEmail"></span></div>
+  </section>
+
+  <div id="hint"><kbd>Space</kbd> start &nbsp;·&nbsp; hold <kbd>Space</kbd> pause &nbsp;·&nbsp; <kbd>F</kbd> full screen &nbsp;·&nbsp; hold <kbd>R</kbd> reset &nbsp;·&nbsp; hold <kbd>S</kbd> setup &nbsp;·&nbsp; <kbd>H</kbd> hide hints</div>
+  <div id="toast" role="status">Press <kbd>F</kbd> for full screen. Press <kbd>Space</kbd> to start the timer.</div>
+  <div id="holdPill" role="status" hidden><span id="holdText"></span><div class="track"><i id="holdFill"></i></div></div>
+</main>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ================= CENTRAL CONFIG ================= */
+  const APP = {
+    configKey: 'cyberpatriot.display.config.v2',
+    timerKey: 'cyberpatriot.display.timer.v2',   // timer state is stored separately from the config
+    hintsKey: 'cyberpatriot.display.hintsHidden.v1',
+    warnSeconds: 10 * 60,                        // amber below this
+    dangerSeconds: 60,                           // red below this
+    holdMs: 3000,                                // how long to hold a key for pause / reset / setup
+    toastMs: 7000,
+    idleMs: 3000,
+    // ID versions. To swap which is which, just change the labels here.
+    idFormats: {
+      competition: { label: 'Competition', lengths: [5, 5, 5], example: 'ABCDE-ABCDE-ABCDE' },
+      training:    { label: 'Training',    lengths: [4, 4, 4], example: 'ABCD-ABCD-ABCD' }
+    },
+    defaults: { meetName: '', idFormat: 'competition', idParts: ['', '', ''], zipKey: '', coachEmail: '', durationValue: 4, durationUnit: 'hours' }
+  };
+
+  const $ = id => document.getElementById(id);
+  const setupEl = $('setup'), displayEl = $('display'), form = $('setupForm');
+  const segs = [0, 1, 2].map(i => $('idPart' + i));
+  const fmtSel = $('idFormat');
+
+  /* ================= CONFIG STORAGE ================= */
+  let storageOk = true;
+
+  function loadConfig() {
+    try {
+      const raw = localStorage.getItem(APP.configKey);
+      if (!raw) return null;
+      const c = JSON.parse(raw);
+      return Object.keys(errors(c)).length ? null : c;   // corrupt or incomplete data is ignored
+    } catch (e) { storageOk = false; return null; }
+  }
+  function saveConfig(c) {
+    try { localStorage.setItem(APP.configKey, JSON.stringify(c)); return true; }
+    catch (e) { storageOk = false; return false; }
+  }
+  // Validates a config object (from storage or the form). Returns { field: message }.
+  function errors(c) {
+    const e = {};
+    if (!c || typeof c !== 'object') return { meetName: 'Missing configuration.' };
+    ['meetName', 'zipKey'].forEach(k => { if (typeof c[k] !== 'string' || !c[k].trim()) e[k] = 'This field is required.'; });
+    if (typeof c.coachEmail !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.coachEmail.trim())) e.coachEmail = 'Enter a valid email address.';
+    const f = APP.idFormats[c.idFormat];
+    if (!f || !Array.isArray(c.idParts) || c.idParts.length !== 3 ||
+        !c.idParts.every((p, i) => typeof p === 'string' && new RegExp('^[A-Z0-9]{' + f.lengths[i] + '}$').test(p)))
+      e.idParts = f ? 'Each box needs ' + f.lengths.join('-') + ' letters or numbers.' : 'Choose an ID version.';
+    if (!(Number(c.durationValue) > 0) || !isFinite(Number(c.durationValue)) || !['hours', 'minutes'].includes(c.durationUnit))
+      e.durationValue = 'Enter a duration greater than 0.';
+    return e;
+  }
+  const durationSeconds = c => Math.round(Number(c.durationValue) * (c.durationUnit === 'hours' ? 3600 : 60));
+
+  let config = loadConfig();
+
+  /* ================= SETUP FORM ================= */
+  fmtSel.innerHTML = Object.entries(APP.idFormats).map(([k, f]) => `<option value="${k}">${f.label} (${f.example})</option>`).join('');
+
+  function applyFormat() {
+    const f = APP.idFormats[fmtSel.value];
+    segs.forEach((s, i) => { s.maxLength = f.lengths[i]; s.placeholder = 'X'.repeat(f.lengths[i]); s.value = s.value.slice(0, f.lengths[i]); });
+  }
+  fmtSel.addEventListener('change', applyFormat);
+
+  // Turns pasted text into { format, parts } if it matches one of the ID versions.
+  function parseId(text) {
+    const t = text.toUpperCase();
+    const groups = t.split(/[^A-Z0-9]+/).filter(Boolean);
+    const flat = t.replace(/[^A-Z0-9]/g, '');
+    for (const [key, f] of Object.entries(APP.idFormats)) {
+      if (groups.length === 3 && groups.every((g, i) => g.length === f.lengths[i])) return { format: key, parts: groups };
+      if (groups.length === 1 && flat.length === f.lengths[0] * 3) {
+        const [a, b] = f.lengths; return { format: key, parts: [flat.slice(0, a), flat.slice(a, a + b), flat.slice(a + b)] };
+      }
+    }
+    return null;
+  }
+  segs.forEach((s, i) => {
+    s.addEventListener('paste', ev => {
+      const r = parseId((ev.clipboardData || window.clipboardData).getData('text'));
+      if (!r) return;                                   // not a full ID: let normal paste happen
+      ev.preventDefault(); fmtSel.value = r.format; applyFormat();
+      segs.forEach((x, j) => { x.value = r.parts[j]; });
+      segs[2].focus();
+    });
+    s.addEventListener('input', () => {
+      s.value = s.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+      if (s.value.length >= s.maxLength && i < 2) segs[i + 1].focus();   // auto-advance
+    });
+    s.addEventListener('keydown', ev => { if (ev.key === 'Backspace' && !s.value && i > 0) segs[i - 1].focus(); });
+  });
+
+  const textFields = ['meetName', 'zipKey', 'coachEmail', 'durationValue', 'durationUnit'];
+  function fillForm(c) {
+    const src = Object.assign({}, APP.defaults, c || {});
+    textFields.forEach(k => { $(k).value = src[k]; });
+    fmtSel.value = src.idFormat; applyFormat();
+    segs.forEach((s, i) => { s.value = src.idParts[i] || ''; });
+  }
+  function clearErrors() {
+    ['meetName', 'idParts', 'zipKey', 'coachEmail', 'durationValue'].forEach(k => $('err-' + k).textContent = '');
+    form.querySelectorAll('[aria-invalid]').forEach(el => el.removeAttribute('aria-invalid'));
+  }
+  function showSetup() {
+    fillForm(config);                                   // always prefilled with what was saved
+    clearErrors();
+    $('cancelBtn').hidden = !config;
+    $('storageNote').hidden = storageOk;
+    displayEl.hidden = true; setupEl.hidden = false;
+    (config ? $('meetName') : $('meetName')).focus();
+  }
+  form.addEventListener('submit', ev => {
+    ev.preventDefault();
+    const data = {
+      meetName: $('meetName').value.trim(), idFormat: fmtSel.value, idParts: segs.map(s => s.value.trim().toUpperCase()),
+      zipKey: $('zipKey').value.trim(), coachEmail: $('coachEmail').value.trim(),
+      durationValue: Number($('durationValue').value), durationUnit: $('durationUnit').value
+    };
+    const errs = errors(data); clearErrors();
+    const keys = Object.keys(errs);
+    if (keys.length) {
+      keys.forEach(k => $('err-' + k).textContent = errs[k]);
+      const focusMap = { idParts: segs[0], meetName: $('meetName'), zipKey: $('zipKey'), coachEmail: $('coachEmail'), durationValue: $('durationValue') };
+      keys.forEach(k => focusMap[k].setAttribute('aria-invalid', 'true'));
+      focusMap[keys[0]].focus();
+      return;
+    }
+    config = data;
+    saveConfig(config);                                 // saved immediately on submit
+    showDisplay(true);
+  });
+  $('cancelBtn').addEventListener('click', () => showDisplay(false));
+
+  /* ================= DISPLAY ================= */
+  function showDisplay(announce) {
+    const f = APP.idFormats[config.idFormat];
+    $('outMeet').textContent = config.meetName;
+    $('outIdLabel').textContent = f.label + ' ID';
+    $('outId').textContent = config.idParts.join('-');
+    $('outKey').textContent = config.zipKey;
+    $('outEmail').textContent = config.coachEmail;
+    document.title = config.meetName + ' | CyberPatriot';
+    setupEl.hidden = true; displayEl.hidden = false;
+    restoreTimer(); fit(); keepAwake();
+    if (announce) { const t = $('toast'); t.classList.add('show'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('show'), APP.toastMs); }
+  }
+  // Shrinks each value just enough to fit on one line, so long keys/emails never overflow the TV.
+  function fit() {
+    if (displayEl.hidden) return;
+    document.querySelectorAll('.value').forEach(el => {
+      let size = Math.min(el.parentElement.clientHeight * 0.5, innerWidth * 0.075);
+      el.style.fontSize = size + 'px';
+      while (el.scrollWidth > el.clientWidth && size > 16) { size *= 0.95; el.style.fontSize = size + 'px'; }
+    });
+  }
+  addEventListener('resize', fit);
+
+  /* ================= TIMER ================= */
+  // Uses a wall-clock end time, so it stays accurate even if the tab is hidden or throttled.
+  let total = 0, remaining = 0, running = false, endAt = 0, tickId = null;
+  const pad = n => String(n).padStart(2, '0');
+
+  function saveTimer() {
+    try { localStorage.setItem(APP.timerKey, JSON.stringify({ total, remaining, running, endAt })); } catch (e) {}
+  }
+  function restoreTimer() {
+    clearInterval(tickId); tickId = null; running = false;
+    let s = null;
+    try { s = JSON.parse(localStorage.getItem(APP.timerKey)); } catch (e) {}
+    const want = durationSeconds(config);
+    if (s && s.total === want && Number.isFinite(s.remaining)) {   // same duration: keep going where we left off
+      total = s.total; remaining = s.remaining;
+      if (s.running) { endAt = s.endAt; remaining = Math.max(0, Math.ceil((endAt - Date.now()) / 1000)); if (remaining > 0) startLoop(); else saveTimer(); }
+    } else resetTimer();
+    render();
+  }
+  function render() {
+    $('cH').textContent = pad(Math.floor(remaining / 3600));
+    $('cM').textContent = pad(Math.floor(remaining % 3600 / 60));
+    $('cS').textContent = pad(remaining % 60);
+    const level = remaining <= APP.dangerSeconds ? 'danger' : remaining <= APP.warnSeconds ? 'warn' : '';
+    const clock = $('clock'), fill = $('barfill');
+    clock.className = level + (total > 0 && remaining === 0 ? ' done' : '');
+    fill.className = level;
+    fill.style.width = (total ? remaining / total * 100 : 0) + '%';
+    $('status').textContent = remaining === 0 ? 'Time expired. Hold R to reset' : running ? 'Running' : remaining < total ? 'Paused. Press Space to resume' : 'Press Space to start';
+  }
+  function tick() {
+    const left = Math.max(0, Math.ceil((endAt - Date.now()) / 1000));
+    if (left !== remaining) { remaining = left; render(); }
+    if (left === 0) { running = false; clearInterval(tickId); tickId = null; saveTimer(); }
+  }
+  function startLoop() { running = true; clearInterval(tickId); tickId = setInterval(tick, 250); }
+  function start() {
+    if (running || remaining <= 0) return;
+    endAt = Date.now() + remaining * 1000;
+    startLoop(); saveTimer(); render();
+  }
+  function pause() {
+    if (!running) return;
+    remaining = Math.max(0, Math.ceil((endAt - Date.now()) / 1000));
+    running = false; clearInterval(tickId); tickId = null; saveTimer(); render();
+  }
+  function resetTimer() {
+    running = false; clearInterval(tickId); tickId = null;
+    total = remaining = durationSeconds(config);
+    try { localStorage.removeItem(APP.timerKey); } catch (e) {}
+    render();
+  }
+  // Catch up immediately when the tab becomes visible again.
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') { if (running) tick(); keepAwake(); } });
+  // Ask for confirmation before closing or refreshing while the timer is running.
+  addEventListener('beforeunload', e => { if (running) { e.preventDefault(); e.returnValue = ''; } });
+
+  // Keep the TV from sleeping where the browser supports it.
+  let wake = null;
+  async function keepAwake() {
+    try {
+      if ('wakeLock' in navigator && !wake && document.visibilityState === 'visible') {
+        wake = await navigator.wakeLock.request('screen');
+        wake.addEventListener('release', () => { wake = null; });
+      }
+    } catch (e) {}
+  }
+
+  /* ================= FULL SCREEN ================= */
+  function toggleFullscreen() {          // only works from a key press or click
+    const el = document.documentElement;
+    try {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
+      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    } catch (e) {}
+  }
+
+  /* ================= HOLD-TO-CONFIRM (pause / reset / setup) ================= */
+  const holds = {
+    ' ': { text: 'Keep holding to pause', run: pause },
+    r:   { text: 'Keep holding to reset the timer', run: resetTimer },
+    s:   { text: 'Keep holding to open setup', run: showSetup }
+  };
+  let hold = null, hintTimer;
+  const pill = $('holdPill');
+  function endHold() { if (hold) cancelAnimationFrame(hold.raf); hold = null; pill.hidden = true; $('holdFill').style.width = '0'; }
+  function beginHold(key) {
+    if (hold) return;
+    hold = { key, t0: performance.now(), run: holds[key].run };
+    $('holdText').textContent = holds[key].text; $('holdFill').style.width = '0'; pill.hidden = false;
+    const loop = now => {
+      if (!hold) return;
+      const p = Math.min(1, (now - hold.t0) / APP.holdMs);
+      $('holdFill').style.width = p * 100 + '%';
+      if (p >= 1) { const fn = hold.run; endHold(); fn(); } else hold.raf = requestAnimationFrame(loop);
+    };
+    hold.raf = requestAnimationFrame(loop);
+  }
+  function hint(text) {
+    endHold(); $('holdText').textContent = text; $('holdFill').style.width = '0'; pill.hidden = false;
+    clearTimeout(hintTimer); hintTimer = setTimeout(() => { if (!hold) pill.hidden = true; }, 2200);
+  }
+
+  /* ================= KEYBOARD ================= */
+  document.addEventListener('keydown', e => {
+    if (displayEl.hidden || e.ctrlKey || e.metaKey || e.altKey) return;   // shortcuts are off while setup is open
+    const k = e.key === ' ' ? ' ' : e.key.toLowerCase();
+    if (k === ' ') e.preventDefault();                                    // no page scroll
+    if (e.repeat) return;
+    if (k === ' ') running ? beginHold(' ') : start();                    // tap starts, hold pauses
+    else if (k === 'f') toggleFullscreen();
+    else if (k === 'h') setHints(!document.body.classList.contains('nohints'));   // toggle the bottom hints
+    else if (k === 'r') beginHold('r');
+    else if (k === 's') running ? hint('Pause the timer before editing setup') : beginHold('s');
+  });
+  document.addEventListener('keyup', e => { const k = e.key === ' ' ? ' ' : e.key.toLowerCase(); if (hold && hold.key === k) endHold(); });
+  addEventListener('blur', endHold);
+
+  /* ================= IDLE UI (fades the hint, hides the cursor) ================= */
+  let idleTimer;
+  function wakeUi() {
+    document.body.classList.add('active'); document.body.classList.remove('idle');
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => { document.body.classList.remove('active'); document.body.classList.add('idle'); }, APP.idleMs);
+  }
+  ['mousemove', 'mousedown', 'keydown', 'touchstart'].forEach(ev => document.addEventListener(ev, wakeUi, { passive: true }));
+  wakeUi();
+
+  /* ================= HINTS ON/OFF (H key, remembered) ================= */
+  function setHints(hidden) {
+    document.body.classList.toggle('nohints', hidden);
+    try { localStorage.setItem(APP.hintsKey, hidden ? '1' : '0'); } catch (e) {}
+  }
+  try { if (localStorage.getItem(APP.hintsKey) === '1') document.body.classList.add('nohints'); } catch (e) {}
+
+  /* ================= BOOT ================= */
+  if (config) showDisplay(true); else showSetup();
+})();
+</script>
+</body>
+</html>

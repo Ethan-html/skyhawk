@@ -271,9 +271,31 @@
     </div>
   </main>
 
+  <div class="mx-auto w-full max-w-7xl px-4 pb-5 text-center">
+    <button
+      id="privacy_link"
+      type="button"
+      class="text-[10px] text-slate-300 dark:text-slate-600
+             hover:text-slate-500 dark:hover:text-slate-400
+             transition-colors duration-200">
+      About this tool
+    </button>
+  </div>
+
+  <div id="privacy_modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-950/40 p-4" role="dialog" aria-modal="true" aria-labelledby="privacy_modal_title">
+    <div class="w-full max-w-md rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5 shadow-xl">
+      <h2 id="privacy_modal_title" class="font-heading text-lg font-semibold text-primary dark:text-blue-300">About this Tool</h2>
+      <p class="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">The Skyhawk Composite Squadron Signature Builder may record technical and usage-related information for purposes including usage reporting, performance evaluation, maintenance, troubleshooting, and the continued development and improvement of the tool. Additionally, information entered by users, including names, cadet grades, and position information, may be collected and processed for these purposes. Information collected may be reviewed by authorized personnel designated by Skyhawk Composite Squadron. Users are advised not to enter sensitive personal information that is unnecessary for generating an email signature. By using the tool, users acknowledge this disclosure. This notice does not independently authorize collection or sharing beyond the practices described herein.</p>
+      <div class="mt-4 flex flex-wrap justify-end gap-2">
+        <button id="privacy_close" type="button" class="rounded-full border border-slate-300 dark:border-slate-600 px-4 py-2 text-sm font-semibold hover:bg-slate-100 dark:hover:bg-slate-800">Close</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Hidden copy source; kept in sync with the rich signature markup exactly -->
   <div id="signature"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 (function () {
   const $ = (id) => document.getElementById(id);
@@ -282,8 +304,11 @@
     "https://cdn-assets-cloud.frontify.com/s3/frontify-cloud-files-us/eyJwYXRoIjoiZnJvbnRpZnlcL2ZpbGVcLzFNOTF6UzJGRXByV0pNUjQ1cnkxLnBuZyJ9:frontify:kAS-l74of5IyRDi0IxD9lG5yNH6i-Zg30PGjGUjU8y0?width=200";
 
   const STORAGE_KEY = "cap_signature_editor_state";
-  const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzo_9MfK5NXY7y0Z6kC7z-eTwz6bnQQunaYv-0IhyRPgwLvwytLUAcM2s2mKGv8HF9C/exec";
-
+  // Set these to your Supabase project's URL and publishable (anon) key.
+  // Never put a Supabase service_role/secret key in browser code.
+  const SUPABASE_URL = "https://hacnkasybfswzmgwxdqz.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_q7o_fRppkd0TYwOvtkMWcQ_Pa-0GdPB";
+  const supabaseClient = window.supabase?.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   const DEFAULTS = {
     member_type: "Cadet",
     grade: "Airman",
@@ -606,7 +631,7 @@ ${websiteHtml}
   async function copySignature() {
     try {
       await writeClipboard($("signature").innerHTML, buildPlainText());
-      await sendStateToSpreadsheet();
+      await sendStateToSupabase("copy_signature");
 
       setStatus("Signature copied! Paste it into your email client's signature settings.", "success");
     } catch (err) {
@@ -617,7 +642,7 @@ ${websiteHtml}
   async function copyHtmlSource() {
     try {
       await writePlainText(buildSignatureHtml());
-      await sendStateToSpreadsheet();
+      await sendStateToSupabase("copy_html");
       setStatus("Raw HTML copied to your clipboard.", "success");
     } catch (err) {
       setStatus("Copy failed. Your browser may block clipboard access here.", "error");
@@ -627,7 +652,7 @@ ${websiteHtml}
   async function copyMobile() {
     try {
       await writePlainText(buildMobileText());
-      await sendStateToSpreadsheet();
+      await sendStateToSupabase("copy_mobile");
       setStatus("Mobile signature copied — name and \u201cCivil Air Patrol\u201d only.", "success");
     } catch (err) {
       setStatus("Copy failed. Your browser may block clipboard access here.", "error");
@@ -637,7 +662,7 @@ ${websiteHtml}
   async function copyPlainText() {
     try {
       await writePlainText(buildPlainSignatureText());
-      await sendStateToSpreadsheet();
+      await sendStateToSupabase("copy_plain_text");
       setStatus("Plain text signature copied — no formatting, just text.", "success");
     } catch (err) {
       setStatus("Copy failed. Your browser may block clipboard access here.", "error");
@@ -670,30 +695,61 @@ ${websiteHtml}
     }
   }
 
-  async function sendStateToSpreadsheet() {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-
-      if (!raw) {
-        console.log("No saved data to send.");
-        return;
-      }
-
-      const data = JSON.parse(raw);
-
-      await fetch(APPS_SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "text/plain"
-        },
-        body: JSON.stringify(data)
-      });
-
-      console.log("Signature data sent to spreadsheet.");
-    } catch (error) {
-      console.error("Failed to send signature data:", error);
+  function getBrowserVisitorId() {
+    const key = "cap_signature_editor_visitor_id";
+    let id = localStorage.getItem(key);
+    if (!id) {
+      id = window.crypto?.randomUUID?.() || ("v_" + Date.now().toString(36) + Math.random().toString(36).slice(2));
+      localStorage.setItem(key, id);
     }
+    return id;
+  }
+
+  const CONSENT_KEY = "cap_signature_editor_analytics_consent";
+
+  function analyticsConsent() {
+    try { return localStorage.getItem(CONSENT_KEY); }
+    catch (_) { return "no-storage"; }
+  }
+
+ function currentAnalyticsProfile() {
+  return {
+    member_type: $("member_type").value,
+    grade: $("grade").value,
+    entered_name: $("name").value.trim(),
+    duty_position: $("title").value.trim()
+  };
+}
+
+  // Records one event in a single browser-visitor row. The database function
+  // appends the event atomically so simultaneous events do not overwrite each other.
+  async function sendStateToSupabase(action) {
+    if (analyticsConsent() !== "yes" || !supabaseClient) return false;
+    try {
+      const { error } = await supabaseClient.rpc("log_signature_event", {
+        p_visitor_id: getBrowserVisitorId(),
+        p_event_type: action,
+        p_profile: currentAnalyticsProfile()
+      });
+      if (error) return false;
+      return true;
+    } catch (_) {
+      // Analytics failures must not interrupt the signature editor.
+      return false;
+    }
+  }
+
+  function initializePrivacyNotice() {
+    const modal = $("privacy_modal");
+    $("privacy_link").addEventListener("click", () => modal.classList.remove("hidden"));
+    $("privacy_close").addEventListener("click", () => modal.classList.add("hidden"));
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) modal.classList.add("hidden");
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") modal.classList.add("hidden");
+    });
+    sendStateToSupabase("page_visit");
   }
 
   function applyState(state) {
@@ -765,12 +821,10 @@ ${websiteHtml}
   $("copy_plain_btn").addEventListener("click", copyPlainText);
   $("copy_mobile_btn").addEventListener("click", copyMobile);
   $("reset_btn").addEventListener("click", startOver);
-  document.addEventListener("copy", () => {
-    sendStateToSpreadsheet();
-  });
 
   loadState();
   render();
+  initializePrivacyNotice();
 })();
 </script>
 
