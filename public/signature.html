@@ -708,36 +708,37 @@ ${websiteHtml}
   const CONSENT_KEY = "cap_signature_editor_analytics_consent";
 
   function analyticsConsent() {
-    try { return localStorage.getItem(CONSENT_KEY); }
-    catch (_) { return "no-storage"; }
+    return true;
   }
-
- function currentAnalyticsProfile() {
-  return {
-    member_type: $("member_type").value,
-    grade: $("grade").value,
-    entered_name: $("name").value.trim(),
-    duty_position: $("title").value.trim()
-  };
-}
+  function currentAnalyticsProfile() {
+    return {
+      member_type: $("member_type").value,
+      grade: $("grade").value,
+      entered_name: $("name").value.trim(),
+      duty_position: $("title").value.trim()
+    };
+  }
 
   // Records one event in a single browser-visitor row. The database function
   // appends the event atomically so simultaneous events do not overwrite each other.
-  async function sendStateToSupabase(action) {
-    if (analyticsConsent() !== "yes" || !supabaseClient) return false;
-    try {
-      const { error } = await supabaseClient.rpc("log_signature_event", {
-        p_visitor_id: getBrowserVisitorId(),
-        p_event_type: action,
-        p_profile: currentAnalyticsProfile()
-      });
-      if (error) return false;
-      return true;
-    } catch (_) {
-      // Analytics failures must not interrupt the signature editor.
-      return false;
-    }
+  
+async function sendStateToSupabase(action) {
+  if (!analyticsConsent() || !supabaseClient) return false;
+
+  try {
+    const { error } = await supabaseClient.rpc("log_signature_event", {
+      p_visitor_id: getBrowserVisitorId(),
+      p_event_type: action,
+      p_profile: currentAnalyticsProfile()
+    });
+
+    if (error) return false;
+    return true;
+  } catch (_) {
+    return false;
   }
+}
+
 
   function initializePrivacyNotice() {
     const modal = $("privacy_modal");

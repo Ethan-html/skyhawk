@@ -67,3 +67,9 @@ Date: Oct 27 2026
 
 Added analytics to the signature page to determine usage
 Updated Staff.svg
+
+Version: 6.0.25
+Date: Nov 6 2026
+
+Updated Signature page analytics
+Updated Login Page Links.
