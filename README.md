@@ -1,562 +1,491 @@
+<div align="center">
+
 # Skyhawk Composite Squadron Website
 
-This repository contains the source code for the **Skyhawk Composite Squadron** website (`skyhawk-cap.org`). The site highlights Civil Air Patrol programs, supports prospective and current members, and provides a authenticated member portal powered by Firebase.
+**Member portal and squadron tools for the Skyhawk Composite Squadron, Civil Air Patrol (Delano, MN)**
 
-The project is a **static site hosted on Firebase Hosting** with dynamic content loaded from **Firebase Firestore** and authentication handled by **Firebase Auth**.
+[![Hosting: Firebase](https://img.shields.io/badge/Hosting-Firebase-FFCA28?logo=firebase&logoColor=white)](https://firebase.google.com/docs/hosting)
+[![Styling: Tailwind CSS 3](https://img.shields.io/badge/Styling-Tailwind_CSS_3-38BDF8?logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![JavaScript: ES Modules](https://img.shields.io/badge/JavaScript-ES_Modules-F7DF1E?logo=javascript&logoColor=black)](#tech-stack)
+[![License: CAP members only](https://img.shields.io/badge/License-CAP_members_only-001489)](LICENSE.txt)
+
+[Live site](https://skyhawk-cap.org/) · [Release log](https://skyhawk-cap.org/changelog) · [Admin](https://admin.skyhawk-cap.org/) · [Contributing](CONTRIBUTING.md)
+
+</div>
 
 ---
 
-## Table of Contents
+## Contents
 
 - [Overview](#overview)
-- [Live Site and Environments](#live-site-and-environments)
-- [Key Features](#key-features)
-- [High-Level Architecture](#high-level-architecture)
-- [Tech Stack](#tech-stack)
-- [Frontend Behavior](#frontend-behavior)
-  - [Initialization and Routing (`init.js`)](#initialization-and-routing-initjs)
-  - [Header, Footer, and Global Layout](#header-footer-and-global-layout)
-  - [Navigation Menu](#navigation-menu)
-  - [Homepage Content Boxes](#homepage-content-boxes)
-  - [Slideshow / Hero Images](#slideshow--hero-images)
-  - [Dynamic Public Pages (`/page`)](#dynamic-public-pages-page)
-  - [Member Area (`/member` and `/memberpage`)](#member-area-member-and-memberpage)
-  - [Login Flow (`/login`)](#login-flow-login)
-  - [Photos and Forms](#photos-and-forms)
-  - [Admin Access Shortcuts](#admin-access-shortcuts)
-- [Content Model (Firestore Collections)](#content-model-firestore-collections)
-- [Caching and Performance](#caching-and-performance)
-- [Accessibility](#accessibility)
-- [Development Setup](#development-setup)
-- [Security Considerations](#security-considerations)
-- [Known Tradeoffs / Limitations](#known-tradeoffs--limitations)
+- [Routes](#routes)
+- [Architecture](#architecture)
+- [Tech stack](#tech-stack)
+- [Project structure](#project-structure)
+- [Getting started](#getting-started)
+- [Configuration](#configuration)
+- [Data model (Firestore)](#data-model-firestore)
+- [Standalone tools](#standalone-tools)
+- [How login and access work](#how-login-and-access-work)
+- [Caching and performance](#caching-and-performance)
+- [Releasing and deploying](#releasing-and-deploying)
+- [Security notes](#security-notes)
+- [Troubleshooting](#troubleshooting)
+- [Known limitations](#known-limitations)
 - [Contributing](#contributing)
-- [License](#license)
+- [License and credits](#license-and-credits)
 
 ---
 
 ## Overview
 
-This website:
+This repository is the source for **skyhawk-cap.org**. It is a **static site on Firebase Hosting**. Dynamic content comes from **Cloud Firestore**, and sign-in is handled by **Firebase Auth** (email and password).
 
-- Supports **joining the squadron**, with clear “Join” calls-to-action.
-- Offers a **password-protected member area** for current members.
-- Hosts **photos, forms, and event information**.
-- Integrates with a separate **admin interface** used to manage content stored in Firestore.
+The site is **member-first**. Visiting `/` redirects to `/member`, and anyone who isn't signed in is sent to `/login`. Photos live on a separate site, and the admin interface that edits the Firestore content is a separate project that is **not** part of this repo.
 
----
+**What it provides**
 
-## Live Site and Environments
-
-- **Production**: `https://skyhawk-cap.org/`
-- **Admin interface**: `https://admin.skyhawk-cap.org/`
-
----
-
-## Key Features
-
-- **Public Content**
-  - Homepage with slideshow and content boxes.
-  - Dynamically-driven informational pages under `/page`.
-  - Join information and general CAP/Unit information.
-- **Member-Only Content**
-  - `/member` dashboard-like landing page for logged-in members.
-  - `/memberpage` section for more detailed member-only pages.
-- **Authentication**
-  - Firebase email/password login.
-  - First-time login flow that forces a password reset via email.
-  - Password reset UI for existing users.
-- **Data-Driven UI**
-  - Menus, content boxes, footer content, slideshow images, and many pages are driven from Firestore.
-  - LocalStorage caching with background revalidation for much faster repeat visits.
-- **Forms & Workflows**
-  - `/form` and `/calldown` entry points for our weekly calldown form which syncs back to Google forms.
-- **Photos**
-  - `photos.html` provides a structured view of images (year/cadet/event filters).
-- **Deployment**
-  - Static assets served by Firebase Hosting with custom caching headers.
+| Area | What it does |
+| --- | --- |
+| **Member portal** | Dashboard of resource tiles (`/member`) and Firestore-driven content pages with side navigation (`/memberpage`). |
+| **Cadet Calldown** | Weekly attendance form that opens and closes on a schedule and submits to a Google Form. |
+| **Squadron tools** | Awards (ribbon rack) builder, CAP email signature editor, CyberPatriot competition display. |
+| **Site controls** | Maintenance mode and a dismissible announcement banner, both switched from Firestore with no redeploy. |
+| **Release log** | Searchable changelog viewer at `/changelog`, fed by a plain-text file. |
+| **Short links** | Unknown URLs are checked against the admin link service and redirected if a short link exists. |
 
 ---
 
-## High-Level Architecture
+## Routes
 
-At a high level, the site works as follows:
+Routing is defined in [`firebase.json`](firebase.json). "Member" routes are gated in the browser by `init.js` (see [How login and access work](#how-login-and-access-work)).
 
-- **Routing**:
-  - Dynamic content routes: `/page` and `/memberpage` use query parameters (e.g. `/page?page=about/ae`) and load from Firestore.
-  - A catch-all rewrite sends unrecognized URLs to `/404`.
-- **Data Source**: Firestore provides the data model for menu, content boxes, footer, and public/member pages. The homepage slideshow uses the same GitHub repo as the photos page (`skyhawk-photos`, `slideshow photos/slideshow.json`).
-- **Authentication**: Firebase Auth (client-only) controls access to certain routes and initializes login UI.
-- **Client-Side Modules**: Page behavior is split across small modules under `public/assets/js/` and coordinated by `init.js`.
-
----
-
-## Tech Stack
-
-- **Hosting**
-  - Firebase Hosting (`firebase.json` defines hosting config)
-- **Frontend**
-  - HTML5
-  - Tailwind CSS (compiled output at `public/styles.css`)
-  - Vanilla JavaScript modules (`type="module"`)
-- **JavaScript Libraries**
-  - Firebase SDK v12 (via ES modules from `https://www.gstatic.com/firebasejs/12.7.0/`):
-    - `firebase-app`
-    - `firebase-firestore`
-    - `firebase-auth`
-  - Glide.js for the homepage slideshow (`@glidejs/glide`)
-  - jQuery and jQuery Cycle2 for legacy slideshow/behavior
-- **Backend / Data**
-  - Firebase Firestore (NoSQL database)
+| Route | Serves | Access | Notes |
+| --- | --- | --- | --- |
+| `/` | 301 → `/member` | n/a | `index.html` is only a meta-refresh fallback. |
+| `/login` | `login.html` | Public | Sign-in, password reset, first-time setup. |
+| `/member` | `member.html` | Member | Dashboard of content boxes. |
+| `/memberpage?page=<section>/<child>` | `memberpage.html` | Member | Content from Firestore. |
+| `/form` · `/calldown` | `form.html` | Public | Same page, two URLs. |
+| `/googleform?id=<id or URL>` | `googleform.html` | Public | Full-screen Google Form embed. |
+| `/cpt` | `cpt.html` | Public | CyberPatriot competition display. |
+| `/ribbon` | `ribbon.html` | Public | Awards builder. |
+| `/signature` | `signature.html` | Public | Email signature editor. |
+| `/changelog` · `/dev` | `changelog/index.html` | Public | Release log viewer. |
+| `/app-info` · `/privacy-policy` | static pages | Public | Info pages for the Automation Script app. |
+| `/health` | `health.json` | Public | Returns `{ "status": "ok" }` for uptime checks. |
+| `/photos` | 301 → `photos.skyhawk-cap.org` | n/a | Photos are hosted separately. |
+| `/admin` | admin site | n/a | `https://admin.skyhawk-cap.org/` |
+| anything else | `/404` | Public | Checks for a short link, otherwise shows the 404 page. |
 
 ---
 
-## Frontend Behavior
+## Architecture
 
-### Initialization and Routing (`init.js`)
+```mermaid
+flowchart LR
+    U([Visitor / Member]) --> H["Firebase Hosting<br/>static HTML, JS, CSS"]
+    H -->|ES modules| I["init.js<br/>entry point"]
+    I --> A[(Firebase Auth)]
+    I --> F[(Cloud Firestore)]
+    I -.->|browser idle| G[Google Analytics]
+    H --> T["Standalone tools<br/>form, ribbon, signature, cpt"]
+    T -->|submit| GF[Google Forms]
+    T -->|opt-in analytics| S[(Supabase)]
+    H -->|unknown URL| AD["admin.skyhawk-cap.org<br/>short-link API"]
+```
 
-`init.js` is the main entry point for client-side behavior:
+**How a page loads**
 
-- Initializes Firebase:
-  - `initializeApp` with project-specific config
-  - `getFirestore` and `getAuth`
-- Defines **page configurations** describing:
-  - Which modules should run for each route (e.g. homepage, member pages, photos, login).
-  - Whether a route is **protected** (requires authentication).
-- Implements an **auth gate**:
-  - For protected routes (`/member`, `/memberpage`, `/photos`), hides the `<body>` until `onAuthStateChanged` resolves.
-  - If user is not logged in, redirects to `/`.
-- Handles **asset loading tiers**:
-  - Tier 0: Immediately loads critical CSS (`/styles.css`) to avoid FOUC.
-  - Tier 1: Asynchronously loads jQuery and jQuery Cycle.
-  - Tier 2/3: Non-critical assets, including `main-*.js`, `admin.js`, and an easter-egg boot script.
-- Lazily initializes **Google Analytics** using `gtag`, only when the browser is idle.
-- After auth gate, runs the appropriate **page modules** in parallel for the current route:
-  - Homepage: `initHeaderFooter`, `initMenu`, `initSlideshow`, `initContentBoxes`
-  - Public pages: `initHeaderFooter`, `initMenu`, `loadPage`/`renderPage`
-  - Member pages: `initHeaderFooter`, `initMenu`, `initMemberMenu`, `loadMemberPage`/`renderMemberPage`, logout wiring
-  - Login: `initLogin`
-
-### Header, Footer, and Global Layout
-
-`header-footer.js`:
-
-- Loads data from Firestore (with cache + revalidate):
-  - `main/unit` → unit name and designation.
-  - `main/donate` → donation URL for the “Donate Today”/“Ways to Give” button.
-  - `main/contact` → address, phone, email.
-  - `main/quickLinks/children` → external/internal quick links.
-- Renders:
-  - Unit name into `#unit-name` in the header.
-  - Donation button `href` via `#donations-button`.
-  - Full footer with:
-    - Address, phone, email.
-    - Fixed mission statement.
-    - Quick links.
-    - Legal links and Adobe Reader link.
-    - Developer credit: `WEB DEVELOPMENT BY ETHAN LARSON`.
-
-The footer content is **cached in `localStorage`** and re-rendered when updated in Firestore.
-
-### Navigation Menu
-
-`menu.js`:
-
-- Loads the main navigation from Firestore:
-  - `main/menu/pages` collection plus each page’s `children` subcollection.
-- Produces:
-  - **Desktop menu** (`#main-menu`):
-    - Top-level items with optional dropdown.
-  - **Mobile menu** (`#mobile-menu-root`):
-    - Nested list structure suitable for mobile nav.
-- Uses **localStorage caching** with background revalidation, similar to header/footer.
-- Handles mouseenter/mouseleave on desktop menus to open/close dropdowns.
-
-`member-menu.js` performs a similar role for the member-side navigation inside `/member` and `/memberpage`.
-
-### Homepage Content Boxes
-
-`content-boxes.js`:
-
-- Loads content boxes from Firestore:
-  - `main/contentBoxes/children`.
-- Renders a grid of content tiles with:
-  - `title`
-  - `img` (thumbnail)
-  - `url`
-  - `position` (layout hint, e.g. left/right)
-  - `target` (`_self`, `_blank`, etc.)
-- Uses `localStorage` (`contentBoxesChildren`) to:
-  - Render cached boxes immediately.
-  - Fetch fresh data in the background, updating only when it changes.
-
-### Slideshow / Hero Images
-
-`slideshow.js`:
-
-- Uses the **same source as the photos page**: the [skyhawk-photos](https://github.com/Ethan-html/skyhawk-photos) repo, folder `slideshow photos`.
-- Fetches `slideshow photos/slideshow.json` (via jsDelivr). JSON shape: `[{ "file": "name.webp", "hidden": false }, ...]`. Order is preserved; entries with `hidden: true` are skipped.
-- Builds image URLs from the same jsDelivr CDN base as the photos gallery.
-- Renders `<li>` slides inside `#glide-slides` and initializes Glide.js (single slide, auto-play, hover pause).
-- Cache-first from `localStorage`, then revalidates in the background.
-
-### Dynamic Public Pages (`/page`)
-
-`page.html` combined with `load-page.js` and `renderPage` provide dynamic content pages. **Content structure template:** `public/edit.html` is the reference template for the HTML/structure of content injected into `#pageContent` (and is also the pattern for `/memberpage`).
-
-- URL structure: `/page?page=<section>/<child>`:
-  - `section` maps to the Firestore document ID in the `pages` collection.
-  - `child` is a slug for child pages within that section.
-- `load-page.js`:
-  - Reads from Firestore:
-    - Document `pages/<sectionId>` for main page data:
-      - `title`
-      - `content` (may be empty if content is only on children).
-    - Subcollection `pages/<sectionId>/children` for child pages:
-      - `title`, `slug`, `content`, `externalUrl`.
-  - Stores combined result in `localStorage` as `pageData_<sectionId>`.
-  - Uses cache-first, revalidate-later behavior.
-- `renderPage`:
-  - Determines the active child based on the URL (`page` query param).
-  - Renders:
-    - Side navigation (`#sideNavList`) for child links.
-    - Page title (`#pageTitle`).
-    - Content into `#pageContent` (either main or child content).
-  - If `externalUrl` is set, redirects to that external URL instead of rendering content.
-
-### Member Area (`/member` and `/memberpage`)
-
-- `/member`:
-  - Requires authentication (checked in `init.js`).
-  - Renders a member-landing view with:
-    - Standard header/menu.
-    - **Logout button** (`#logoutBtn`, plus mobile logout icon).
-    - Member-only content boxes (`initContentBoxes` with member-specific configuration).
-- `/memberpage`:
-  - Similar to `/page`, but scoped to member content. Content is injected into `#pageContent` using the same structure as the **template** `public/edit.html` (see Dynamic Public Pages).
-    - Uses `load-member-page.js`.
-    - Reads data from `member` namespaced collections (see Content Model section).
-  - Side navigation and active page rendering parallel the public pages behavior.
-- `initLogout` in `init.js`:
-  - Hooks up click handlers for both desktop and mobile logout controls.
-  - Calls `signOut(auth)` and redirects back to `/`.
-
-### Login Flow (`/login`)
-
-`login.html` + `login.js` implement a modern login + reset flow:
-
-- **Standard login**:
-  - Form `#loginForm` collects `email` and `password`.
-  - On submit:
-    - Calls `signInWithEmailAndPassword`.
-    - Checks `user.metadata.creationTime` vs `lastSignInTime`:
-      - If equal, treats as **first login** and triggers a forced password reset.
-      - Otherwise, sets a cookie (`new`) and redirects to `/member`.
-- **First-time login flow**:
-  - If URL has `?new=<email>`:
-    - The page switches to a first-time section UI.
-    - User can trigger a password reset for the new account.
-    - The email is prefilled from the query param.
-    - A “Resend reset email” link is available with debounced UI updates.
-- **Password reset (existing users)**:
-  - “Forgot your password?” link reveals a reset section.
-  - User enters email, clicks “Send Reset Email”.
-  - Uses `sendPasswordResetEmail` with `actionCodeSettings`:
-    - `url: "https://skyhawk-cap.org/login"` so the reset process returns to the login page.
-
-All UI states are managed with simple DOM operations (show/hide sections, set text content for messages).
-
-### Photos and Forms
-
-- **Photos (`photos.html`)**:
-  - Provides a structured photo gallery UI.
-  - Uses dynamic `<select>` elements for:
-    - Year
-    - Cadet
-    - Month
-    - Event
-  - JS populates these selects and the gallery using template strings and `.innerHTML`.
-  - Data may be static or driven via JSON/Firestore (depending on configuration).
-
-- **Forms (`form.html` and `calldown`)**:
-  - `form.html` is used for various forms, including `calldown`.
-  - Pulls form configuration from `/assets/json/form.json`.
-  - Dynamically builds form sections and fields from JSON.
-  - Handles multi-step/wizard-like or sectioned forms (depending on JSON).
-
-### Admin Access Shortcuts
-
-`admin.js` defines hidden shortcuts for quickly navigating to the admin UI:
-
-- **Keyboard shortcut**:
-  - Typing the sequence `a d m i n` (`"admin"`) anywhere in the document redirects to the admin host.
-- Target URL (from `admin.js`):
-  - `https://admin.skyhawk-cap.org/`.
+1. The HTML shell (`member.html`, `login.html`, ...) loads `config.js`, then dynamically imports `init.js` with `?v=<ASSET_VERSION>`.
+2. `init.js` loads the critical CSS, then reads `admin/settings`. If maintenance mode is on, it renders a full-screen notice and stops.
+3. Page modules are imported (all versioned), and non-critical scripts are loaded in the background.
+4. For protected routes the page stays hidden until Firebase Auth reports a user. If there isn't one, the browser is sent to `/login`.
+5. The modules for that route run in parallel. Menus, content boxes and pages render **from `localStorage` first**, then update if Firestore returns something different.
 
 ---
 
-## Content Model (Firestore Collections)
+## Tech stack
 
-Based on the current code, the expected Firestore structure is roughly:
-
-- **Main / Global**
-  - `main/unit` (document)
-    - `name`
-    - `designation`
-  - `main/donate` (document)
-    - `url`
-  - `main/contact` (document)
-    - `address` (may contain newlines)
-    - `phone`
-    - `email`
-  - `main/quickLinks/children` (collection)
-    - Each child:
-      - `title`
-      - `url`
-      - `external` (string `"true"` or `"false"`)
-  - `main/contentBoxes/children` (collection)
-    - Each doc:
-      - `title`
-      - `url`
-      - `img`
-      - `position` (e.g. `left`/`right`) Note: you should have 3 of each
-      - `target` (`_self`, `_blank`, etc.)
-  - `main/menu/pages` (collection)
-    - Each page doc:
-      - `id`, `title`, `url`, etc.
-    - `main/menu/pages/<pageId>/children` (subcollection)
-      - Each child: `title`, `url`
-
-- **Slideshow (GitHub, not Firestore)**
-  - Homepage slideshow reads from the [skyhawk-photos](https://github.com/Ethan-html/skyhawk-photos) repo: `slideshow photos/slideshow.json` (order + `hidden` flag). Images are served via jsDelivr, same as the photos page.
-
-- **Public Pages**
-  - `pages` (collection)
-    - `<sectionId>` (document):
-      - `title`
-      - `content` (HTML string, optional if content is only on children)
-    - `pages/<sectionId>/children` (subcollection)
-      - Each child:
-        - `title`
-        - `slug`
-        - `content` (HTML string)
-        - `externalUrl` (optional)
-
-- **Member Pages**
-  - `member/pages/...` (nested collections)
-    - A tree structure similar to `pages`, but scoped for member-only content.
-    - See `load-member-page.js` for exact path usage.
-
-The admin UI (hosted separately) is responsible for editing and maintaining this content.
+| Layer | Technology |
+| --- | --- |
+| Hosting | Firebase Hosting (project `skyhawk-web`) |
+| Data and auth | Cloud Firestore, Firebase Auth (Firebase JS SDK **12.7.0**, loaded as ES modules from `gstatic.com`) |
+| Front end | HTML5, vanilla JavaScript modules, Tailwind CSS 3.4 |
+| Legacy libraries | jQuery, jQuery Cycle2, and a vendored `main-*.min.js` bundle (loaded after the critical path) |
+| Icons | Font Awesome 6.5 (member pages) |
+| Tool back ends | Google Forms (calldown), Supabase (signature analytics), mcchord.org (ribbon builder) |
+| Tooling | ESLint 9, Prettier 3, EditorConfig, Firebase CLI |
 
 ---
 
-## Caching and Performance
+## Project structure
 
-The site uses several simple but effective client-side performance techniques:
+```text
+skyhawk/
+├── public/                     # Firebase Hosting root (everything here is deployed)
+│   ├── index.html              # Meta-refresh fallback to /member
+│   ├── login.html              # Sign in, reset, first-time setup
+│   ├── member.html             # Member dashboard
+│   ├── memberpage.html         # Firestore-driven member pages
+│   ├── form.html               # Cadet Calldown (/form and /calldown)
+│   ├── googleform.html         # Google Form embed
+│   ├── cpt.html                # CyberPatriot competition display
+│   ├── ribbon.html             # Awards builder
+│   ├── signature.html          # Email signature editor
+│   ├── edit.html               # Template for member page content (no route)
+│   ├── app-info.html           # Automation Script info
+│   ├── privacy-policy.html     # Automation Script privacy policy
+│   ├── 404.html                # 404 page + short-link redirect
+│   ├── changelog/
+│   │   ├── index.html          # Release log viewer
+│   │   └── CHANGELOG.txt       # Source of truth for release notes
+│   ├── assets/
+│   │   ├── js/                 # Site modules (see below)
+│   │   ├── json/form.json      # Calldown questions
+│   │   ├── images/
+│   │   ├── easter/             # Hidden keyboard-triggered extras
+│   │   └── manifest.json
+│   ├── media/                  # PDFs, page images, content-box images
+│   ├── styles.css              # Compiled Tailwind output (generated)
+│   └── health.json · robots.txt · sitemap.xml · favicon.ico
+├── src/input.css               # Tailwind input (base styles for page content)
+├── tailwind.config.js          # Theme: CAP colours, dark mode, safelist
+├── firebase.json · .firebaserc # Hosting, redirects, rewrites, cache headers
+├── !Deploy.cmd                 # Guided Windows deploy script
+├── .last-deployed-version      # Written by the deploy script
+├── .github/workflows/          # PR preview deploys
+├── package.json                # Lint and format scripts
+├── eslint.config.js · .prettierrc.json · .editorconfig
+└── CONTRIBUTING.md · LICENSE.txt · README.md
+```
 
-- **Asset Versioning**
-  - `public/assets/js/config.js` defines `window.ASSET_VERSION`.
-  - `init.js` appends `v=<ASSET_VERSION>` query param to JS and CSS URLs.
-  - Makes it easy to bust caches on deploy by changing a single value.
+**`public/assets/js/` modules**
 
-- **Aggressive Static Caching**
-  - `firebase.json` sets `Cache-Control` headers:
-    - `/assets/**` and `/media/**`: `max-age=2592000` (30 days).
-    - `main` JS/CSS bundles: also `max-age=2592000`.
-    - `config.js`: shorter cache (`max-age=60`) for safer config updates.
-
-- **LocalStorage Caching of Dynamic Data**
-  - Menus, content boxes, footer, and pages use cache-first + background revalidation from Firestore.
-  - Slideshow uses the same pattern but revalidates from the GitHub `slideshow.json` (same source as photos page).
-  - **Update on change** (only re-render if data changed).
-
-- **Lazy Script Loading**
-  - jQuery / legacy libraries are loaded after main CSS.
-  - Google Analytics is initialized only during browser idle time.
+| File | Responsibility |
+| --- | --- |
+| `config.js` | Asset version, Firebase web config, analytics ID. **The one file you edit for settings.** |
+| `init.js` | Entry point: Firebase init, maintenance check, asset loading, auth gate, per-route module list. |
+| `public-settings.js` | Reads `admin/settings`; renders the maintenance screen and announcement banner. |
+| `header-footer.js` | Renders the header and footer, and the dark-mode toggle. Unit name and designation are set here. |
+| `menu.js` · `member-menu.js` | Desktop and mobile navigation from Firestore, cached in `localStorage`. |
+| `content-boxes.js` | Dashboard tiles on `/member`. |
+| `load-member-page.js` | Loads and renders `/memberpage` content (with sanitising) and the staff-diagram lightbox. |
+| `login.js` | Sign-in, lockout, password reset, first-time flow. |
+| `stats.js` | Per-user daily visit and per-page monthly view counters. |
+| `mobile-menu-a11y.js` | Focus and keyboard behaviour for the mobile drawer. |
+| `admin.js` | Shortcuts to the admin site (keyboard sequence, long-press on logo or copyright). |
 
 ---
 
-## Accessibility
-
-The codebase includes several accessibility-conscious decisions:
-
-- **Semantic Structure**
-  - `h1` elements are present (often visually hidden) for each main page.
-  - Breadcrumb list semantics where applicable.
-- **Skip Links**
-  - `member.html` includes a “Skip to main content” link (screen-reader-friendly).
-- **Keyboard Navigation**
-  - Menus and links are standard anchors (`<a>`) with proper `href`s for predictable keyboard behavior.
-- **Alt Text**
-  - Images, especially brand and decorative images, provide `alt` attributes.
-
-There is still room to improve (e.g., focus management, ARIA roles/states, more descriptive alt texts), but the foundation is reasonable.
-
----
-
-## Development Setup
-
-Because this is a static site with client-only Firebase usage, setup is relatively simple.
+## Getting started
 
 ### Prerequisites
 
-- A recent web browser.
-- Optionally:
-  - **Node.js** (for installing the Firebase CLI).
-  - **Firebase CLI** (`firebase-tools`) for local emulation and deployment.
-  - A **Firebase project** configured with:
-    - Hosting
-    - Firestore
-    - Authentication (Email/Password)
-    - Optional: Storage
+- **Node.js 18.18+** (20 or newer recommended) and npm, for linting, formatting and Tailwind
+- **Firebase CLI**: `npm install -g firebase-tools`, then `firebase login`
+- Access to the `skyhawk-web` Firebase project (only needed to deploy)
 
-### Running Locally (Simple)
+### Run locally
 
-For basic HTML/CSS/JS work without Firebase emulation:
+```bash
+git clone https://github.com/Ethan-html/skyhawk.git
+cd skyhawk
+npm install
 
-1. Open the `public` folder in your editor.
-2. Use a simple static server (or your editor’s built-in live server) to serve `public`:
-   - For example, with Node and `npx serve` (from the repo root):
-     ```bash
-     npx serve public
-     ```
-3. Visit `http://localhost:<port>/` in your browser.
+# Serve public/ with the same redirects and rewrites as production
+firebase emulators:start --only hosting
+```
 
-Note: Login and Firestore-backed sections will interact with **your configured Firebase project**, as set in `public/assets/js/config.js`.
+Open the URL the emulator prints. Because `/` redirects to `/member`, you will land on the login page.
+
+> **Heads up:** `config.js` points at the **live** Firebase project, so local runs read production Firestore and use real accounts. Use a test project (edit `window.SITE_CONFIG.firebase`) if you need to experiment safely.
+
+A plain static server (`npx serve public`) also works for quick HTML and CSS edits, but `/calldown`, `/health` and other rewrites will not resolve.
+
+### Rebuild the CSS
+
+Tailwind output is committed as `public/styles.css`. After changing classes in HTML or JS, or editing `src/input.css` or `tailwind.config.js`:
+
+```bash
+npx tailwindcss -i ./src/input.css -o ./public/styles.css --minify
+```
+
+### Lint and format
+
+```bash
+npm run lint           # ESLint over public/assets/js
+npm run lint:fix
+npm run format:check   # Prettier check
+npm run format         # Prettier write
+```
+
+Style is enforced by [`.editorconfig`](.editorconfig) (2 spaces, LF) and [`.prettierrc.json`](.prettierrc.json) (100 columns, double quotes, semicolons, no trailing commas).
 
 ---
 
 ## Configuration
 
-**`public/assets/js/config.js`** is the single config file (no env vars on static hosting). Edit it for:
+There are no environment variables on static hosting. Settings live in a few well-marked places.
 
-- **`window.ASSET_VERSION`** — Bump on deploy for cache-busting. `init.js` appends `?v=<version>` to CSS and JS URLs.
-- **`window.SITE_CONFIG.firebase`** — Firebase project: `apiKey`, `authDomain`, `projectId`, `storageBucket`, `messagingSenderId`, `appId`, `measurementId`. Change when switching projects or when credentials rotate.
-- **`window.SITE_CONFIG.measurementId`** — Optional Google Analytics / gtag ID; leave empty to disable.
-- **`window.SITE_CONFIG.github`** — GitHub repo for the photos page and homepage slideshow: `owner`, `repo`, `branch`, `slideshowFolder` (folder containing `slideshow.json` and slide images).
+### `public/assets/js/config.js`
 
-`init.js` reads this file to initialize Firebase and (optionally) gtag. The photos page and `slideshow.js` use `SITE_CONFIG.github` for the skyhawk-photos repo.
+| Setting | Purpose |
+| --- | --- |
+| `window.ASSET_VERSION` | Version string, `MAJOR.MINOR.PATCH`. Appended as `?v=` to every script and stylesheet to bust caches. The deploy script reads it. |
+| `window.SITE_CONFIG.firebase` | Firebase web app config (`apiKey`, `projectId`, ...). |
+| `window.SITE_CONFIG.measurementId` | Google Analytics 4 ID. Leave empty to disable analytics. |
+
+### Site controls in Firestore (no redeploy)
+
+Create or edit the document **`admin/settings`**:
+
+| Field | Type | Effect |
+| --- | --- | --- |
+| `maintenanceMode` | boolean (`"true"` / `"1"` also accepted) | Replaces every page with a full-screen "We'll be right back" message. There is no bypass. |
+| `announcementBanner` | string (HTML allowed) | Shows a dismissible "SPECIAL NOTICE" bar at the top of every page. Empty string hides it. |
+
+Add `#public-settings-debug` to any URL to log the loaded values to the browser console.
+
+### Calldown form
+
+Questions live in `public/assets/json/form.json`. Timing lives in the `FORM_SETTINGS` block at the top of `form.html`.
+
+| Setting | Meaning |
+| --- | --- |
+| `schedule.type` | `"weekly"`, `"date"`, `"close-only"` or `"always-open"`. |
+| `schedule.open` / `close` | Day (0 = Sunday ... 6 = Saturday) and 24-hour time (`200` = 2:00 AM) for weekly mode. Current behaviour: **opens Tuesday 2:00 AM, closes Saturday at midnight.** |
+| `schedule.closeDate` | `YYYY-MM-DDTHH:MM:SS`, used by `"date"` and `"close-only"`. |
+| `schedule.closedBehavior` | `"close"` hides the form; `"skip"` keeps it usable but skips the drill-test step. |
+| `deadlineText` / `closedMessage` | Text shown to cadets. Update these by hand when the schedule changes. |
+| `FORM_CONFIG_VERSION` | **Bump whenever `form.json` changes** so browsers fetch the new copy. |
+| `TEST_MODE` | Forces the clock to a Saturday for testing. **Must be `false` in production.** |
+
+Each question in `form.json` maps to a Google Form field through its `googleId`, and answers are posted to the form's `formResponse` URL.
+
+### Hard-coded in source
+
+- **Unit name and designation:** `UNIT` in `header-footer.js`.
+- **Footer links and credit line:** `header-footer.js`.
+- **Theme:** colours, fonts and shadows in `tailwind.config.js`. Brand colours include `primary #001489`, `accent #ba0c2f` and the `capNavy` / `capBlue` / `capGold` set.
 
 ---
 
-## Security Considerations
+## Data model (Firestore)
 
-Important security-related notes:
+All reads and writes use the Firebase client SDK. The structure below is what the code in this repo expects.
 
-- **Firestore Rules**  
-  Firestore security is NOT defined in this repo. Ensure:
-  - Proper security rules are set up in the Firebase console or in external rules files.
-  - Only authorized users can write or read sensitive data.
+| Path | Fields | Used by | Read by |
+| --- | --- | --- | --- |
+| `admin/settings` | `maintenanceMode`, `announcementBanner` | `public-settings.js` | **Everyone**, including logged-out visitors |
+| `member/menu/pages/{pageId}` | menu item fields (`title`, `url`, ...) | `menu.js`, `init.js` | Members |
+| `member/menu/pages/{pageId}/children/{id}` | child menu item | `menu.js` | Members |
+| `member/contentBoxes/children/{id}` | `title`, `url`, `img`, `target` | `content-boxes.js` | Members |
+| `member/pages/children/{sectionId}` | `title` | `load-member-page.js` | Members |
+| `member/pages/children/{sectionId}/children/{id}` | `title`, `slug`, `content` (HTML), `externalUrl` (optional) | `load-member-page.js` | Members |
+| `userDailyVisits/{uid}` | `userId`, `date` (comma-separated `YYYY-MM-DD` list), `lastSeenAt` | `stats.js` | Written by the signed-in user |
+| `pageMonthlyStats/{year}/{month}/{pageId}` | `pageUrl`, `year`, `month`, `viewCount`, `updatedAt` | `stats.js` | Written by any signed-in user |
 
-rules_version = '2';
-service cloud.firestore {
-match /databases/{database}/documents {
+**Notes**
 
-    // --------------------
-    // PUBLIC CONTENT
-    // --------------------
+- Dashboard tile images are loaded from `/media/website/content-boxs/` (the folder name really is spelled that way). `img` holds only the file name.
+- Content pages are addressed as `/memberpage?page=<sectionId>/<childSlug>`. If the section document does not exist the visitor is sent to `/404`.
+- `public/edit.html` is the **reference template** for the HTML structure used inside page content.
+- The `main/` and `pages/` collections from earlier versions are no longer read by this repo's code.
+- Content is edited through the separate admin site, not in this repo.
 
-    match /main/{docId} {
-      allow read: if true;
-      allow write: if request.auth != null
-                   && request.auth.token.admin == true;
+---
 
-      // allow ALL subcollections under /main
-      match /{subCollection=**} {
+## Standalone tools
+
+These pages are mostly self-contained (inline JS, their own state) and do not need a login.
+
+| Tool | Route | What it does |
+| --- | --- | --- |
+| **Cadet Calldown** | `/form`, `/calldown` | Multi-step form driven by `form.json`. Branches on the "attending?" answer, saves a draft in `localStorage`, and posts to a Google Form. |
+| **Google Form embed** | `/googleform?id=` | Embeds a Google Form full-screen from a form ID or full URL. |
+| **Awards builder** | `/ribbon` | Redesigned front end for the mcchord.org rack builder. Ribbon images and the form post go to `mcchord.org`. |
+| **Email signature editor** | `/signature` | Builds CAP email signatures with copy-as-rich-text, HTML, mobile and plain-text options. Optional usage analytics are sent to Supabase and respect a consent check. |
+| **CyberPatriot display** | `/cpt` | Competition-day screen: setup form (meet name, team ID in competition or training format, image key, coach email, duration), then a countdown that turns amber under 10 minutes and red under 1. Settings persist in `localStorage`. |
+| **Release log** | `/changelog`, `/dev` | Searchable viewer for `changelog/CHANGELOG.txt`. |
+| **Short links** | any unknown URL | `404.html` checks `admin.skyhawk-cap.org/api/v1/links/<slug>` and redirects when a link exists. |
+
+There are also a few hidden, keyboard-triggered extras in `public/assets/easter/`. They load after the page is ready and are skipped inside iframes.
+
+---
+
+## How login and access work
+
+1. **Gate.** For `/member` and `/memberpage`, `init.js` hides the page, waits for `onAuthStateChanged`, and redirects to `/login` when no one is signed in.
+2. **Sign in.** `login.js` calls `signInWithEmailAndPassword`. After 5 failed attempts the form locks for 3 minutes (see [Security notes](#security-notes) for what this does and does not protect).
+3. **First login.** If an account's `creationTime` equals its `lastSignInTime`, the app sends a password-reset email and signs the user out so they can choose their own password. Links with `?new=<email>` open a dedicated first-time screen.
+4. **Reset.** "Forgot Password?" sends a reset email whose link returns to `https://skyhawk-cap.org/login`.
+5. **Success.** The user is sent to `/member` and focus is moved to the main content area.
+6. **Sign out.** The logout icon calls `signOut()` and returns to `/`.
+7. **Tracking.** Signed-in page loads record a daily visit and a once-per-day-per-page view count (see [Data model](#data-model-firestore)).
+
+Access to account creation is handled outside this repo (the login page links to the squadron's access-request portal).
+
+---
+
+## Caching and performance
+
+| What | How |
+| --- | --- |
+| **Asset versioning** | `init.js` appends `?v=<ASSET_VERSION>` to its imports and to CSS and JS it loads. Bump the version to invalidate caches. |
+| **HTTP caching** | `/assets/**`, `/media/**`, `/styles.css` and `main-*.js` are cached for 30 days. `config.js` is `no-cache`. |
+| **Cache-first data** | Menus, content boxes and member pages render from `localStorage` instantly, then re-render only if Firestore data changed. |
+| **Load tiers** | Critical CSS first; jQuery chain next; everything else in parallel; Google Analytics only when the browser is idle. |
+| **Resilient init** | Page modules run with `Promise.allSettled`, so one failing module does not blank the page. |
+
+`localStorage` keys in use: `menuPagesMember`, `contentBoxesChildren`, `memberPageData_<id>`, `theme`, `stats_state`, `cyberpatriot.display.*`. Clearing them is a safe first step when debugging stale content.
+
+---
+
+## Releasing and deploying
+
+Every release is a version bump plus a changelog entry. The deploy script enforces the second part.
+
+### Release checklist
+
+1. Make and test your changes.
+2. If `form.json` changed, bump `FORM_CONFIG_VERSION` in `form.html`.
+3. Bump `window.ASSET_VERSION` in `public/assets/js/config.js`.
+   `MAJOR` = breaking · `MINOR` = new features · `PATCH` = fixes only.
+4. Add an entry to `public/changelog/CHANGELOG.txt` (format below).
+5. Run `npm run lint` and `npm run format:check`.
+6. Run **`!Deploy.cmd`** (Windows). It will:
+   - confirm `config.js` and `CHANGELOG.txt` exist and the Firebase CLI is installed,
+   - read the version and **block the deploy if `Version: X.Y.Z` is missing from the changelog**,
+   - warn if the version matches `.last-deployed-version`,
+   - run `firebase deploy`, and only then record the new version.
+7. Commit using the version as the message, for example `V6.0.27`.
+
+### Changelog entry format
+
+```text
+Version: 6.0.27
+Date: Nov 15 2026
+Name: Short title for this release
+
+Added New thing that was added
+Updated Something that changed
+Fixed Something that was broken
+```
+
+Each line starts with one of `Added`, `Updated`, `Fixed`, `Changed`, `Removed`, `Security`, `Improved`, `Deprecated`, `Known` or `Note`. An optional link can be added in braces, for example `{https://skyhawk-cap.org/signature}`. See the `Version: 0.0.0` demo block at the top of the file.
+
+### Continuous integration
+
+[`firebase-hosting-pull-request.yml`](.github/workflows/firebase-hosting-pull-request.yml) deploys a **preview channel** for every pull request opened from this repository (not from forks). It needs the `FIREBASE_SERVICE_ACCOUNT_SKYHAWK_WEB` secret. Production deploys are done manually with `!Deploy.cmd`.
+
+---
+
+## Security notes
+
+- **Firebase web config is public by design.** The values in `config.js` identify the project and are not secrets. Protection comes from Firestore rules, so keep the rules strict. Restricting the API key to the site's domains in Google Cloud is also recommended.
+- **Firestore rules are not stored in this repo.** They live in the Firebase console, so any rules change is invisible to code review. Whatever you deploy must allow what the code does:
+  - `admin/settings` **readable without login** (it is read before sign-in),
+  - `member/**` readable by signed-in users only,
+  - `userDailyVisits/{uid}` writable by that user,
+  - `pageMonthlyStats/**` writable by signed-in users.
+
+  <details>
+  <summary>Reference rules sketch (compare with your live rules before changing anything)</summary>
+
+  ```
+  rules_version = '2';
+  service cloud.firestore {
+    match /databases/{database}/documents {
+
+      // Maintenance flag and banner: read before login, so it must be public.
+      match /admin/settings {
         allow read: if true;
-        allow write: if request.auth != null
-                     && request.auth.token.admin == true;
+        allow write: if request.auth != null && request.auth.token.admin == true;
       }
 
-      // Example of this rule:
-      // Anyone can read a /main document,
-      // but only authenticated admins can write.
-      // e.g., /main/exampleDoc
-    }
-
-    match /pages/{docId} {
-      allow read: if true;
-      allow write: if request.auth != null
-                   && request.auth.token.admin == true;
-
-      match /{subCollection=**} {
-        allow read: if true;
-        allow write: if request.auth != null
-                     && request.auth.token.admin == true;
-      }
-
-      // Example of this rule:
-      // Reading a page like /pages/home works for everyone,
-      // writing requires admin privileges.
-    }
-
-    // --------------------
-    // MEMBER-ONLY CONTENT
-    // --------------------
-
-    match /member/{docId} {
-      allow read: if request.auth != null;
-      allow write: if false;
-
-      match /{subCollection=**} {
+      // Member-only content (menus, content boxes, pages).
+      match /member/{document=**} {
         allow read: if request.auth != null;
         allow write: if false;
       }
 
-      // Example of this rule:
-      // Only logged-in users can read /member profiles,
-      // no one can write to them.
+      // Per-user visit log.
+      match /userDailyVisits/{uid} {
+        allow read, write: if request.auth != null && request.auth.uid == uid;
+      }
+
+      // Monthly page counters (consider validating that viewCount only goes up by 1).
+      match /pageMonthlyStats/{year}/{month}/{pageId} {
+        allow create, update: if request.auth != null;
+        allow read: if request.auth != null && request.auth.token.admin == true;
+      }
+
+      // Deny everything else.
+      match /{document=**} {
+        allow read, write: if false;
+      }
     }
+  }
+  ```
 
-    // --------------------
-    // DENY EVERYTHING ELSE
-    // --------------------
+  </details>
 
-    match /{document=**} {
-      allow read, write: if false;
-
-      // Example of this rule:
-      // Any document outside /main, /pages, or /member
-      // is completely inaccessible.
-    }
-
-}
-}
-
-- **Authentication Handling**
-  - Auth is client-side only.
-  - Protected routes rely on `onAuthStateChanged` and conditional redirects.
-
-- **Cookies**
-  - A simple cookie (`new`) is used client-side to track first-time login behavior.
-  - It is not used for security; do not rely on this cookie for access control.
+- **Route protection is client-side.** The HTML shell of `/member` is public. What protects the content is Firestore rules, so never put sensitive data in HTML files or `public/media`.
+- **Login lockout is a courtesy, not a defence.** The 5-attempts-per-3-minutes counter lives in `sessionStorage`, so a new tab or private window resets it. Real throttling comes from Firebase Auth itself.
+- **Member page HTML is sanitised with DOMPurify when `window.DOMPurify` exists.** See [IMPROVEMENTS.md](IMPROVEMENTS.md), because the library is not currently loaded by any page.
+- **Cookies.** A `new` cookie remembers the first-time-login state. It is not used for access control.
+- **Third-party keys in client code.** The Supabase key in `signature.html` is a *publishable* key and is safe only while row-level security and the `log_signature_event` function are locked down. Never commit a service-role or secret key.
 
 ---
 
-## Known Tradeoffs / Limitations
+## Troubleshooting
 
-- **No backend rendering**: All dynamic content is rendered in the browser. Users with aggressive JS blockers may see limited content.
-- **Tightly-coupled content model**: Firestore document/collection structure is tied directly to JS codepaths; changing the schema requires code changes.
-- **Admin interface is external**: This repo does not include the admin UI; it’s hosted separately as it requres a backend.
+| Symptom | Likely cause and fix |
+| --- | --- |
+| Changes don't show after deploy | Browsers cached old files. Bump `ASSET_VERSION` and redeploy. |
+| Deploy blocked: "NO COMMIT MESSAGE IN CHANGE LOG" | `CHANGELOG.txt` has no `Version: <ASSET_VERSION>` line. Add one. |
+| Deploy warns about the same version | `ASSET_VERSION` equals `.last-deployed-version`. Bump it unless you really mean to redeploy. |
+| Whole site shows "We'll be right back" | `admin/settings.maintenanceMode` is true. Set it to false. |
+| Page stays blank on `/member` | Not signed in (should redirect to `/login`), or Firestore rules are blocking reads. Check the browser console. |
+| Calldown shows "closed" at the wrong time | Check `FORM_SETTINGS.schedule` and make sure `TEST_MODE` is `false`. |
+| Calldown shows old questions | Bump `FORM_CONFIG_VERSION` after editing `form.json`. |
+| Menu or tiles look stale | Clear `menuPagesMember` / `contentBoxesChildren` from `localStorage`, or wait for the background refresh. |
+| Styling looks broken after adding classes | Rebuild `styles.css` with the Tailwind command above. |
+
+---
+
+## Known limitations
+
+- **Client-rendered.** Content is built in the browser, so it needs JavaScript.
+- **Content model is coupled to the code.** Firestore structure is tied to the JS modules, so schema changes need code changes.
+- **Admin UI lives elsewhere.** It needs a backend, so it is a separate project.
+- **Windows-only deploy script.** `!Deploy.cmd` requires Windows and PowerShell.
+- **Absolute production URLs.** A few assets (header images, changelog fetch) use `https://skyhawk-cap.org/...`, so local and preview builds still pull some files from production.
+
+A prioritised list of fixes and improvements is in **[IMPROVEMENTS.md](IMPROVEMENTS.md)**.
 
 ---
 
 ## Contributing
 
-Contributions are welcome, especially for:
+Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow.
 
-- Performance optimizations (CSS splitting, code-splitting).
-- Better developer documentation and tooling.
+Before opening a pull request:
 
-General guidelines:
-
-- **Before Submitting**
-  - Test locally (at least `index.html`, `login.html`, `page.html`, `member.html`, `photos.html`).
-  - Check that navigation, login, and core pages still function.
+- Run `npm run lint` and `npm run format:check`.
+- Test the pages you touched: `/login`, `/member`, `/memberpage`, and any tool you changed. Check mobile and dark mode if you changed layout.
+- Keep `ASSET_VERSION` bumps and changelog entries for release time, not every commit.
 
 ---
 
-## License
+## License and credits
 
-- See `LICENSE.txt` for full license details.
+Released under a **CAP-members-only licence**. See [LICENSE.txt](LICENSE.txt) for the full terms. In short:
+
+- Use is limited to Civil Air Patrol projects.
+- The credit line in the footer (set in `header-footer.js`) **must stay visible** on all pages.
+- The template may not be redistributed or sublicensed.
+
+**Developed by Ethan Larson** (C/CMSgt Larson), Skyhawk Composite Squadron.
+
