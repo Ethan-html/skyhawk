@@ -9,7 +9,7 @@
 [![JavaScript: ES Modules](https://img.shields.io/badge/JavaScript-ES_Modules-F7DF1E?logo=javascript&logoColor=black)](#tech-stack)
 [![License: CAP members only](https://img.shields.io/badge/License-CAP_members_only-001489)](LICENSE.txt)
 
-[Live site](https://skyhawk-cap.org/) · [Release log](https://skyhawk-cap.org/changelog) · [Admin](https://admin.skyhawk-cap.org/) · [Contributing](CONTRIBUTING.md)
+[Live site](https://skyhawk-cap.org/) · [Release log](https://skyhawk-cap.org/changelog) · [Portal](https://portal.skyhawk-cap.org/) · [Contributing](CONTRIBUTING.md)
 
 </div>
 
@@ -18,6 +18,7 @@
 ## Contents
 
 - [Overview](#overview)
+- [The Portal](#the-portal)
 - [Routes](#routes)
 - [Architecture](#architecture)
 - [Tech stack](#tech-stack)
@@ -41,7 +42,7 @@
 
 This repository is the source for **skyhawk-cap.org**. It is a **static site on Firebase Hosting**. Dynamic content comes from **Cloud Firestore**, and sign-in is handled by **Firebase Auth** (email and password).
 
-The site is **member-first**. Visiting `/` redirects to `/member`, and anyone who isn't signed in is sent to `/login`. Photos live on a separate site, and the admin interface that edits the Firestore content is a separate project that is **not** part of this repo.
+The site is **member-first**. Visiting `/` redirects to `/member`, and anyone who isn't signed in is sent to `/login`. Photos live on a separate site, and everything that manages the site's data lives in the **[Portal](#the-portal)**, a separate project that is **not** part of this repo.
 
 **What it provides**
 
@@ -52,7 +53,24 @@ The site is **member-first**. Visiting `/` redirects to `/member`, and anyone wh
 | **Squadron tools** | Awards (ribbon rack) builder, CAP email signature editor, CyberPatriot competition display. |
 | **Site controls** | Maintenance mode and a dismissible announcement banner, both switched from Firestore with no redeploy. |
 | **Release log** | Searchable changelog viewer at `/changelog`, fed by a plain-text file. |
-| **Short links** | Unknown URLs are checked against the admin link service and redirected if a short link exists. |
+| **Short links** | Unknown URLs are checked against the Portal's link service and redirected if a short link exists. |
+
+---
+
+## The Portal
+
+The **[Portal](https://portal.skyhawk-cap.org/)** (`portal.skyhawk-cap.org`) is the squadron's management hub. It is a separate project from this repo, and it is where everything this site displays is created and maintained. Members request access from its `/request-access` page (linked from the login screen).
+
+| Portal area | What it manages | How this site uses it |
+| --- | --- | --- |
+| **Admin** | Users, access and site settings | Maintenance mode and the announcement banner (`admin/settings`); access requests from the login page |
+| **Content management** | Member pages, menus and dashboard tiles | The `member/...` Firestore collections behind `/member` and `/memberpage` |
+| **Stats** | Visit and page-view reporting | Reports on the counters this site writes (`userDailyVisits`, `pageMonthlyStats`) |
+| **Calendar management** | Squadron events and schedule | Not displayed on this site yet (see [IMPROVEMENTS.md](IMPROVEMENTS.md)) |
+| **Inspection scoring** | Entering and tracking inspection scores | Not displayed on this site yet (see [IMPROVEMENTS.md](IMPROVEMENTS.md)) |
+| **More tools** | Short links and other squadron utilities | Short links resolve through the 404 page |
+
+This repo only **reads** that data (plus the stats counters it writes). Anything on the Portal side needs changes in the Portal project, not here.
 
 ---
 
@@ -75,7 +93,7 @@ Routing is defined in [`firebase.json`](firebase.json). "Member" routes are gate
 | `/app-info` · `/privacy-policy` | static pages | Public | Info pages for the Automation Script app. |
 | `/health` | `health.json` | Public | Returns `{ "status": "ok" }` for uptime checks. |
 | `/photos` | 301 → `photos.skyhawk-cap.org` | n/a | Photos are hosted separately. |
-| `/admin` | admin site | n/a | `https://admin.skyhawk-cap.org/` |
+| `/admin` | the Portal | n/a | `https://portal.skyhawk-cap.org/` (see [Known limitations](#known-limitations)) |
 | anything else | `/404` | Public | Checks for a short link, otherwise shows the 404 page. |
 
 ---
@@ -92,7 +110,7 @@ flowchart LR
     H --> T["Standalone tools<br/>form, ribbon, signature, cpt"]
     T -->|submit| GF[Google Forms]
     T -->|opt-in analytics| S[(Supabase)]
-    H -->|unknown URL| AD["admin.skyhawk-cap.org<br/>short-link API"]
+    H -->|unknown URL| AD["Portal<br/>portal.skyhawk-cap.org<br/>short-link API"]
 ```
 
 **How a page loads**
@@ -174,7 +192,7 @@ skyhawk/
 | `login.js` | Sign-in, lockout, password reset, first-time flow. |
 | `stats.js` | Per-user daily visit and per-page monthly view counters. |
 | `mobile-menu-a11y.js` | Focus and keyboard behaviour for the mobile drawer. |
-| `admin.js` | Shortcuts to the admin site (keyboard sequence, long-press on logo or copyright). |
+| `admin.js` | Shortcuts to the Portal (keyboard sequence, long-press on logo or copyright). |
 
 ---
 
@@ -292,7 +310,7 @@ All reads and writes use the Firebase client SDK. The structure below is what th
 - Content pages are addressed as `/memberpage?page=<sectionId>/<childSlug>`. If the section document does not exist the visitor is sent to `/404`.
 - `public/edit.html` is the **reference template** for the HTML structure used inside page content.
 - The `main/` and `pages/` collections from earlier versions are no longer read by this repo's code.
-- Content is edited through the separate admin site, not in this repo.
+- Content is edited through the [Portal](#the-portal), not in this repo.
 
 ---
 
@@ -308,7 +326,7 @@ These pages are mostly self-contained (inline JS, their own state) and do not ne
 | **Email signature editor** | `/signature` | Builds CAP email signatures with copy-as-rich-text, HTML, mobile and plain-text options. Optional usage analytics are sent to Supabase and respect a consent check. |
 | **CyberPatriot display** | `/cpt` | Competition-day screen: setup form (meet name, team ID in competition or training format, image key, coach email, duration), then a countdown that turns amber under 10 minutes and red under 1. Settings persist in `localStorage`. |
 | **Release log** | `/changelog`, `/dev` | Searchable viewer for `changelog/CHANGELOG.txt`. |
-| **Short links** | any unknown URL | `404.html` checks `admin.skyhawk-cap.org/api/v1/links/<slug>` and redirects when a link exists. |
+| **Short links** | any unknown URL | `404.html` checks the Portal's link API (`/api/v1/links/<slug>`) and redirects when a link exists. |
 
 There are also a few hidden, keyboard-triggered extras in `public/assets/easter/`. They load after the page is ready and are skipped inside iframes.
 
@@ -459,8 +477,9 @@ Each line starts with one of `Added`, `Updated`, `Fixed`, `Changed`, `Removed`, 
 
 - **Client-rendered.** Content is built in the browser, so it needs JavaScript.
 - **Content model is coupled to the code.** Firestore structure is tied to the JS modules, so schema changes need code changes.
-- **Admin UI lives elsewhere.** It needs a backend, so it is a separate project.
+- **Management lives in the Portal.** Content, calendar, stats and inspection data are edited there, in a separate project with its own backend.
 - **Windows-only deploy script.** `!Deploy.cmd` requires Windows and PowerShell.
+- **Old Portal hostname in code.** `firebase.json` (`/admin`) and `404.html` (short-link lookup) still point at the former `admin.skyhawk-cap.org` host. Update them to `portal.skyhawk-cap.org` once the Portal's API is served from there.
 - **Absolute production URLs.** A few assets (header images, changelog fetch) use `https://skyhawk-cap.org/...`, so local and preview builds still pull some files from production.
 
 A prioritised list of fixes and improvements is in **[IMPROVEMENTS.md](IMPROVEMENTS.md)**.
